@@ -9,3 +9,4 @@
 Тема: <br />
 
 [Trello](https://trello.com/b/3VvHXBl8/каталог-музыкальных-произведений)<br />
+[Figma](https://www.figma.com/file/lxNLWWGxuIuIzYhXjq0pLB/Untitled?node-id=0%3A1&t=sWzJLNaKLOIeV0qb-0)<br />
