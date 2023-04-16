@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">MusicZoneApp</string>
+
+    <string name="logo">Music Zone</string>
+    <string name="my_music">My music</string>
+    <string name="hint_search_name">Search music</string>
+
+    <string name="music_name">Music name - author</string>
+
+    <string name="account_name">Name Surname</string>
+    <string name="account_nickname">Nickname</string>
+    <string name="account_email">email@email.com</string>
+    <string name="account_phone">+7(900)888–77-55</string>
+
+    <string name="account_edit">Edit</string>
+    <string name="account_sing_out">Sing out</string>
+    <string name="account_check_music">Check music</string>
+    <string name="account_admin_add_music">Add music</string>
+
+    <string name="back">Back</string>
+
+    <string name="first_name">First name</string>
+    <string name="second_name">Second name</string>
+    <string name="nickname">Nickname</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone number</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="save">Save</string>
+
+    <string name="send_code">Send code</string>
+    <string name="code">Code</string>
+    <string name="verify_code">Verify code</string>
+    <string name="new_password">New password</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="new_password_send">Input new password</string>
+    <string name="verify_password">Verify password</string>
+
+    <string name="cancel">Cancel</string>
+
+    <string name="sign_in">Sign in</string>
+
+    <string name="recover_password">Recover your password</string>
+    <string name="forgot_password">Forgot password</string>
+
+    <string-array name="misic">
+        <item>music 1</item>
+        <item>music 2</item>
+        <item>music 3</item>
+        <item>music 4</item>
+    </string-array>
+</resources>
