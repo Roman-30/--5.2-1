@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface Playlist extends JpaRepository<Playlist, Integer> {
+public interface PlaylistRepository extends JpaRepository<PlaylistRepository, Integer> {
 }
