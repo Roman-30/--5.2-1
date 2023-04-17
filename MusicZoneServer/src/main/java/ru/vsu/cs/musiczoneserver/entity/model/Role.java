@@ -1,4 +1,4 @@
-package ru.vsu.cs.musiczoneserver.entity.role;
+package ru.vsu.cs.musiczoneserver.entity.model;
 
 import org.springframework.security.core.GrantedAuthority;
 
