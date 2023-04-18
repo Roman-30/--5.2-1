@@ -16,7 +16,6 @@ import ru.vsu.cs.musiczoneserver.service.PersonService;
 import javax.validation.Valid;
 
 @RestController
-@ApiOperation("Music API")
 public class PersonController {
     private final PersonService service;
 
@@ -24,11 +23,6 @@ public class PersonController {
         this.service = service;
     }
 
-    @ApiOperation(value = "Sign up new user", notes = "Returns the registered user")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully created"),
-            @ApiResponse(code = 404, message = "Not found - User was not found")
-    })
     @PostMapping("/registration")
     public ResponseEntity<PersonDto> registration(@Valid @RequestBody PersonDto person) {
         var user = service.savePerson(person);
