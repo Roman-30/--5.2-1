@@ -5,7 +5,11 @@ import org.springframework.stereotype.Repository;
 import ru.vsu.cs.musiczoneserver.entity.Person;
 
 import javax.naming.InsufficientResourcesException;
+import java.util.Optional;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, InsufficientResourcesException> {
+
+    Optional<Person> findByEmail(String email);
+
 }
