@@ -7,6 +7,7 @@ import ru.vsu.cs.musiczoneserver.entity.model.Role;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -39,7 +40,7 @@ public class Person implements UserDetails {
     private Set<GrantedAuthority> roles;
 
     @ManyToMany(mappedBy = "people")
-    private Set<Playlist> playlists;
+    private Set<Playlist> playlists = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
