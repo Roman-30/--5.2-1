@@ -6,10 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.vsu.cs.musiczoneserver.entity.model.Role;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.util.Collection;
 import java.util.Set;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
