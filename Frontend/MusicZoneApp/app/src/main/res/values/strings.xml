@@ -13,7 +13,7 @@
     <string name="account_phone">+7(900)888–77-55</string>
 
     <string name="account_edit">Edit</string>
-    <string name="account_sing_out">Sing out</string>
+    <string name="account_sing_out">Sign out</string>
     <string name="account_check_music">Check music</string>
     <string name="account_admin_add_music">Add music</string>
 
@@ -49,4 +49,6 @@
         <item>music 3</item>
         <item>music 4</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
