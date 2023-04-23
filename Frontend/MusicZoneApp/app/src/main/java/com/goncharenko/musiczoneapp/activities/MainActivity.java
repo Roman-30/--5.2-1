@@ -1,13 +1,18 @@
 package com.goncharenko.musiczoneapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.fragments.AccountFragment;
@@ -40,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 //            Fragment fragment = (Fragment) extras.get("firstFragment");
 //            this.firstFragment = fragment;
         }
+
+        if(!checkPermission()){
+            requestPermission();
+            return;
+        }
     }
 
     public void goHome(View view){
@@ -70,5 +80,21 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     @Override
     public void onSignedIn(boolean isSignedIn) {
         this.isSignIn = isSignedIn;
+    }
+
+    boolean checkPermission(){
+        int result = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if(result == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    void requestPermission(){
+        if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)){
+            Toast.makeText(MainActivity.this,"READ PERMISSION IS REQUIRED,PLEASE ALLOW FROM SETTTINGS",Toast.LENGTH_SHORT).show();
+        }else
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},123);
     }
 }

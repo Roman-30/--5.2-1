@@ -1,35 +1,49 @@
 package com.goncharenko.musiczoneapp.fragments;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
+import com.goncharenko.musiczoneapp.activities.MainActivity;
+import com.goncharenko.musiczoneapp.models.AudioModel;
+
+import java.io.File;
+import java.util.ArrayList;
 
 public class SearchMusicFragment extends Fragment {
 
-    private String[] music = new String[]{"music_1", "music_2", "music_3", "music_4", "music_5",
-            "music_1", "music_2", "music_3", "music_4", "music_5",
-            "music_1", "music_2", "music_3", "music_4", "music_5"};
-    private ListView listView;
+    private RecyclerView recyclerView;
 
     private ImageButton searchButton;
+
+    ArrayList<AudioModel> songsList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_music, container, false);
 
-        listView = view.findViewById(R.id.list_music);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.music_item, R.id.music_name, music);
-        listView.setAdapter(adapter);
+        recyclerView = view.findViewById(R.id.recycler_view);
 
         searchButton = view.findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -38,9 +52,36 @@ public class SearchMusicFragment extends Fragment {
                 searchMusic(v);
             }
         });
+
+
+        String[] projection = {
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.DATA,
+                MediaStore.Audio.Media.DURATION
+        };
+
+        String selection = MediaStore.Audio.Media.IS_MUSIC +" != 0";
+
+        Cursor cursor = getContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,projection,selection,null,null);
+        while(cursor.moveToNext()){
+            AudioModel songData = new AudioModel(cursor.getString(1),cursor.getString(0),cursor.getString(2));
+            if(new File(songData.getPath()).exists())
+                songsList.add(songData);
+        }
+
+        if(songsList.size()==0){
+            // обработка если нет музыки
+        }else{
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
+        }
+
+
         return view;
     }
 
     public void searchMusic(View view) {
     }
+
+
 }
