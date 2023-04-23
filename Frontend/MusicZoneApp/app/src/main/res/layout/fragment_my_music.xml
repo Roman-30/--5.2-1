@@ -57,8 +57,22 @@
 
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/list_music"
+<!--    <ListView-->
+<!--        android:id="@+id/list_music"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_marginHorizontal="20dp"-->
+<!--        android:layout_marginTop="160dp"-->
+<!--        android:layout_marginBottom="110dp"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/linearLayout"-->
+<!--        app:layout_constraintVertical_bias="0.666"-->
+<!--        tools:ignore="MissingConstraints"-->
+<!--        tools:layout_editor_absoluteX="20dp">-->
+
+<!--    </ListView>-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="20dp"
@@ -67,8 +81,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.666"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="20dp">
-
-    </ListView>
+        tools:layout_editor_absoluteX="20dp"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
