@@ -18,12 +18,12 @@
 
     </FrameLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,27 +32,41 @@
 
         <ImageButton
             android:id="@+id/home_button"
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="45dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/round_bg"
+            android:backgroundTint="@color/colorPrimary"
             android:onClick="goHome"
-            app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+            android:padding="16dp"
+            app:srcCompat="@drawable/ic_player" />
 
         <ImageButton
             android:id="@+id/player_button"
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="45dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="35dp"
+            android:layout_toStartOf="@+id/account_button"
+            android:layout_toEndOf="@+id/home_button"
+            android:background="@drawable/round_bg"
+            android:backgroundTint="@color/colorPrimary"
             android:onClick="goPlayer"
-            app:srcCompat="@android:drawable/ic_media_play" />
+            android:padding="16dp"
+            app:srcCompat="@drawable/ic_baseline_play_circle_outline_24" />
 
         <ImageButton
             android:id="@+id/account_button"
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/round_bg"
+            android:backgroundTint="@color/colorPrimary"
             android:onClick="goAccount"
-            app:srcCompat="@android:drawable/stat_notify_chat" />
-    </LinearLayout>
+            android:padding="16dp"
+            app:srcCompat="@drawable/ic_account" />
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
