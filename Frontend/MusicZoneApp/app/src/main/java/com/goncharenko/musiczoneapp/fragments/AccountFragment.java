@@ -12,10 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.goncharenko.musiczoneapp.activities.EditAccountActivity;
 import com.goncharenko.musiczoneapp.activities.MainListener;
 import com.goncharenko.musiczoneapp.R;
+import com.goncharenko.musiczoneapp.models.UserModel;
+import com.goncharenko.musiczoneapp.service.UserService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccountFragment extends Fragment {
 
@@ -24,11 +31,44 @@ public class AccountFragment extends Fragment {
     private Button checkMusicButton;
     private Button addMusicButton;
 
+    private TextView name;
+    private TextView nickname;
+    private TextView email;
+    private TextView phoneNumber;
+
     private MainListener mainListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
+
+        name = view.findViewById(R.id.account_name);
+        nickname = view.findViewById(R.id.account_nickname);
+        email = view.findViewById(R.id.account_email);
+        phoneNumber = view.findViewById(R.id.account_phone);
+
+        UserService.getInstance()
+                .getJSON()
+                .getPostWithID(1)
+                .enqueue(new Callback<UserModel>() {
+                    @Override
+                    public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
+                        UserModel user = response.body();
+                        if(user != null) {
+                            name.append(user.getName() + " " + user.getSurname());
+                            nickname.append(user.getNickname());
+                            email.append(user.getEmail());
+                            phoneNumber.append(user.getPhoneNumber());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
+
+                        //textView.append("Error occurred while getting request!");
+                        t.printStackTrace();
+                    }
+                });
 
         editAccountButton = view.findViewById(R.id.edit);
         editAccountButton.setOnClickListener(new View.OnClickListener() {

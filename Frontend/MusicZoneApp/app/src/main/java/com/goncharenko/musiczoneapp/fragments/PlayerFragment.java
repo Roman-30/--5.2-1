@@ -97,7 +97,6 @@ public class PlayerFragment extends Fragment {
 
     void setResourcesWithMusic(){
         currentSong = songsList.get(MyMediaPlayer.currentIndex);
-
         titleTv.setText(currentSong.getTitle());
 
         totalTimeTv.setText(convertToMMSS(currentSong.getDuration()));
