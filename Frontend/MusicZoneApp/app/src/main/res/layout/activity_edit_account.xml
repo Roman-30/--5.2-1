@@ -17,6 +17,8 @@
         android:background="@drawable/round_bg"
         android:onClick="goBack"
         android:text="@string/back"
+        android:textColor="@color/textButtonColor"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -123,6 +125,8 @@
         android:background="@drawable/round_bg"
         android:onClick="save"
         android:text="@string/save"
+        android:textColor="@color/textButtonColor"
+        android:textSize="20dp"
         tools:ignore="MissingConstraints" />
 
 </RelativeLayout>
