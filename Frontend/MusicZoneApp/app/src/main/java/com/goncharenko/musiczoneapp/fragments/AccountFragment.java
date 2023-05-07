@@ -47,28 +47,28 @@ public class AccountFragment extends Fragment {
         email = view.findViewById(R.id.account_email);
         phoneNumber = view.findViewById(R.id.account_phone);
 
-        UserService.getInstance()
-                .getJSON()
-                .getPostWithID(1)
-                .enqueue(new Callback<UserModel>() {
-                    @Override
-                    public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
-                        UserModel user = response.body();
-                        if(user != null) {
-                            name.append(user.getName() + " " + user.getSurname());
-                            nickname.append(user.getNickname());
-                            email.append(user.getEmail());
-                            phoneNumber.append(user.getPhoneNumber());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
-
-                        //textView.append("Error occurred while getting request!");
-                        t.printStackTrace();
-                    }
-                });
+//        UserService.getInstance()
+//                .getJSON()
+//                .getPostWithID(1)
+//                .enqueue(new Callback<UserModel>() {
+//                    @Override
+//                    public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
+//                        UserModel user = response.body();
+//                        if(user != null) {
+//                            name.append(user.getName() + " " + user.getSurname());
+//                            nickname.append(user.getNickname());
+//                            email.append(user.getEmail());
+//                            phoneNumber.append(user.getPhoneNumber());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
+//
+//                        //textView.append("Error occurred while getting request!");
+//                        t.printStackTrace();
+//                    }
+//                });
 
         editAccountButton = view.findViewById(R.id.edit);
         editAccountButton.setOnClickListener(new View.OnClickListener() {

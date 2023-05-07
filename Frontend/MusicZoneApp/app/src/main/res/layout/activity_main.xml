@@ -38,7 +38,6 @@
             android:layout_marginStart="20dp"
             android:background="@drawable/round_bg"
             android:backgroundTint="@color/colorPrimary"
-            android:onClick="goHome"
             android:padding="16dp"
             app:srcCompat="@drawable/ic_player" />
 
@@ -52,7 +51,6 @@
             android:layout_toEndOf="@+id/home_button"
             android:background="@drawable/round_bg"
             android:backgroundTint="@color/colorPrimary"
-            android:onClick="goPlayer"
             android:padding="16dp"
             app:srcCompat="@drawable/ic_baseline_play_circle_outline_24" />
 
@@ -64,7 +62,6 @@
             android:layout_marginEnd="20dp"
             android:background="@drawable/round_bg"
             android:backgroundTint="@color/colorPrimary"
-            android:onClick="goAccount"
             android:padding="16dp"
             app:srcCompat="@drawable/ic_account" />
     </RelativeLayout>

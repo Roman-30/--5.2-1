@@ -50,7 +50,7 @@ public class PlayerFragment extends Fragment {
         if(extras != null){
             songsList = (ArrayList<AudioModel>) getActivity().getIntent().getSerializableExtra("LIST");
         }
-        if(songsList.isEmpty()){
+        if(songsList == null || songsList.isEmpty()){
             return view;
         }
         setResourcesWithMusic();

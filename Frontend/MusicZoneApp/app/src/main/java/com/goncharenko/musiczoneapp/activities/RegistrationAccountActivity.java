@@ -58,7 +58,7 @@ public class RegistrationAccountActivity extends AppCompatActivity {
     private void goToAccount(){
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("firstFragment", "new AccountFragment()");
+        intent.putExtra("fragment", "Account");
         intent.putExtra("isSignIn", true);
         startActivity(intent);
     }
@@ -66,7 +66,7 @@ public class RegistrationAccountActivity extends AppCompatActivity {
     private void goToEntryAccount(){
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("firstFragment", "new EntryFragment()");
+        intent.putExtra("fragment", "Entry");
         intent.putExtra("isSignIn", false);
         startActivity(intent);
     }
