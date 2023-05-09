@@ -8,11 +8,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -30,8 +28,9 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 
     private boolean isSignIn = false;
 
-    private Fragment firstFragment;
-    private String fragment = "Search";
+    private Fragment activeFragment;
+    private String fragmentName = "Search";
+    private FragmentManager ft = getSupportFragmentManager();
 
     private ImageButton homeButton;
     private ImageButton playerButton;
@@ -43,16 +42,21 @@ public class MainActivity extends AppCompatActivity implements MainListener{
         setContentView(R.layout.activity_main);
 
         frameLayout = findViewById(R.id.frame_layout);
+        ft.beginTransaction().add(R.id.frame_layout, new SearchMusicFragment());
+        ft.beginTransaction().add(R.id.frame_layout, new PlayerFragment());
+        ft.beginTransaction().add(R.id.frame_layout, new EntryFragment());
+        ft.beginTransaction().add(R.id.frame_layout, new AccountFragment());
+        ft.beginTransaction().add(R.id.frame_layout, new MyMusicFragment());
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             boolean isSignIn = extras.getBoolean("isSignIn");
             this.isSignIn = isSignIn;
 
-            fragment = (String) extras.get("fragment");
+            fragmentName = (String) extras.get("fragment");
         }
 
-        showFragments(fragment);
+        showFragments(fragmentName);
 
         homeButton = findViewById(R.id.home_button);
         homeButton.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +108,12 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 
     private void setNewFragment(Fragment fragment){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_layout, fragment).commit();
+        ft.replace(R.id.frame_layout, fragment);
+        ft.addToBackStack(null);
+        activeFragment = fragment;
+//        ft.hide(activeFragment);
+//        ft.show(fragment);
+        ft.commit();
     }
 
     @Override
@@ -131,24 +140,24 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     public void showFragments(String fragment) {
         switch (fragment) {
             case "Account":
-                firstFragment = new AccountFragment();
+                activeFragment = new AccountFragment();
                 break;
             case "Entry":
-                firstFragment = new EntryFragment();
+                activeFragment = new EntryFragment();
                 break;
             case "Player":
-                firstFragment = new PlayerFragment();
+                activeFragment = new PlayerFragment();
                 break;
             case "My music":
-                firstFragment = new MyMusicFragment();
+                activeFragment = new MyMusicFragment();
                 break;
             case "Search":
-                firstFragment = new SearchMusicFragment();
+                activeFragment = new SearchMusicFragment();
                 break;
             default:
-                firstFragment = new SearchMusicFragment();
+                activeFragment = new SearchMusicFragment();
         }
 
-        setNewFragment(firstFragment);
+        setNewFragment(activeFragment);
     }
 }

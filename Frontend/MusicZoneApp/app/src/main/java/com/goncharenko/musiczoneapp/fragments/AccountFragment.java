@@ -53,12 +53,14 @@ public class AccountFragment extends Fragment {
 //                .enqueue(new Callback<UserModel>() {
 //                    @Override
 //                    public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
-//                        UserModel user = response.body();
-//                        if(user != null) {
-//                            name.append(user.getName() + " " + user.getSurname());
-//                            nickname.append(user.getNickname());
-//                            email.append(user.getEmail());
-//                            phoneNumber.append(user.getPhoneNumber());
+//                        if(response.isSuccessful()) {
+//                            UserModel user = response.body();
+//                            if (user != null) {
+//                                name.append(user.getName() + " " + user.getSurname());
+//                                nickname.append(user.getNickname());
+//                                email.append(user.getEmail());
+//                                phoneNumber.append(user.getPhoneNumber());
+//                            }
 //                        }
 //                    }
 //

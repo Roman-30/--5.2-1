@@ -12,15 +12,15 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface UserInterface {
-    @GET("/posts/{id}")
+    @GET("/user/{id}")
     public Call<UserModel> getPostWithID(@Path("id") int id);
 
-    @GET("/posts")
+    @GET("/user")
     public Call<List<UserModel>> getAllPosts();
 
-    @GET("/posts")
+    @GET("/user")
     public Call<List<UserModel>> getPostOfUser(@Query("userId") int id);
 
-    @POST("/posts")
+    @POST("/user")
     public Call<UserModel> postData(@Body UserModel data);
 }
