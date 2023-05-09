@@ -74,6 +74,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
             super(itemView);
             titleTextView = itemView.findViewById(R.id.music_title_text);
             iconImageView = itemView.findViewById(R.id.icon_view);
+            titleTextView.setSelected(true);
         }
     }
 }
