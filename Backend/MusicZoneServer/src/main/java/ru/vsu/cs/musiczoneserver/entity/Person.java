@@ -39,7 +39,12 @@ public class Person implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<GrantedAuthority> roles;
 
-    @ManyToMany(mappedBy = "people")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "user_playlist",
+            joinColumns = {
+                    @JoinColumn(name = "playlist_id", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "user_id", referencedColumnName = "id")})
     private Set<Playlist> playlists = new HashSet<>();
 
     @Override

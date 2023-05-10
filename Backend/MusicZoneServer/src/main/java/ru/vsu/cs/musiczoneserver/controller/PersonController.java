@@ -6,16 +6,14 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.musiczoneserver.dto.PersonDto;
 import ru.vsu.cs.musiczoneserver.service.PersonService;
 
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/person")
 public class PersonController {
     private final PersonService service;
 
@@ -32,4 +30,5 @@ public class PersonController {
             return new ResponseEntity<>(person, HttpStatus.OK);
         }
     }
+
 }
