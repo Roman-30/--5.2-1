@@ -12,6 +12,8 @@ import ru.vsu.cs.musiczoneserver.repository.PlaylistRepository;
 import javax.sound.sampled.*;
 import java.io.*;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MusicService {
@@ -72,6 +74,7 @@ public class MusicService {
         audioInputStream.close();
         return audioFormat;
     }
+
     public void saveMusicFile(byte[] audioBytes) throws Exception {
         AudioFormat audioFormat = getAudioFormat(new File("C:\\Users\\romse\\OneDrive\\Документы\\GitHub\\TP-5.2-1\\Backend\\MusicZoneServer\\src\\main\\resources\\music\\Melnica_-_Dorogi_48002701.wave"));
 
@@ -88,4 +91,10 @@ public class MusicService {
         audioInputStream.close();
     }
 
+    public List<MusicDto> findAll() {
+        return musicRepository.findAll()
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
 }
