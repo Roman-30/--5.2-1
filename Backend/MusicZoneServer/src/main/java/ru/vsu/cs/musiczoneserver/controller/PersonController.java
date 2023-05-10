@@ -22,13 +22,32 @@ public class PersonController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<PersonDto> registration(@Valid @RequestBody PersonDto person) {
+    public ResponseEntity<?> registration(@Valid @RequestBody PersonDto person) {
         var user = service.savePerson(person);
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<>(person, HttpStatus.OK);
+            return new ResponseEntity<>("Registration Successful!", HttpStatus.OK);
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePersonData(@PathVariable Integer id, @RequestBody PersonDto dto) {
+        var user = service.updateData(id, dto);
+        if (user == null) {
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>("Update Successful!", HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePassword(@PathVariable Integer id, @RequestParam String pass) {
+        var user = service.updatePassword(id, pass);
+        if (user == null) {
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>("Update Successful!", HttpStatus.OK);
+        }
+    }
 }
