@@ -3,6 +3,7 @@ package ru.vsu.cs.musiczoneserver.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,27 +23,21 @@ public class Playlist {
     @NonNull
     private String description;
 
-    @NonNull
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "music_in_playlist",
             joinColumns = {
-                    @JoinColumn(name = "music_id", referencedColumnName = "id",
-                            nullable = false, updatable = false)},
+                    @JoinColumn(name = "music_id", referencedColumnName = "id")},
             inverseJoinColumns = {
-                    @JoinColumn(name = "playlist_id", referencedColumnName = "id",
-                            nullable = false, updatable = false)})
-    private Set<Music> musics;
+                    @JoinColumn(name = "playlist_id", referencedColumnName = "id")})
+    private Set<Music> musics = new HashSet<>();
 
-    @NonNull
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_playlist",
             joinColumns = {
-                    @JoinColumn(name = "user_id", referencedColumnName = "id",
-                            nullable = false, updatable = false)},
+                    @JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {
-                    @JoinColumn(name = "playlist_id", referencedColumnName = "id",
-                            nullable = false, updatable = false)})
-    private Set<Person> people;
+                    @JoinColumn(name = "playlist_id", referencedColumnName = "id")})
+    private Set<Person> people = new HashSet<>();
 
 
 

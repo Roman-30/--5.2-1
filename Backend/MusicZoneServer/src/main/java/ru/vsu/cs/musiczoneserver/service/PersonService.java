@@ -12,6 +12,7 @@ import ru.vsu.cs.musiczoneserver.mapper.PersonMapper;
 import ru.vsu.cs.musiczoneserver.repository.PersonRepository;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class PersonService implements UserDetailsService {
@@ -42,5 +43,35 @@ public class PersonService implements UserDetailsService {
         person.setRoles(Collections.singleton(Role.USER));
 
         return repository.save(person);
+    }
+
+    public Person updateData(Integer id, PersonDto dto) {
+        Optional<Person> person = repository.findById(id);
+        if (person.isPresent()) {
+
+            Person oldPerson = person.orElseThrow();
+            oldPerson.setName(dto.getName());
+            oldPerson.setNickName(dto.getNickName());
+            oldPerson.setSurname(dto.getSurname());
+            oldPerson.setEmail(dto.getEmail());
+            oldPerson.setPhone(dto.getPhone());
+
+            return repository.save(oldPerson);
+        } else {
+            return null;
+        }
+    }
+
+    public Person updatePassword(Integer id, String pass) {
+        Optional<Person> person = repository.findById(id);
+        if (person.isPresent()) {
+
+            Person oldPerson = person.orElseThrow();
+            oldPerson.setPassword(bCryptPasswordEncoder.encode(pass));
+
+            return repository.save(oldPerson);
+        } else {
+            return null;
+        }
     }
 }

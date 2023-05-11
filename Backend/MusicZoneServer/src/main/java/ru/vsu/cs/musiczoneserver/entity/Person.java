@@ -6,10 +6,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.vsu.cs.musiczoneserver.entity.model.Role;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,8 +39,13 @@ public class Person implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<GrantedAuthority> roles;
 
-    @ManyToMany(mappedBy = "people")
-    private Set<Playlist> playlists;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "user_playlist",
+            joinColumns = {
+                    @JoinColumn(name = "playlist_id", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "user_id", referencedColumnName = "id")})
+    private Set<Playlist> playlists = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
