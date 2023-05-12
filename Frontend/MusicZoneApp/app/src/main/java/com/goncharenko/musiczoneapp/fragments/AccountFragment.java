@@ -26,6 +26,7 @@ import retrofit2.Response;
 
 public class AccountFragment extends Fragment {
 
+    public static final String TAG = AccountFragment.class.getSimpleName();
     private Button editAccountButton;
     private Button signOutButton;
     private Button checkMusicButton;
@@ -124,21 +125,33 @@ public class AccountFragment extends Fragment {
     }
 
     public void singOut(View view) {
-        EntryFragment entryFragment = new EntryFragment();
+        Fragment entryFragment = getActivity().getSupportFragmentManager().findFragmentByTag(EntryFragment.TAG);
+        if(entryFragment != null){
+            //saveFragmentState(1, myMusicFragment);
+        } else {
+            entryFragment = new EntryFragment();
+        }
+        setNewFragment(entryFragment, EntryFragment.TAG);
         mainListener.onSignedIn(false);
-        setNewFragment(entryFragment);
     }
 
     public void checkMusic(View view) {
-        MyMusicFragment myMusicFragment = new MyMusicFragment();
-        setNewFragment(myMusicFragment);
+        Fragment myMusicFragment = getActivity().getSupportFragmentManager().findFragmentByTag(MyMusicFragment.TAG);
+        if(myMusicFragment != null){
+            //saveFragmentState(1, myMusicFragment);
+        } else {
+            myMusicFragment = new SearchMusicFragment();
+        }
+        setNewFragment(myMusicFragment, MyMusicFragment.TAG);
     }
 
     public void addMusic(View view) {
     }
 
-    private void setNewFragment(Fragment fragment){
+    private void setNewFragment(Fragment fragment, String tag){
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_layout, fragment).commit();
+        ft.replace(R.id.frame_layout, fragment, tag);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 }

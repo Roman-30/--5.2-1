@@ -3,14 +3,15 @@ package com.goncharenko.musiczoneapp.fragments;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -23,28 +24,63 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerFragment extends Fragment {
+    public static final String TAG = PlayerFragment.class.getSimpleName();
+    private TextView titleTextView;
+    private String title = "Title";
+    private final String TITLE_KEY = "title";
+    private TextView currentTimeTextView;
+    private String currentTime = "00:00";
+    private final String CURRENT_TIME_KEY = "curr";
+    private TextView totalTimeTextView;
+    private String totalTime = "00:00";
+    private final String TOTAL_TIME_KEY = "total";
+    private SeekBar seekBar;
+    private int progressSeekBar = 0;
+    private final String PROGRESS_KEY = "progress";
+    private ImageView pausePlay;
+    private ImageView nextButton;
+    private ImageView previousButton;
+    private ArrayList<AudioModel> songsList = new ArrayList<>();
+    private AudioModel currentSong;
+    private MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
 
-    TextView titleTv, currentTimeTv, totalTimeTv;
-    SeekBar seekBar;
-    ImageView pausePlay, nextBtn, previousBtn;
-    ArrayList<AudioModel> songsList = new ArrayList<>();
-    AudioModel currentSong;
-    MediaPlayer mediaPlayer = MyMediaPlayer.getInstance();
+    private boolean isPlaying = true;
+    private final String PLAYING_KEY = "play";
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            title = savedInstanceState.getString(TITLE_KEY);
+            currentTime = savedInstanceState.getString(CURRENT_TIME_KEY);
+            totalTime = savedInstanceState.getString(TOTAL_TIME_KEY);
+            progressSeekBar = savedInstanceState.getInt(PROGRESS_KEY);
+            isPlaying = savedInstanceState.getBoolean(PLAYING_KEY);
+        }
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_player, container, false);
 
-        titleTv = view.findViewById(R.id.song_title);
-        currentTimeTv = view.findViewById(R.id.current_time);
-        totalTimeTv = view.findViewById(R.id.total_time);
-        seekBar = view.findViewById(R.id.seek_bar);
-        pausePlay = view.findViewById(R.id.pause_play);
-        nextBtn = view.findViewById(R.id.next);
-        previousBtn = view.findViewById(R.id.previous);
+        titleTextView = view.findViewById(R.id.song_title);
+        titleTextView.setText(title);
 
-        titleTv.setSelected(true);
+        currentTimeTextView = view.findViewById(R.id.current_time);
+        currentTimeTextView.setText(currentTime);
+
+        totalTimeTextView = view.findViewById(R.id.total_time);
+        totalTimeTextView.setText(totalTime);
+
+        seekBar = view.findViewById(R.id.seek_bar);
+        seekBar.setProgress(progressSeekBar);
+
+        pausePlay = view.findViewById(R.id.pause_play);
+        nextButton = view.findViewById(R.id.next);
+        previousButton = view.findViewById(R.id.previous);
+
+        titleTextView.setSelected(true);
 
         Bundle extras = getActivity().getIntent().getExtras();
         if(extras != null){
@@ -58,11 +94,14 @@ public class PlayerFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(mediaPlayer!=null){
+                if(mediaPlayer != null){
                     seekBar.setProgress(mediaPlayer.getCurrentPosition());
-                    currentTimeTv.setText(convertToMMSS(mediaPlayer.getCurrentPosition()+""));
+                    currentTimeTextView.setText(convertToMMSS(mediaPlayer.getCurrentPosition() + ""));
+
+                    isPlaying = mediaPlayer.isPlaying();
 
                     if(mediaPlayer.isPlaying()){
+                        progressSeekBar = mediaPlayer.getCurrentPosition();
                         pausePlay.setImageResource(R.drawable.ic_baseline_pause_circle_outline_24);
                     }else{
                         pausePlay.setImageResource(R.drawable.ic_baseline_play_circle_outline_24);
@@ -78,6 +117,7 @@ public class PlayerFragment extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(mediaPlayer!=null && fromUser){
                     mediaPlayer.seekTo(progress);
+                    progressSeekBar = progress;
                 }
             }
 
@@ -95,28 +135,40 @@ public class PlayerFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(TITLE_KEY, titleTextView.toString().trim());
+        outState.putString(CURRENT_TIME_KEY, currentTimeTextView.toString().trim());
+        outState.putString(TOTAL_TIME_KEY, totalTimeTextView.toString().trim());
+        outState.putInt(PROGRESS_KEY, progressSeekBar);
+        outState.putBoolean(PLAYING_KEY, isPlaying);
+    }
+
     void setResourcesWithMusic(){
         currentSong = songsList.get(MyMediaPlayer.currentIndex);
-        titleTv.setText(currentSong.getTitle());
+        titleTextView.setText(currentSong.getTitle());
 
-        totalTimeTv.setText(convertToMMSS(currentSong.getDuration()));
+        totalTimeTextView.setText(convertToMMSS(currentSong.getDuration()));
 
         pausePlay.setOnClickListener(v-> pausePlay());
-        nextBtn.setOnClickListener(v-> playNextSong());
-        previousBtn.setOnClickListener(v-> playPreviousSong());
+        nextButton.setOnClickListener(v-> playNextSong());
+        previousButton.setOnClickListener(v-> playPreviousSong());
 
         playMusic();
     }
 
 
     private void playMusic(){
-
         mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(currentSong.getPath());
             mediaPlayer.prepare();
-            mediaPlayer.start();
-            seekBar.setProgress(0);
+            mediaPlayer.seekTo(progressSeekBar);
+            if(isPlaying) {
+                mediaPlayer.start();
+            }
+            seekBar.setProgress(progressSeekBar);
             seekBar.setMax(mediaPlayer.getDuration());
         } catch (IOException e) {
             e.printStackTrace();
@@ -126,7 +178,8 @@ public class PlayerFragment extends Fragment {
     }
 
     private void playNextSong(){
-
+        progressSeekBar = 0;
+        isPlaying = true;
         if(MyMediaPlayer.currentIndex== songsList.size()-1)
             return;
         MyMediaPlayer.currentIndex +=1;
@@ -136,6 +189,8 @@ public class PlayerFragment extends Fragment {
     }
 
     private void playPreviousSong(){
+        progressSeekBar = 0;
+        isPlaying = true;
         if(MyMediaPlayer.currentIndex== 0)
             return;
         MyMediaPlayer.currentIndex -=1;

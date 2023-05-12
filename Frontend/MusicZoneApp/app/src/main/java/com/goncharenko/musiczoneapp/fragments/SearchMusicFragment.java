@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -29,17 +31,31 @@ import com.goncharenko.musiczoneapp.activities.MainActivity;
 import com.goncharenko.musiczoneapp.models.AudioModel;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class SearchMusicFragment extends Fragment {
-
+    public static final String TAG = SearchMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
 
     private ImageButton searchButton;
     private EditText inputSearch;
 
-    ArrayList<AudioModel> songsList = new ArrayList<>();
+    private final String SEARCH_KEY = "search";
+    private final String LIST_KEY = "list";
+    private String search = "";
 
+    ArrayList<AudioModel> songsList = new ArrayList<>();
+    ArrayList<AudioModel> savedSongsList = new ArrayList<>();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            search = savedInstanceState.getString(SEARCH_KEY);
+            savedSongsList = (ArrayList<AudioModel>) savedInstanceState.getSerializable(LIST_KEY);
+        }
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,6 +63,7 @@ public class SearchMusicFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recycler_view);
         inputSearch = view.findViewById(R.id.input_search);
+        inputSearch.setText(search);
 
         searchButton = view.findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -56,31 +73,41 @@ public class SearchMusicFragment extends Fragment {
             }
         });
 
-
         String[] projection = {
                 MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media.DATA,
                 MediaStore.Audio.Media.DURATION
         };
 
-        String selection = MediaStore.Audio.Media.IS_MUSIC +" != 0";
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
 
-        Cursor cursor = getContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,projection,selection,null,null);
-        while(cursor.moveToNext()){
-            AudioModel songData = new AudioModel(cursor.getString(1),cursor.getString(0),cursor.getString(2));
-            if(new File(songData.getPath()).exists())
+        Cursor cursor = getContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, null, null);
+        while (cursor.moveToNext()) {
+            AudioModel songData = new AudioModel(cursor.getString(1), cursor.getString(0), cursor.getString(2));
+            if (new File(songData.getPath()).exists())
                 songsList.add(songData);
         }
 
         if(songsList.size() == 0){
             // обработка если нет музыки
         }else{
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
+            if(savedSongsList.size() != 0){
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext()));
+            }else {
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
+            }
         }
 
-
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(SEARCH_KEY, inputSearch.toString().trim());
+        outState.putSerializable(LIST_KEY, (Serializable) songsList);
     }
 
     public void searchMusic() {
@@ -93,17 +120,16 @@ public class SearchMusicFragment extends Fragment {
                 recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
             }
         } else {
-            ArrayList<AudioModel> searchResults = new ArrayList<>();
+            savedSongsList = new ArrayList<>();
             for (AudioModel song : songsList) {
                 if (song.getTitle().toLowerCase().contains(searchQuery.toLowerCase()) ||
                         song.getDuration().toLowerCase().contains(searchQuery.toLowerCase())) {
-                    searchResults.add(song);
+                    savedSongsList.add(song);
                 }
             }
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new MusicListAdapter(searchResults, getContext().getApplicationContext()));
+            recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext()));
         }
     }
-
 
 }

@@ -3,6 +3,7 @@ package com.goncharenko.musiczoneapp.fragments;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,13 +24,27 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class MyMusicFragment extends Fragment {
-
+    public static final String TAG = MyMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
 
     private ImageButton searchButton;
     private EditText inputSearch;
 
+    private final String SEARCH_KEY = "search";
+    private final String LIST_KEY = "list";
+    private String search = "";
     ArrayList<AudioModel> songsList = new ArrayList<>();
+
+    ArrayList<AudioModel> savedSongsList = new ArrayList<>();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            search = savedInstanceState.getString(SEARCH_KEY);
+            savedSongsList = (ArrayList<AudioModel>) savedInstanceState.getSerializable(LIST_KEY);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +53,7 @@ public class MyMusicFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recycler_view);
         inputSearch = view.findViewById(R.id.input_search);
+        inputSearch.setText(search);
 
         searchButton = view.findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -66,8 +82,13 @@ public class MyMusicFragment extends Fragment {
         if(songsList.size() == 0){
             // обработка если нет музыки
         }else{
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
+            if(savedSongsList.size() != 0){
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext()));
+            }else {
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
+            }
         }
 
 
@@ -84,15 +105,15 @@ public class MyMusicFragment extends Fragment {
                 recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
             }
         } else {
-            ArrayList<AudioModel> searchResults = new ArrayList<>();
+            savedSongsList = new ArrayList<>();
             for (AudioModel song : songsList) {
                 if (song.getTitle().toLowerCase().contains(searchQuery.toLowerCase()) ||
                         song.getDuration().toLowerCase().contains(searchQuery.toLowerCase())) {
-                    searchResults.add(song);
+                    savedSongsList.add(song);
                 }
             }
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new MusicListAdapter(searchResults, getContext().getApplicationContext()));
+            recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext()));
         }
     }
 }

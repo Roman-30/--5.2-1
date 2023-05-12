@@ -8,8 +8,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -25,6 +28,9 @@ import com.goncharenko.musiczoneapp.fragments.SearchMusicFragment;
 public class MainActivity extends AppCompatActivity implements MainListener{
 
     private FrameLayout frameLayout;
+
+    //@State
+    SparseArray<Fragment.SavedState> savedStateSparseArray = new SparseArray<>();
 
     private boolean isSignIn = false;
 
@@ -87,28 +93,60 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     }
 
     public void goHome(){
-        SearchMusicFragment searchMusicFragment = new SearchMusicFragment();
-        setNewFragment(searchMusicFragment);
+        Fragment searchMusicFragment = getSupportFragmentManager().findFragmentByTag(SearchMusicFragment.TAG);
+        if(searchMusicFragment != null){
+            saveFragmentState(1, searchMusicFragment);
+        } else {
+            searchMusicFragment = new SearchMusicFragment();
+        }
+        setNewFragment(searchMusicFragment, SearchMusicFragment.TAG);
     }
 
     public void goPlayer(){
-        PlayerFragment playerFragment = new PlayerFragment();
-        setNewFragment(playerFragment);
+        Fragment playerFragment = getSupportFragmentManager().findFragmentByTag(PlayerFragment.TAG);
+        if(playerFragment != null){
+            saveFragmentState(1, playerFragment);
+        } else {
+            playerFragment = new PlayerFragment();
+        }
+        setNewFragment(playerFragment, PlayerFragment.TAG);
     }
 
     public void goAccount(){
         if(isSignIn) {
-            AccountFragment accountFragment = new AccountFragment();
-            setNewFragment(accountFragment);
+            Fragment accountFragment = getSupportFragmentManager().findFragmentByTag(AccountFragment.TAG);
+            if(accountFragment != null){
+                saveFragmentState(1, accountFragment);
+            } else {
+                accountFragment = new AccountFragment();
+            }
+            setNewFragment(accountFragment, AccountFragment.TAG);
         }else {
-            EntryFragment entryFragment = new EntryFragment();
-            setNewFragment(entryFragment);
+
+            Fragment entryFragment = getSupportFragmentManager().findFragmentByTag(EntryFragment.TAG);
+            if (entryFragment != null) {
+                saveFragmentState(1, entryFragment);
+            } else {
+                entryFragment = new EntryFragment();
+            }
+
+            setNewFragment(entryFragment, EntryFragment.TAG);
         }
     }
 
-    private void setNewFragment(Fragment fragment){
+    private void saveFragmentState(int index, Fragment fragment) {
+        Fragment.SavedState savedState = getSupportFragmentManager().saveFragmentInstanceState(fragment);
+        savedStateSparseArray.put(index, savedState);
+    }
+
+    private void restoreFragmentState(int index, Fragment fragment) {
+        Fragment.SavedState savedState = savedStateSparseArray.get(index);
+        fragment.setInitialSavedState(savedState);
+    }
+
+    private void setNewFragment(Fragment fragment, String tag){
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_layout, fragment);
+        ft.replace(R.id.frame_layout, fragment, tag);
         ft.addToBackStack(null);
         activeFragment = fragment;
 //        ft.hide(activeFragment);
@@ -138,26 +176,32 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     }
 
     public void showFragments(String fragment) {
+        String tag = "";
         switch (fragment) {
             case "Account":
                 activeFragment = new AccountFragment();
+                tag = AccountFragment.TAG;
                 break;
             case "Entry":
                 activeFragment = new EntryFragment();
+                tag = EntryFragment.TAG;
                 break;
             case "Player":
                 activeFragment = new PlayerFragment();
+                tag = PlayerFragment.TAG;
                 break;
             case "My music":
                 activeFragment = new MyMusicFragment();
+                tag = MyMusicFragment.TAG;
                 break;
             case "Search":
                 activeFragment = new SearchMusicFragment();
+                tag = SearchMusicFragment.TAG;
                 break;
             default:
                 activeFragment = new SearchMusicFragment();
         }
 
-        setNewFragment(activeFragment);
+        setNewFragment(activeFragment, tag);
     }
 }
