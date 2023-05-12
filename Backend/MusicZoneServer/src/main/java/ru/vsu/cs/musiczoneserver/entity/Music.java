@@ -3,6 +3,7 @@ package ru.vsu.cs.musiczoneserver.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -26,7 +27,13 @@ public class Music {
     @NonNull
     private String genre;
 
-    @NonNull
-    @ManyToMany(mappedBy = "musics")
-    private Set<Playlist> playlists;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "music_in_playlist",
+            joinColumns = {
+                    @JoinColumn(name = "playlist_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "music_id", referencedColumnName = "id",
+                            nullable = false, updatable = false)})
+    private Set<Playlist> playlists = new HashSet<>();
 }

@@ -6,16 +6,14 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.musiczoneserver.dto.PersonDto;
 import ru.vsu.cs.musiczoneserver.service.PersonService;
 
 import javax.validation.Valid;
 
 @RestController
+@RequestMapping("/person")
 public class PersonController {
     private final PersonService service;
 
@@ -24,12 +22,32 @@ public class PersonController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<PersonDto> registration(@Valid @RequestBody PersonDto person) {
+    public ResponseEntity<?> registration(@Valid @RequestBody PersonDto person) {
         var user = service.savePerson(person);
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<>(person, HttpStatus.OK);
+            return new ResponseEntity<>("Registration Successful!", HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePersonData(@PathVariable Integer id, @RequestBody PersonDto dto) {
+        var user = service.updateData(id, dto);
+        if (user == null) {
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>("Update Successful!", HttpStatus.OK);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updatePassword(@PathVariable Integer id, @RequestParam String pass) {
+        var user = service.updatePassword(id, pass);
+        if (user == null) {
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>("Update Successful!", HttpStatus.OK);
         }
     }
 }
