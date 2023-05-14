@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     SparseArray<Fragment.SavedState> savedStateSparseArray = new SparseArray<>();
 
     private boolean isSignIn = false;
+    private String email = "";
+    private String password = "";
 
     private Fragment activeFragment;
     private String fragmentName = "Search";
@@ -56,8 +58,9 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            boolean isSignIn = extras.getBoolean("isSignIn");
-            this.isSignIn = isSignIn;
+            this.isSignIn = extras.getBoolean("isSignIn");
+            this.email = extras.getString("email");
+            this.password = extras.getString("password");
 
             fragmentName = (String) extras.get("fragment");
         }
@@ -157,6 +160,26 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     @Override
     public void onSignedIn(boolean isSignedIn) {
         this.isSignIn = isSignedIn;
+    }
+
+    @Override
+    public void setOnEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public void setOnPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String getOnEmail() {
+        return this.email;
+    }
+
+    @Override
+    public String getOnPassword() {
+        return this.password;
     }
 
     boolean checkPermission(){

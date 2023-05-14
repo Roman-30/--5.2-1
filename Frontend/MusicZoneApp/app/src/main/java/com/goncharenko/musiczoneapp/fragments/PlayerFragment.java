@@ -6,11 +6,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +18,10 @@ import android.widget.TextView;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.models.AudioModel;
+import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerFragment extends Fragment {

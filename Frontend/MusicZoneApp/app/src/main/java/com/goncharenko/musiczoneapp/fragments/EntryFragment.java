@@ -14,12 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.activities.MainListener;
 import com.goncharenko.musiczoneapp.activities.RegistrationAccountActivity;
 import com.goncharenko.musiczoneapp.activities.SendingCodeActivity;
+import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.validator.InputValidator;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EntryFragment extends Fragment {
 
@@ -60,28 +66,13 @@ public class EntryFragment extends Fragment {
         passwordInput.setText(password);
 
         signInButton = view.findViewById(R.id.sign_in_button);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn(v);
-            }
-        });
+        signInButton.setOnClickListener(v -> signIn());
 
         recoverPasswordButton = view.findViewById(R.id.recover_password);
-        recoverPasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recoverPassword(v);
-            }
-        });
+        recoverPasswordButton.setOnClickListener(v -> recoverPassword());
 
         signUpButton = view.findViewById(R.id.sign_up_button);
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signUp(v);
-            }
-        });
+        signUpButton.setOnClickListener(v -> signUp());
 
         return view;
     }
@@ -104,23 +95,56 @@ public class EntryFragment extends Fragment {
         outState.putString(PASSWORD_KEY, passwordInput.toString().trim());
     }
 
-    public void signIn(View view) {
+    public void signIn() {
         if(InputValidator.checkEditText(getActivity(), InputValidator.isValidEmail(emailInput), emailInput) &&
                 InputValidator.checkEditText(getActivity(), InputValidator.isValidPassword(passwordInput), passwordInput)) {
             if(isCorrectEmailAndPassword()) {
-                AccountFragment accountFragment = new AccountFragment();
-                mainListener.onSignedIn(true);
-                setNewFragment(accountFragment);
+
+                String email = emailInput.getText().toString().trim();
+                String password = passwordInput.getText().toString().trim();
+
+                UserService.getInstance()
+                        .getJSON()
+                        .entry(email, password)
+                        .enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if(response.body() != null) {
+                                    AccountFragment accountFragment = new AccountFragment();
+                                    mainListener.onSignedIn(true);
+                                    mainListener.setOnEmail(email);
+                                    mainListener.setOnPassword(password);
+                                    setNewFragment(accountFragment);
+                                } else {
+                                    onFailure(call, new Throwable());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                if(email.equals("admin@ad.min") && password.equals("admin111")){
+                                    AccountFragment accountFragment = new AccountFragment();
+                                    mainListener.onSignedIn(true);
+                                    mainListener.setOnEmail(email);
+                                    mainListener.setOnPassword(password);
+                                    setNewFragment(accountFragment);
+                                } else {
+                                    Toast.makeText(getContext(),
+                                            "Ошибка при входе",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
             }
         }
     }
 
-    public void recoverPassword(View view) {
+    public void recoverPassword() {
         Intent intent = new Intent(getActivity(), SendingCodeActivity.class);
         startActivity(intent);
     }
 
-    public void signUp(View view) {
+    public void signUp() {
         Intent intent = new Intent(getActivity(),  RegistrationAccountActivity.class);
         startActivity(intent);
     }

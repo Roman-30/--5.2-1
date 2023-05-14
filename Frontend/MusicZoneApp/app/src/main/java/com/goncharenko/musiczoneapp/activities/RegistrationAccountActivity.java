@@ -8,11 +8,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.validator.InputValidator;
+import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
+import com.goncharenko.musiczoneapp.viewmodels.UserViewModel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,10 +30,16 @@ public class RegistrationAccountActivity extends AppCompatActivity {
     private EditText phoneNumberInput;
     private EditText passwordInput;
 
+    private UserViewModel userViewModel;
+
+    private MainListener mainListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         firstNameInput = findViewById(R.id.first_name_input);
         secondNameInput = findViewById(R.id.second_name_input);
@@ -53,10 +62,15 @@ public class RegistrationAccountActivity extends AppCompatActivity {
             String number = this.phoneNumberInput.getText().toString();
             String password = this.passwordInput.getText().toString();
 
-
             UserModel dto = new UserModel(firstName, secondName, nickname, email, number, password);
 
-            UserService.getInstance().getJSON().registration(dto).enqueue(new Callback<String>() {
+            userViewModel.setEmail(dto.getEmail());
+            userViewModel.setPassword(dto.getPassword());
+
+            UserService.getInstance()
+                    .getJSON()
+                    .registration(dto)
+                    .enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     if(response.body() != null) {
@@ -98,6 +112,8 @@ public class RegistrationAccountActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("fragment", "Account");
         intent.putExtra("isSignIn", true);
+        intent.putExtra("email", emailInput.getText().toString().trim());
+        intent.putExtra("password", passwordInput.getText().toString().trim());
         startActivity(intent);
     }
 

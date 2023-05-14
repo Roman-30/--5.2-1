@@ -1,4 +1,4 @@
-package com.goncharenko.musiczoneapp.fragments;
+package com.goncharenko.musiczoneapp.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 import com.goncharenko.musiczoneapp.models.AudioModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MusicViewModel extends ViewModel {
     private MutableLiveData<ArrayList<AudioModel>> songsList = new MutableLiveData<>();

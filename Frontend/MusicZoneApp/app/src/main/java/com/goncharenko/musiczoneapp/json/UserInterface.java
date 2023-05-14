@@ -14,4 +14,8 @@ import retrofit2.http.Query;
 public interface UserInterface {
     @POST("/person/registration")
     Call<String> registration(@Body UserModel dto);
+    @GET("/person/{id}")
+    Call<UserModel> getUserFromId(@Path("id") int id);
+    @POST("/person/entry{email}-{password}")
+    Call<String> entry(@Path("email") String email, @Path("password") String password);
 }

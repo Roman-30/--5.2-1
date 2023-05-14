@@ -1,17 +1,10 @@
 package com.goncharenko.musiczoneapp.fragments;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,15 +15,12 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
-import com.goncharenko.musiczoneapp.activities.MainActivity;
 import com.goncharenko.musiczoneapp.models.AudioModel;
+import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 
 import java.io.File;
 import java.io.Serializable;
