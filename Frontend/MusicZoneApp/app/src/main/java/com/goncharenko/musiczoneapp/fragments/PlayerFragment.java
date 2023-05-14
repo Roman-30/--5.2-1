@@ -6,6 +6,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Handler;
 import android.text.TextUtils;
@@ -21,6 +23,7 @@ import com.goncharenko.musiczoneapp.models.AudioModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerFragment extends Fragment {
@@ -47,6 +50,8 @@ public class PlayerFragment extends Fragment {
     private boolean isPlaying = true;
     private final String PLAYING_KEY = "play";
 
+    private MusicViewModel musicViewModel;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +68,8 @@ public class PlayerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_player, container, false);
+
+        musicViewModel = new ViewModelProvider(requireActivity()).get(MusicViewModel.class);
 
         titleTextView = view.findViewById(R.id.song_title);
         titleTextView.setText(title);
@@ -82,14 +89,19 @@ public class PlayerFragment extends Fragment {
 
         titleTextView.setSelected(true);
 
-        Bundle extras = getActivity().getIntent().getExtras();
-        if(extras != null){
-            songsList = (ArrayList<AudioModel>) getActivity().getIntent().getSerializableExtra("LIST");
-        }
-        if(songsList == null || songsList.isEmpty()){
-            return view;
-        }
-        setResourcesWithMusic();
+        musicViewModel.getSongsList().observe(getViewLifecycleOwner(), audioModels -> {
+            songsList = audioModels;
+            setResourcesWithMusic();
+        });
+
+//        Bundle extras = getActivity().getIntent().getExtras();
+//        if(extras != null){
+//            songsList = (ArrayList<AudioModel>) getActivity().getIntent().getSerializableExtra("LIST");
+//        }
+//        if(songsList == null || songsList.isEmpty()){
+//            return view;
+//        }
+
 
         getActivity().runOnUiThread(new Runnable() {
             @Override

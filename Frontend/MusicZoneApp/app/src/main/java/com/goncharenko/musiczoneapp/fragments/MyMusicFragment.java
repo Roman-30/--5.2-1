@@ -23,7 +23,7 @@ import com.goncharenko.musiczoneapp.models.AudioModel;
 import java.io.File;
 import java.util.ArrayList;
 
-public class MyMusicFragment extends Fragment {
+public class MyMusicFragment extends Fragment implements ItemClickInterface{
     public static final String TAG = MyMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
 
@@ -84,10 +84,10 @@ public class MyMusicFragment extends Fragment {
         }else{
             if(savedSongsList.size() != 0){
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext()));
+                recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext(), this::onItemClick));
             }else {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
+                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext(), this::onItemClick));
             }
         }
 
@@ -102,7 +102,7 @@ public class MyMusicFragment extends Fragment {
                 // обработка если нет музыки
             }else{
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
+                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext(), this::onItemClick));
             }
         } else {
             savedSongsList = new ArrayList<>();
@@ -113,7 +113,12 @@ public class MyMusicFragment extends Fragment {
                 }
             }
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext()));
+            recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext(), this::onItemClick));
         }
+    }
+
+    @Override
+    public void onItemClick(int id) {
+
     }
 }

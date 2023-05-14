@@ -1,14 +1,20 @@
 package com.goncharenko.musiczoneapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.goncharenko.musiczoneapp.R;
@@ -21,11 +27,14 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
 
     ArrayList<AudioModel> songsList;
     Context context;
+    ItemClickInterface itemClickInterface;
 
-    public MusicListAdapter(ArrayList<AudioModel> songsList, Context context) {
+    public MusicListAdapter(ArrayList<AudioModel> songsList, Context context, ItemClickInterface itemClickInterface) {
         this.songsList = songsList;
         this.context = context;
+        this.itemClickInterface = itemClickInterface;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,7 +43,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
     }
 
     @Override
-    public void onBindViewHolder( MusicListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(MusicListAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         AudioModel songData = songsList.get(position);
         holder.titleTextView.setText(songData.getTitle());
 
@@ -47,15 +56,16 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //navigate to another acitivty
+                itemClickInterface.onItemClick(position);
 
-                MyMediaPlayer.getInstance().reset();
-                MyMediaPlayer.currentIndex = position;
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.putExtra("LIST",songsList);
-                intent.putExtra("fragment", "Player");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+//                MyMediaPlayer.getInstance().reset();
+//                MyMediaPlayer.currentIndex = position;
+//                Intent intent = new Intent(context, MainActivity.class);
+//                intent.putExtra("LIST",songsList);
+//                intent.putExtra("fragment", "Player");
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                context.startActivity(intent);
             }
         });
 

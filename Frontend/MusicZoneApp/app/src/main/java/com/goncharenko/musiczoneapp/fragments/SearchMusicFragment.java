@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,7 +36,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SearchMusicFragment extends Fragment {
+public class SearchMusicFragment extends Fragment implements ItemClickInterface{
     public static final String TAG = SearchMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
 
@@ -48,6 +50,8 @@ public class SearchMusicFragment extends Fragment {
     ArrayList<AudioModel> songsList = new ArrayList<>();
     ArrayList<AudioModel> savedSongsList = new ArrayList<>();
 
+    private MusicViewModel musicViewModel;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +64,8 @@ public class SearchMusicFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_music, container, false);
+
+        musicViewModel = new ViewModelProvider(requireActivity()).get(MusicViewModel.class);
 
         recyclerView = view.findViewById(R.id.recycler_view);
         inputSearch = view.findViewById(R.id.input_search);
@@ -93,10 +99,10 @@ public class SearchMusicFragment extends Fragment {
         }else{
             if(savedSongsList.size() != 0){
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext()));
+                recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext(), this::onItemClick));
             }else {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
+                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext(), this::onItemClick));
             }
         }
 
@@ -117,7 +123,7 @@ public class SearchMusicFragment extends Fragment {
                 // обработка если нет музыки
             }else{
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext()));
+                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext(), this::onItemClick));
             }
         } else {
             savedSongsList = new ArrayList<>();
@@ -128,8 +134,29 @@ public class SearchMusicFragment extends Fragment {
                 }
             }
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext()));
+            recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext(), this::onItemClick));
         }
     }
 
+    @Override
+    public void onItemClick(int id) {
+        MyMediaPlayer.getInstance().reset();
+        MyMediaPlayer.currentIndex = id;
+
+        musicViewModel.setSongsList(songsList);
+
+        Fragment playerFragment = getActivity().getSupportFragmentManager().findFragmentByTag(PlayerFragment.TAG);
+        if(playerFragment != null){
+        } else {
+            playerFragment = new PlayerFragment();
+        }
+        setNewFragment(playerFragment, PlayerFragment.TAG);
+    }
+
+    private void setNewFragment(Fragment fragment, String tag){
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.frame_layout, fragment, tag);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
 }
