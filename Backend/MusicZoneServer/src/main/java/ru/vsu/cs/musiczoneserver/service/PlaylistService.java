@@ -1,8 +1,8 @@
 package ru.vsu.cs.musiczoneserver.service;
 
-import io.swagger.v3.oas.models.security.SecurityScheme;
+
 import org.springframework.stereotype.Service;
-import ru.vsu.cs.musiczoneserver.dto.PersonDto;
+
 import ru.vsu.cs.musiczoneserver.dto.PlaylistDto;
 import ru.vsu.cs.musiczoneserver.entity.Playlist;
 import ru.vsu.cs.musiczoneserver.mapper.PlaylistMapper;

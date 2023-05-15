@@ -37,11 +37,13 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers("/user/**").hasAnyAuthority("ADMIN", "USER")
                 .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                .antMatchers("/registration", "/login").permitAll()
+                .antMatchers("/registration", "/login", "/swagger-ui/index.html#").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .antMatcher("/swagger-ui/index.html#")
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .permitAll());

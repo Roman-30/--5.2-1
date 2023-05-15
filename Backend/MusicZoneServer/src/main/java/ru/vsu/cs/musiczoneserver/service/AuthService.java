@@ -16,11 +16,16 @@ import ru.vsu.cs.musiczoneserver.service.jwtcomponent.JwtProvider;
 import javax.security.auth.message.AuthException;
 
 @Service
-@RequiredArgsConstructor
 public class AuthService {
     private final PersonRepository personRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+
+    public AuthService(PersonRepository personRepository, BCryptPasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
+        this.personRepository = personRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtProvider = jwtProvider;
+    }
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
         final Person user = personRepository.findByEmail(authRequest.getUsername()).orElseThrow();
