@@ -21,7 +21,9 @@ public class MusicController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> saveMusic(@RequestBody MusicDto dto) {
+    public ResponseEntity<?> saveMusic(@RequestBody MusicDto dto) throws IOException {
+        String link = service.downloadFileToServer(dto.getName());
+        dto.setLink(link);
         var music = service.saveMusic(dto);
         if (music == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

@@ -1,6 +1,9 @@
 package ru.vsu.cs.musiczoneserver.service;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.stereotype.Service;
 import ru.vsu.cs.musiczoneserver.dto.MusicDto;
 import ru.vsu.cs.musiczoneserver.dto.PlaylistDto;
@@ -11,9 +14,7 @@ import ru.vsu.cs.musiczoneserver.mapper.PlaylistMapper;
 import ru.vsu.cs.musiczoneserver.repository.MusicRepository;
 import ru.vsu.cs.musiczoneserver.repository.PlaylistRepository;
 
-import javax.sound.sampled.*;
 import java.io.*;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,6 @@ import java.util.stream.Collectors;
 public class MusicService {
 
     private static final String name = "APP_MUSIC";
-
     private final MusicMapper mapper;
     private final PlaylistMapper playlistMapper;
 
@@ -41,13 +41,14 @@ public class MusicService {
         }
 
         var playlist = playlistRepository.findByName(name);
+        Playlist playlist1;
 
         if (playlist.isEmpty()) {
-            playlistRepository.save(playlistMapper
+            playlist1 = playlistRepository.save(playlistMapper
                     .toEntity(new PlaylistDto(name, "All app music")));
+        } else {
+            playlist1 = playlist.orElseThrow();
         }
-
-        Playlist playlist1 = playlistRepository.findByName(name).orElseThrow();
 
         var music = mapper.toEntity(musicDto);
 
@@ -66,7 +67,7 @@ public class MusicService {
     }
 
     public byte[] getFileByLink(String link) throws IOException {
-        File srcFile = new File(link);
+        String srcFile = new File(link).getAbsolutePath();
 
         byte[] byteArray = new byte[(int) srcFile.length()];
 
@@ -82,5 +83,44 @@ public class MusicService {
                 .stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public String downloadFileToServer(String fileName) throws IOException {
+        String url = "https://storage.yandexcloud.net/musik/" + fileName + ".mp3";
+
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(url);
+
+        HttpResponse response;
+        try {
+            response = httpClient.execute(request);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        InputStream stream;
+        try {
+            stream = response.getEntity().getContent();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+        int nRead;
+        byte[] data = new byte[16384];
+
+        while ((nRead = stream.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
+        }
+
+        String path = "MusicZoneServer\\src\\main\\resources\\music\\" + fileName + ".mp3";
+
+        try (FileOutputStream fos = new FileOutputStream(
+                new File(path).getAbsolutePath())) {
+            fos.write(buffer.toByteArray());
+            fos.close();
+        }
+
+        return path;
     }
 }
