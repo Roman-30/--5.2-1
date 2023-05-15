@@ -35,7 +35,7 @@ public class MusicService {
         this.playlistRepository = playlistRepository;
     }
 
-    public Music saveMusic(MusicDto musicDto) {
+    public MusicDto saveMusic(MusicDto musicDto) {
         if (musicRepository.findByLink(musicDto.getLink()).isPresent()) {
             return null;
         }
@@ -53,7 +53,7 @@ public class MusicService {
 
         music.getPlaylists().add(playlist1);
 
-        return musicRepository.save(music);
+        return mapper.toDto(musicRepository.save(music));
     }
 
     public Music deleteMusic(MusicDto musicDto) {
@@ -66,8 +66,7 @@ public class MusicService {
     }
 
     public byte[] getFileByLink(String link) throws IOException {
-        File srcFile = new File("C:\\Users\\romse\\OneDrive\\Документы\\GitHub\\TP-5.2-1\\Backend\\MusicZoneServer\\" + link);
-        System.out.println(srcFile.getPath());
+        File srcFile = new File(link);
 
         byte[] byteArray = new byte[(int) srcFile.length()];
 
@@ -75,30 +74,7 @@ public class MusicService {
             fileInputStream.read(byteArray);
         }
 
-        System.out.println(Arrays.toString(byteArray));
-
         return byteArray;
-    }
-
-    public static AudioFormat getAudioFormat(File audioFile) throws Exception {
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-        AudioFormat audioFormat = audioInputStream.getFormat();
-        audioInputStream.close();
-        return audioFormat;
-    }
-
-    public void saveMusicFile(byte[] audioBytes) throws Exception {
-        AudioFormat audioFormat = getAudioFormat(new File("C:\\Users\\romse\\OneDrive\\Документы\\GitHub\\TP-5.2-1\\Backend\\MusicZoneServer\\src\\main\\resources\\music\\Melnica_-_Dorogi_48002701.wave"));
-
-        AudioInputStream audioInputStream = new AudioInputStream(new ByteArrayInputStream(audioBytes), audioFormat, audioBytes.length);
-
-        AudioFileFormat.Type targetType = AudioFileFormat.Type.WAVE;
-        AudioFileFormat targetFileFormat = new AudioFileFormat(targetType, audioFormat, AudioSystem.NOT_SPECIFIED);
-
-        File outputFile = new File("C:\\Users\\romse\\OneDrive\\Документы\\GitHub\\TP-5.2-1\\Backend\\MusicZoneServer\\src\\main\\resources\\music");
-        AudioSystem.write(audioInputStream, targetType, outputFile);
-
-        audioInputStream.close();
     }
 
     public List<MusicDto> findAll() {

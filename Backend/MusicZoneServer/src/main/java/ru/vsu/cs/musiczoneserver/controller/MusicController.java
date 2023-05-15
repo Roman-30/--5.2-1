@@ -26,7 +26,7 @@ public class MusicController {
         if (music == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>("", HttpStatus.OK);
+            return new ResponseEntity<>(music, HttpStatus.OK);
         }
     }
 
@@ -48,13 +48,6 @@ public class MusicController {
     @GetMapping("/file")
     public ResponseEntity<?> getMusic(@RequestParam String link) throws IOException {
         return ResponseEntity.ok(service.getFileByLink(link));
-    }
-
-    // TODO: 11.05.2023 Get надо
-    @PostMapping("/file/save")
-    public ResponseEntity<?> saveMusicFile(@RequestBody byte[] bytes) throws Exception {
-        service.saveMusicFile(bytes);
-        return ResponseEntity.ok("OK!");
     }
 
     @DeleteMapping("/file/delete")
