@@ -40,7 +40,6 @@ public class PlaylistController {
         }
     }
 
-
     @GetMapping("/get/all")
     public ResponseEntity<List<PlaylistDto>> findAllPlaylists() {
         return ResponseEntity.ok(service.findAll());
@@ -66,14 +65,14 @@ public class PlaylistController {
         }
     }
 
-//    @PostMapping("/song/add")
-//    public ResponseEntity<?> addMusicOnPlaylist(@RequestParam Integer pl, @RequestParam Integer tr) {
-//        var playlist = service.addMusicOnPlaylist(pl, tr);
-//        if (playlist == null) {
-//            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-//        } else {
-//            return new ResponseEntity<>("Added is successful!", HttpStatus.OK);
-//        }
-//    }
+    @PostMapping("/song/add")
+    public ResponseEntity<?> addMusicOnPlaylist(@RequestParam Integer pl, @RequestParam Integer tr) {
+        var playlist = service.addMusicOnPlaylist(pl, tr);
+        if (playlist == null) {
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>("Added is successful!", HttpStatus.OK);
+        }
+    }
 
 }

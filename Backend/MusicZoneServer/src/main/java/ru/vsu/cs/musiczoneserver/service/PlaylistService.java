@@ -1,6 +1,8 @@
 package ru.vsu.cs.musiczoneserver.service;
 
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.stereotype.Service;
+import ru.vsu.cs.musiczoneserver.dto.PersonDto;
 import ru.vsu.cs.musiczoneserver.dto.PlaylistDto;
 import ru.vsu.cs.musiczoneserver.entity.Playlist;
 import ru.vsu.cs.musiczoneserver.mapper.PlaylistMapper;
@@ -60,8 +62,9 @@ public class PlaylistService {
         }
     }
 
-    public Playlist deleteMusicOnPlaylist(Integer pl, Integer tr) {
-        Optional<Playlist> oldPlaylist = playlistRepository.findById(pl);
+    public Playlist deleteMusicOnPlaylist(Integer id, Integer tr) {
+        var user = personRepository.findById(id).orElseThrow();
+        Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getNickName());
         if (oldPlaylist.isPresent()) {
             Playlist playlist = oldPlaylist.orElseThrow();
             playlist.getMusics().remove(musicRepository.findById(tr)
@@ -71,6 +74,34 @@ public class PlaylistService {
         } else {
             return null;
         }
+    }
+
+    public Playlist addMusicOnPlaylist(Integer id, Integer tr) {
+        var user = personRepository.findById(id).orElseThrow();
+        Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getNickName());
+        Playlist playlist;
+        if (oldPlaylist.isPresent()) {
+            playlist = oldPlaylist.orElseThrow();
+            playlist.getMusics().add(musicRepository.findById(tr)
+                    .orElseThrow());
+
+        } else {
+            playlist = playlistRepository.save(
+                    mapper.toEntity(new PlaylistDto(user.getNickName(), "User tracks"))
+            );
+
+
+            playlist.getMusics().add(musicRepository.findById(tr)
+                    .orElseThrow());
+
+        }
+
+        var s = playlistRepository.save(playlist);
+
+        user.getPlaylists().add(s);
+        personRepository.save(user);
+
+        return s;
     }
 
     private void addMusicOnPlaylist(Playlist playlist, Set<Integer> musicIds) {
