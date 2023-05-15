@@ -20,10 +20,9 @@ public class PlaylistController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addPlaylist(@RequestBody PlaylistDto dto,
-                                         @RequestParam String email,
-                                         @RequestBody List<Integer> ids
+                                         @RequestParam String email
     ) {
-        var playlist = service.savePlayList(dto, email, ids);
+        var playlist = service.savePlayList(dto, email);
         if (playlist == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         } else {

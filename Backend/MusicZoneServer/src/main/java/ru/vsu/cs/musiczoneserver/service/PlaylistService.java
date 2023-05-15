@@ -29,7 +29,7 @@ public class PlaylistService {
         this.mapper = mapper;
     }
 
-    public Playlist savePlayList(PlaylistDto dto, String email, List<Integer> musicIds) {
+    public Playlist savePlayList(PlaylistDto dto, String email) {
         Optional<Playlist> oldPlaylist = playlistRepository.findByName(dto.getName());
         if (oldPlaylist.isPresent()) {
             return null;
@@ -38,7 +38,7 @@ public class PlaylistService {
             playlist.getPeople().add(personRepository.findByEmail(email)
                     .orElseThrow());
 
-            addMusicOnPlaylist(playlist, musicIds);
+            addMusicOnPlaylist(playlist, dto.getIds());
 
             return playlistRepository.save(playlist);
         }
@@ -72,7 +72,7 @@ public class PlaylistService {
         }
     }
 
-    private void addMusicOnPlaylist(Playlist playlist, List<Integer> musicIds) {
+    private void addMusicOnPlaylist(Playlist playlist, Set<Integer> musicIds) {
         for (Integer id : musicIds) {
             playlist.getMusics().add(
                     musicRepository.findById(id).orElseThrow()
