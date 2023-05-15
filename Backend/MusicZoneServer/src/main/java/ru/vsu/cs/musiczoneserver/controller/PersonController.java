@@ -1,11 +1,8 @@
 package ru.vsu.cs.musiczoneserver.controller;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.musiczoneserver.dto.PersonDto;
 import ru.vsu.cs.musiczoneserver.service.PersonService;
@@ -14,6 +11,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/person")
+@Api(value = "User Resource REST Endpoint", description = "Shows the user info")
 public class PersonController {
     private final PersonService service;
 

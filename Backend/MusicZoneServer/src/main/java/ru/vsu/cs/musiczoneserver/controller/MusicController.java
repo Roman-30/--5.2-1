@@ -7,6 +7,7 @@ import ru.vsu.cs.musiczoneserver.dto.MusicDto;
 import ru.vsu.cs.musiczoneserver.entity.Music;
 import ru.vsu.cs.musiczoneserver.service.MusicService;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class MusicController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> saveMusic(@RequestBody MusicDto dto) throws IOException {
+    public ResponseEntity<?> saveMusic(@RequestBody @Valid MusicDto dto) throws IOException {
         String link = service.downloadFileToServer(dto.getName());
         dto.setLink(link);
         var music = service.saveMusic(dto);

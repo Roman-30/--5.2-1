@@ -1,8 +1,6 @@
 package ru.vsu.cs.musiczoneserver.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
 
 import java.util.Set;
 
