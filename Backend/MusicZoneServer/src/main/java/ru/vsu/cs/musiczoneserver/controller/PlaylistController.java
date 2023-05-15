@@ -1,16 +1,13 @@
 package ru.vsu.cs.musiczoneserver.controller;
 
-import org.hibernate.validator.constraints.ParameterScriptAssert;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.musiczoneserver.dto.PlaylistDto;
-import ru.vsu.cs.musiczoneserver.entity.Playlist;
 import ru.vsu.cs.musiczoneserver.service.PlaylistService;
 
-import javax.swing.*;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/playlist")
@@ -22,8 +19,11 @@ public class PlaylistController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addPlaylist(@RequestBody PlaylistDto dto, @RequestParam String email) {
-        var playlist = service.save(dto, email);
+    public ResponseEntity<?> addPlaylist(@RequestBody PlaylistDto dto,
+                                         @RequestParam String email,
+                                         @RequestBody List<Integer> ids
+    ) {
+        var playlist = service.savePlayList(dto, email, ids);
         if (playlist == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         } else {
@@ -67,14 +67,14 @@ public class PlaylistController {
         }
     }
 
-    @PostMapping("/song/add")
-    public ResponseEntity<?> addMusicOnPlaylist(@RequestParam Integer pl, @RequestParam Integer tr) {
-        var playlist = service.addMusicOnPlaylist(pl, tr);
-        if (playlist == null) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
-        } else {
-            return new ResponseEntity<>("Added is successful!", HttpStatus.OK);
-        }
-    }
+//    @PostMapping("/song/add")
+//    public ResponseEntity<?> addMusicOnPlaylist(@RequestParam Integer pl, @RequestParam Integer tr) {
+//        var playlist = service.addMusicOnPlaylist(pl, tr);
+//        if (playlist == null) {
+//            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+//        } else {
+//            return new ResponseEntity<>("Added is successful!", HttpStatus.OK);
+//        }
+//    }
 
 }

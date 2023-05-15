@@ -8,10 +8,9 @@ import ru.vsu.cs.musiczoneserver.repository.MusicRepository;
 import ru.vsu.cs.musiczoneserver.repository.PersonRepository;
 import ru.vsu.cs.musiczoneserver.repository.PlaylistRepository;
 
-import java.security.cert.PKIXParameters;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,11 +29,7 @@ public class PlaylistService {
         this.mapper = mapper;
     }
 
-    public Playlist savePlayList(PlaylistDto dto) {
-        return new Playlist();
-    }
-
-    public Playlist save(PlaylistDto dto, String email) {
+    public Playlist savePlayList(PlaylistDto dto, String email, List<Integer> musicIds) {
         Optional<Playlist> oldPlaylist = playlistRepository.findByName(dto.getName());
         if (oldPlaylist.isPresent()) {
             return null;
@@ -43,7 +38,9 @@ public class PlaylistService {
             playlist.getPeople().add(personRepository.findByEmail(email)
                     .orElseThrow());
 
-            return playlistRepository.save(mapper.toEntity(dto));
+            addMusicOnPlaylist(playlist, musicIds);
+
+            return playlistRepository.save(playlist);
         }
     }
 
@@ -53,6 +50,8 @@ public class PlaylistService {
             Playlist playlist = oldPlaylist.orElseThrow();
             playlist.setName(dto.getName());
             playlist.setDescription(dto.getDescription());
+
+
 
             return playlistRepository.save(playlist);
         } else {
@@ -73,16 +72,11 @@ public class PlaylistService {
         }
     }
 
-    public Playlist addMusicOnPlaylist(Integer pl, Integer tr) {
-        Optional<Playlist> oldPlaylist = playlistRepository.findById(pl);
-        if (oldPlaylist.isPresent()) {
-            Playlist playlist = oldPlaylist.orElseThrow();
-            playlist.getMusics().add(musicRepository.findById(tr)
-                    .orElseThrow());
-
-            return playlistRepository.save(playlist);
-        } else {
-            return null;
+    private void addMusicOnPlaylist(Playlist playlist, List<Integer> musicIds) {
+        for (Integer id : musicIds) {
+            playlist.getMusics().add(
+                    musicRepository.findById(id).orElseThrow()
+            );
         }
     }
 
@@ -101,6 +95,7 @@ public class PlaylistService {
     public List<PlaylistDto> findAll() {
         return playlistRepository.findAll()
                 .stream()
+                .filter(e -> !e.getName().equals("APP_MUSIC"))
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
