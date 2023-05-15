@@ -7,6 +7,7 @@ import ru.vsu.cs.musiczoneserver.dto.MusicDto;
 import ru.vsu.cs.musiczoneserver.entity.Music;
 import ru.vsu.cs.musiczoneserver.service.MusicService;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,12 +22,14 @@ public class MusicController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> saveMusic(@RequestBody MusicDto dto) {
+    public ResponseEntity<?> saveMusic(@RequestBody @Valid MusicDto dto) throws IOException {
+        String link = service.downloadFileToServer(dto.getName());
+        dto.setLink(link);
         var music = service.saveMusic(dto);
         if (music == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>("", HttpStatus.OK);
+            return new ResponseEntity<>(music, HttpStatus.OK);
         }
     }
 
@@ -45,15 +48,9 @@ public class MusicController {
         }
     }
 
-    @PostMapping("/file")
+    @GetMapping("/file")
     public ResponseEntity<?> getMusic(@RequestParam String link) throws IOException {
         return ResponseEntity.ok(service.getFileByLink(link));
-    }
-
-    @PostMapping("/file/save")
-    public ResponseEntity<?> saveMusicFile(@RequestBody byte[] bytes) throws Exception {
-        service.saveMusicFile(bytes);
-        return ResponseEntity.ok("OK!");
     }
 
     @DeleteMapping("/file/delete")

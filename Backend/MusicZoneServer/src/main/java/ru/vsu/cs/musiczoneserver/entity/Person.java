@@ -1,6 +1,7 @@
 package ru.vsu.cs.musiczoneserver.entity;
 
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.vsu.cs.musiczoneserver.entity.model.Role;
@@ -31,6 +32,7 @@ public class Person implements UserDetails {
     private String email;
     @NonNull
     private String password;
+
     private String nickName;
     private String phone;
 
@@ -42,9 +44,9 @@ public class Person implements UserDetails {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "user_playlist",
             joinColumns = {
-                    @JoinColumn(name = "playlist_id", referencedColumnName = "id")},
+                    @JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {
-                    @JoinColumn(name = "user_id", referencedColumnName = "id")})
+                    @JoinColumn(name = "playlist_id", referencedColumnName = "id")})
     private Set<Playlist> playlists = new HashSet<>();
 
     @Override
