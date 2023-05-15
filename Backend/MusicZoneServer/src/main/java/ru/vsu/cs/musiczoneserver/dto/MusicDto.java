@@ -5,6 +5,8 @@ import lombok.NonNull;
 
 @Data
 public class MusicDto {
+
+    private Integer id;
     private String name;
     private String copyright;
     private String link;

@@ -1,7 +1,9 @@
 package ru.vsu.cs.musiczoneserver;
 
+import org.mapstruct.factory.Mappers;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.vsu.cs.musiczoneserver.mapper.MusicMapper;
 
 import java.io.File;
 import java.io.FileInputStream;

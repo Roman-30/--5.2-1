@@ -31,6 +31,11 @@ public class PersonController {
         }
     }
 
+    @PostMapping("/login")
+    public String login() {
+        return "login";
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePersonData(@PathVariable Integer id, @RequestBody PersonDto dto) {
         var user = service.updateData(id, dto);
@@ -41,7 +46,8 @@ public class PersonController {
         }
     }
 
-    @PutMapping("/{id}")
+    // TODO: 11.05.2023
+    @PutMapping("/pass/{id}")
     public ResponseEntity<?> updatePassword(@PathVariable Integer id, @RequestParam String pass) {
         var user = service.updatePassword(id, pass);
         if (user == null) {

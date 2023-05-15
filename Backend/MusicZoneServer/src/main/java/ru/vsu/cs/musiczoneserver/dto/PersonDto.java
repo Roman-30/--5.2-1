@@ -9,21 +9,23 @@ import javax.validation.constraints.Pattern;
 @Data
 public class PersonDto {
 
-    @NotEmpty
-    @Pattern(regexp = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$",
-    message = "Не соответствует формату email!")
+    private Integer id;
+
+//    @NotEmpty
+//    @Pattern(regexp = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$",
+//    message = "Не соответствует формату email!")
     private String email;
-    @NotEmpty
-    @Min(5)
+//    @NotEmpty
+//    @Min(5)
     private String password;
-    @NotEmpty
+//    @NotEmpty
     private String name;
-    @NotEmpty
+//    @NotEmpty
     private String nickName;
-    @NotEmpty
-    @Pattern(regexp = "\\d{10}",
-    message = "Не соответствует формату номера телефона!")
+//    @NotEmpty
+//    @Pattern(regexp = "\\d{10}",
+//    message = "Не соответствует формату номера телефона!")
     private String phone;
-    @NotEmpty
+//    @NotEmpty
     private String surname;
 }

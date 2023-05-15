@@ -45,11 +45,12 @@ public class MusicController {
         }
     }
 
-    @PostMapping("/file")
+    @GetMapping("/file")
     public ResponseEntity<?> getMusic(@RequestParam String link) throws IOException {
         return ResponseEntity.ok(service.getFileByLink(link));
     }
 
+    // TODO: 11.05.2023 Get надо
     @PostMapping("/file/save")
     public ResponseEntity<?> saveMusicFile(@RequestBody byte[] bytes) throws Exception {
         service.saveMusicFile(bytes);

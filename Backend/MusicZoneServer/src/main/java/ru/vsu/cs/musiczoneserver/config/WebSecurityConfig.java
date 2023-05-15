@@ -20,7 +20,6 @@ public class WebSecurityConfig {
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 8, new SecureRandom());
     }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -37,6 +36,7 @@ public class WebSecurityConfig {
                         .defaultSuccessUrl("/")
                         .permitAll()
                 )
+
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                         .permitAll());

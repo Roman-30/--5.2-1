@@ -9,6 +9,4 @@ public interface MusicMapper {
     Music toEntity(MusicDto musicDto);
 
     MusicDto toDto(Music music);
-
-
 }
