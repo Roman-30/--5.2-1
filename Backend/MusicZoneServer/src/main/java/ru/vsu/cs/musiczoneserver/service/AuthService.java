@@ -11,7 +11,7 @@ import ru.vsu.cs.musiczoneserver.entity.jwt.JwtAuthentication;
 import ru.vsu.cs.musiczoneserver.entity.jwt.JwtRequest;
 import ru.vsu.cs.musiczoneserver.entity.jwt.JwtResponse;
 import ru.vsu.cs.musiczoneserver.repository.PersonRepository;
-import ru.vsu.cs.musiczoneserver.service.jwt.JwtProvider;
+import ru.vsu.cs.musiczoneserver.service.jwtcomponent.JwtProvider;
 
 import javax.security.auth.message.AuthException;
 

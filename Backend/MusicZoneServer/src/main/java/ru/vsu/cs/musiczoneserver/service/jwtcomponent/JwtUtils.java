@@ -1,4 +1,4 @@
-package ru.vsu.cs.musiczoneserver.service.jwt;
+package ru.vsu.cs.musiczoneserver.service.jwtcomponent;
 
 import io.jsonwebtoken.Claims;
 import ru.vsu.cs.musiczoneserver.entity.jwt.JwtAuthentication;
