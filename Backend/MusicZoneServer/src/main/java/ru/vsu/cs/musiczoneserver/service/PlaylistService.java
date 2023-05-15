@@ -105,6 +105,7 @@ public class PlaylistService {
     }
 
     private void addMusicOnPlaylist(Playlist playlist, Set<Integer> musicIds) {
+        if (musicIds.size() == 0) return;
         for (Integer id : musicIds) {
             playlist.getMusics().add(
                     musicRepository.findById(id).orElseThrow()
