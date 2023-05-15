@@ -44,14 +44,15 @@ public class PlaylistService {
         }
     }
 
-    public Playlist updatePlaylist(Integer id, PlaylistDto dto) {
-        Optional<Playlist> oldPlaylist = playlistRepository.findById(id);
+    public Playlist updatePlaylist(PlaylistDto dto) {
+        Optional<Playlist> oldPlaylist = playlistRepository.findById(dto.getId());
         if (oldPlaylist.isPresent()) {
             Playlist playlist = oldPlaylist.orElseThrow();
             playlist.setName(dto.getName());
             playlist.setDescription(dto.getDescription());
 
-
+            playlist.getMusics().clear();
+            addMusicOnPlaylist(playlist, dto.getIds());
 
             return playlistRepository.save(playlist);
         } else {

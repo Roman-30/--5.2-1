@@ -30,9 +30,9 @@ public class PlaylistController {
         }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updatePlaylist(@PathVariable Integer id, @RequestBody PlaylistDto dto) {
-        var playlist = service.updatePlaylist(id, dto);
+    @PutMapping("/update")
+    public ResponseEntity<?> updatePlaylist(@RequestBody PlaylistDto dto) {
+        var playlist = service.updatePlaylist(dto);
         if (playlist == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         } else {
