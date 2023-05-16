@@ -44,12 +44,16 @@
     <string name="forgot_password">Forgot password</string>
 
     <string name="adminMusic">Admins Music</string>
-    
+
     <string name="track_name">Track name</string>
     <string name="author">Author</string>
     <string name="genre">Genre</string>
     <string name="track_path">Track</string>
     <string name="add_track">Add track</string>
+
+    <string name="playlists_logo">Playlist</string>
+    <string name="playlist_name">Playlist</string>
+    <string name="check_playlists">Check Playlists</string>
 
     <string-array name="misic">
         <item>music 1</item>
