@@ -43,6 +43,8 @@
     <string name="recover_password">Recover your password</string>
     <string name="forgot_password">Forgot password</string>
 
+    <string name="adminMusic">Admins Music</string>
+
     <string-array name="misic">
         <item>music 1</item>
         <item>music 2</item>
