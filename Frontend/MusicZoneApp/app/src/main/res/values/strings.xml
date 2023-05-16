@@ -44,6 +44,12 @@
     <string name="forgot_password">Forgot password</string>
 
     <string name="adminMusic">Admins Music</string>
+    
+    <string name="track_name">Track name</string>
+    <string name="author">Author</string>
+    <string name="genre">Genre</string>
+    <string name="track_path">Track</string>
+    <string name="add_track">Add track</string>
 
     <string-array name="misic">
         <item>music 1</item>
@@ -54,4 +60,5 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="music_time">0:00</string>
+    <string name="title_activity_add_music">AddMusicActivity</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.goncharenko.musiczoneapp.fragments;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -16,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.goncharenko.musiczoneapp.R;
+import com.goncharenko.musiczoneapp.activities.AddMusicActivity;
+import com.goncharenko.musiczoneapp.activities.EditAccountActivity;
 import com.goncharenko.musiczoneapp.models.AudioModel;
 import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 
@@ -39,7 +42,6 @@ public class AdminMusicFragment extends Fragment implements ItemClickInterface, 
         View view = inflater.inflate(R.layout.fragment_admin_music, container, false);
 
         musicViewModel = new ViewModelProvider(requireActivity()).get(MusicViewModel.class);
-
         recyclerView = view.findViewById(R.id.recycler_view);
         addMusicButton = view.findViewById(R.id.add_music_button);
         addMusicButton.setOnClickListener(v -> addMusic());
@@ -69,7 +71,8 @@ public class AdminMusicFragment extends Fragment implements ItemClickInterface, 
     }
 
     public void addMusic(){
-
+        Intent intent = new Intent(getActivity(), AddMusicActivity.class);
+        startActivity(intent);
     }
 
     @Override
