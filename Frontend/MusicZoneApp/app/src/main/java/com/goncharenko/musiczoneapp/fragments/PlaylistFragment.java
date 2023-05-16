@@ -1,6 +1,5 @@
 package com.goncharenko.musiczoneapp.fragments;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -14,10 +13,8 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
 import com.goncharenko.musiczoneapp.R;
-import com.goncharenko.musiczoneapp.activities.AddMusicActivity;
 import com.goncharenko.musiczoneapp.adapters.MusicListAdapter;
 import com.goncharenko.musiczoneapp.clickinterface.ButtonClickInterface;
 import com.goncharenko.musiczoneapp.clickinterface.ItemClickInterface;
@@ -27,11 +24,10 @@ import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 import java.io.File;
 import java.util.ArrayList;
 
-public class AdminMusicFragment extends Fragment implements ItemClickInterface, ButtonClickInterface {
+public class PlaylistFragment extends Fragment implements ItemClickInterface, ButtonClickInterface {
 
-    public static final String TAG = AdminMusicFragment.class.getSimpleName();
+    public static final String TAG = PlaylistFragment.class.getSimpleName();
     private RecyclerView recyclerView;
-    private ImageButton addMusicButton;
 
     private ArrayList<AudioModel> addSongsList = new ArrayList<>();
 
@@ -41,12 +37,10 @@ public class AdminMusicFragment extends Fragment implements ItemClickInterface, 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_admin_music, container, false);
+        View view = inflater.inflate(R.layout.fragment_playlist, container, false);
 
         musicViewModel = new ViewModelProvider(requireActivity()).get(MusicViewModel.class);
         recyclerView = view.findViewById(R.id.recycler_view);
-        addMusicButton = view.findViewById(R.id.add_music_button);
-        addMusicButton.setOnClickListener(v -> addMusic());
 
         String[] projection = {
                 MediaStore.Audio.Media.TITLE,
@@ -68,13 +62,7 @@ public class AdminMusicFragment extends Fragment implements ItemClickInterface, 
         }else{
             setRecyclerView(addSongsList);
         }
-
         return view;
-    }
-
-    public void addMusic(){
-        Intent intent = new Intent(getActivity(), AddMusicActivity.class);
-        startActivity(intent);
     }
 
     @Override
@@ -94,7 +82,12 @@ public class AdminMusicFragment extends Fragment implements ItemClickInterface, 
 
     @Override
     public void onItemButtonClick(int id) {
-
+        Fragment playlistFragment = getActivity().getSupportFragmentManager().findFragmentByTag(PlaylistFragment.TAG);
+        if(playlistFragment != null){
+        } else {
+            playlistFragment = new PlayerFragment();
+        }
+        setNewFragment(playlistFragment, PlaylistFragment.TAG);
     }
 
     private void setRecyclerView(ArrayList<AudioModel> songsList){

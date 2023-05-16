@@ -1,4 +1,4 @@
-package com.goncharenko.musiczoneapp.fragments;
+package com.goncharenko.musiczoneapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -6,14 +6,14 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.goncharenko.musiczoneapp.R;
-import com.goncharenko.musiczoneapp.models.AudioModel;
+import com.goncharenko.musiczoneapp.clickinterface.ItemClickInterface;
+import com.goncharenko.musiczoneapp.fragments.MyMediaPlayer;
 import com.goncharenko.musiczoneapp.models.PlaylistModel;
 
 import java.util.ArrayList;
@@ -23,10 +23,14 @@ public class PlaylistsListAdapter extends RecyclerView.Adapter<PlaylistsListAdap
     private List<PlaylistModel> playlists = new ArrayList<>();
     private Context context;
 
-    public PlaylistsListAdapter(List<PlaylistModel> playlists, Context context) {
+    private ItemClickInterface itemClickInterface;
+
+    public PlaylistsListAdapter(List<PlaylistModel> playlists, Context context, ItemClickInterface itemClickInterface) {
         this.playlists = playlists;
         this.context = context;
+        this.itemClickInterface = itemClickInterface;
     }
+
 
     @Override
     public PlaylistsListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -45,7 +49,7 @@ public class PlaylistsListAdapter extends RecyclerView.Adapter<PlaylistsListAdap
             holder.titleTextView.setTextColor(Color.parseColor("#000000"));
         }
 
-        //holder.itemView.setOnClickListener(v -> itemClickInterface.onItemClick(position));
+        holder.itemView.setOnClickListener(v -> itemClickInterface.onItemClick(position));
         //holder.optionsButton.setOnClickListener(v -> buttonClickInterface.onItemButtonClick(position));
 
     }

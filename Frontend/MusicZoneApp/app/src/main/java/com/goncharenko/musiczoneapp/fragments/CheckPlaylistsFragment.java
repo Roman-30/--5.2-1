@@ -12,14 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.goncharenko.musiczoneapp.R;
-import com.goncharenko.musiczoneapp.models.AudioModel;
+import com.goncharenko.musiczoneapp.adapters.PlaylistsListAdapter;
+import com.goncharenko.musiczoneapp.clickinterface.ItemClickInterface;
 import com.goncharenko.musiczoneapp.models.PlaylistModel;
-import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CheckPlaylistsFragment extends Fragment {
+public class CheckPlaylistsFragment extends Fragment implements ItemClickInterface {
 
     public static final String TAG = CheckPlaylistsFragment.class.getSimpleName();
 
@@ -45,15 +45,27 @@ public class CheckPlaylistsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onItemClick(int id) {
+        Fragment playlistFragment = getActivity().getSupportFragmentManager().findFragmentByTag(PlaylistFragment.TAG);
+        if(playlistFragment != null){
+        } else {
+            playlistFragment = new PlaylistFragment();
+        }
+        setNewFragment(playlistFragment, PlaylistFragment.TAG);
+    }
+
     private void setNewFragment(Fragment fragment, String tag){
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frame_layout, fragment, tag);
         ft.addToBackStack(null);
         ft.commit();
     }
-    
+
     private void setRecyclerView(List<PlaylistModel> playlists){
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new PlaylistsListAdapter(playlists, getContext().getApplicationContext()));
+        recyclerView.setAdapter(new PlaylistsListAdapter(playlists, getContext().getApplicationContext(), this::onItemClick));
     }
+
+
 }

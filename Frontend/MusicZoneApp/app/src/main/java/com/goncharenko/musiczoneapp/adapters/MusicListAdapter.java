@@ -1,36 +1,31 @@
-package com.goncharenko.musiczoneapp.fragments;
+package com.goncharenko.musiczoneapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.goncharenko.musiczoneapp.R;
-import com.goncharenko.musiczoneapp.activities.MainActivity;
+import com.goncharenko.musiczoneapp.clickinterface.ButtonClickInterface;
+import com.goncharenko.musiczoneapp.clickinterface.ItemClickInterface;
+import com.goncharenko.musiczoneapp.fragments.MyMediaPlayer;
 import com.goncharenko.musiczoneapp.models.AudioModel;
 
 import java.util.ArrayList;
 
 public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.ViewHolder>{
 
-    ArrayList<AudioModel> songsList;
-    Context context;
-    ItemClickInterface itemClickInterface;
-    ButtonClickInterface buttonClickInterface;
+    private ArrayList<AudioModel> songsList;
+    private Context context;
+    private ItemClickInterface itemClickInterface;
+    private ButtonClickInterface buttonClickInterface;
 
     public MusicListAdapter(ArrayList<AudioModel> songsList, Context context, ItemClickInterface itemClickInterface, ButtonClickInterface buttonClickInterface) {
         this.songsList = songsList;

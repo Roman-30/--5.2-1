@@ -23,6 +23,9 @@ import android.widget.ImageButton;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.activities.MainListener;
+import com.goncharenko.musiczoneapp.adapters.MusicListAdapter;
+import com.goncharenko.musiczoneapp.clickinterface.ButtonClickInterface;
+import com.goncharenko.musiczoneapp.clickinterface.ItemClickInterface;
 import com.goncharenko.musiczoneapp.models.AudioModel;
 import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -31,7 +34,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SearchMusicFragment extends Fragment implements ItemClickInterface, ButtonClickInterface{
+public class SearchMusicFragment extends Fragment implements ItemClickInterface, ButtonClickInterface {
     public static final String TAG = SearchMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
 
