@@ -144,7 +144,7 @@ public class AccountFragment extends Fragment {
         if(myMusicFragment != null){
             //saveFragmentState(1, myMusicFragment);
         } else {
-            myMusicFragment = new SearchMusicFragment();
+            myMusicFragment = new MyMusicFragment();
         }
         setNewFragment(myMusicFragment, MyMusicFragment.TAG);
     }

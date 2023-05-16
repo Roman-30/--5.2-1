@@ -9,6 +9,8 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,11 +30,13 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
     ArrayList<AudioModel> songsList;
     Context context;
     ItemClickInterface itemClickInterface;
+    ButtonClickInterface buttonClickInterface;
 
-    public MusicListAdapter(ArrayList<AudioModel> songsList, Context context, ItemClickInterface itemClickInterface) {
+    public MusicListAdapter(ArrayList<AudioModel> songsList, Context context, ItemClickInterface itemClickInterface, ButtonClickInterface buttonClickInterface) {
         this.songsList = songsList;
         this.context = context;
         this.itemClickInterface = itemClickInterface;
+        this.buttonClickInterface = buttonClickInterface;
     }
 
 
@@ -53,21 +57,8 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
             holder.titleTextView.setTextColor(Color.parseColor("#000000"));
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                itemClickInterface.onItemClick(position);
-
-//                MyMediaPlayer.getInstance().reset();
-//                MyMediaPlayer.currentIndex = position;
-//                Intent intent = new Intent(context, MainActivity.class);
-//                intent.putExtra("LIST",songsList);
-//                intent.putExtra("fragment", "Player");
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//                context.startActivity(intent);
-            }
-        });
+        holder.itemView.setOnClickListener(v -> itemClickInterface.onItemClick(position));
+        holder.optionsButton.setOnClickListener(v -> buttonClickInterface.onItemButtonClick(position));
 
     }
 
@@ -80,10 +71,13 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
 
         TextView titleTextView;
         ImageView iconImageView;
+
+        ImageButton optionsButton;
         public ViewHolder(View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.music_title_text);
             iconImageView = itemView.findViewById(R.id.icon_view);
+            optionsButton = itemView.findViewById(R.id.options_button);
             titleTextView.setSelected(true);
         }
     }

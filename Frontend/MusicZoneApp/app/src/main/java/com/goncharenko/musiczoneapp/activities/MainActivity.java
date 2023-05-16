@@ -24,6 +24,10 @@ import com.goncharenko.musiczoneapp.fragments.EntryFragment;
 import com.goncharenko.musiczoneapp.fragments.MyMusicFragment;
 import com.goncharenko.musiczoneapp.fragments.PlayerFragment;
 import com.goncharenko.musiczoneapp.fragments.SearchMusicFragment;
+import com.goncharenko.musiczoneapp.models.AudioModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MainListener{
 
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     private boolean isSignIn = false;
     private String email = "";
     private String password = "";
+
+    private ArrayList<AudioModel> audioModels = new ArrayList<>();
 
     private Fragment activeFragment;
     private String fragmentName = "Search";
@@ -173,6 +179,11 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     }
 
     @Override
+    public void setOnAudioModel(AudioModel audioModel) {
+        audioModels.add(audioModel);
+    }
+
+    @Override
     public String getOnEmail() {
         return this.email;
     }
@@ -180,6 +191,11 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     @Override
     public String getOnPassword() {
         return this.password;
+    }
+
+    @Override
+    public ArrayList<AudioModel> getOnAudioModels() {
+        return audioModels;
     }
 
     boolean checkPermission(){

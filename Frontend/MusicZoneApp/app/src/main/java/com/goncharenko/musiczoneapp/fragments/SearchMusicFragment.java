@@ -1,10 +1,12 @@
 package com.goncharenko.musiczoneapp.fragments;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,14 +21,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.goncharenko.musiczoneapp.R;
+import com.goncharenko.musiczoneapp.activities.MainListener;
 import com.goncharenko.musiczoneapp.models.AudioModel;
 import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SearchMusicFragment extends Fragment implements ItemClickInterface{
+public class SearchMusicFragment extends Fragment implements ItemClickInterface, ButtonClickInterface{
     public static final String TAG = SearchMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
 
@@ -37,10 +41,12 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface{
     private final String LIST_KEY = "list";
     private String search = "";
 
-    ArrayList<AudioModel> songsList = new ArrayList<>();
-    ArrayList<AudioModel> savedSongsList = new ArrayList<>();
+    private ArrayList<AudioModel> songsList = new ArrayList<>();
+    private ArrayList<AudioModel> savedSongsList = new ArrayList<>();
 
     private MusicViewModel musicViewModel;
+
+    private MainListener mainListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,15 +94,24 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface{
             // обработка если нет музыки
         }else{
             if(savedSongsList.size() != 0){
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext(), this::onItemClick));
+                setRecyclerView(savedSongsList);
             }else {
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext(), this::onItemClick));
+                setRecyclerView(songsList);
             }
         }
 
         return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof MainListener) {
+            mainListener = (MainListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement SignInListener");
+        }
     }
 
     @Override
@@ -112,8 +127,8 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface{
             if(songsList.size() == 0){
                 // обработка если нет музыки
             }else{
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext(), this::onItemClick));
+                savedSongsList = songsList;
+                setRecyclerView(songsList);
             }
         } else {
             savedSongsList = new ArrayList<>();
@@ -123,8 +138,8 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface{
                     savedSongsList.add(song);
                 }
             }
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            recyclerView.setAdapter(new MusicListAdapter(savedSongsList, getContext().getApplicationContext(), this::onItemClick));
+
+            setRecyclerView(savedSongsList);
         }
     }
 
@@ -133,7 +148,11 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface{
         MyMediaPlayer.getInstance().reset();
         MyMediaPlayer.currentIndex = id;
 
-        musicViewModel.setSongsList(songsList);
+        if(savedSongsList.size() != 0){
+            musicViewModel.setSongsList(savedSongsList);
+        } else {
+            musicViewModel.setSongsList(songsList);
+        }
 
         Fragment playerFragment = getActivity().getSupportFragmentManager().findFragmentByTag(PlayerFragment.TAG);
         if(playerFragment != null){
@@ -143,10 +162,42 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface{
         setNewFragment(playerFragment, PlayerFragment.TAG);
     }
 
+    @Override
+    public void onItemButtonClick(int id) {
+
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                getContext(), R.style.BottomSheetDialogTheme
+        );
+        View bottomSheetView = LayoutInflater.from(getContext()).inflate(
+                R.layout.layout_bottom_sheet,
+                (ConstraintLayout) getActivity().findViewById(R.id.bottomSheetContainer)
+        );
+
+        bottomSheetView.findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AudioModel audioModel = songsList.get(id);
+                mainListener.setOnAudioModel(audioModel);
+            }
+        });
+
+        bottomSheetView.findViewById(R.id.remove_button).setVisibility(View.GONE);
+        bottomSheetView.findViewById(R.id.edit_button).setVisibility(View.GONE);
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+
+    }
+
     private void setNewFragment(Fragment fragment, String tag){
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frame_layout, fragment, tag);
         ft.addToBackStack(null);
         ft.commit();
+    }
+
+    private void setRecyclerView(ArrayList<AudioModel> songsList){
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new MusicListAdapter(songsList, getContext().getApplicationContext(), this::onItemClick, this::onItemButtonClick));
     }
 }

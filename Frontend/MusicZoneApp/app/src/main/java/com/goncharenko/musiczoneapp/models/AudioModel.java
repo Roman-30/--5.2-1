@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class AudioModel implements Serializable {
     @SerializedName("path")
@@ -20,6 +21,12 @@ public class AudioModel implements Serializable {
         this.path = path;
         this.title = title;
         this.duration = duration;
+    }
+
+    public AudioModel() {
+        path = "";
+        title = "";
+        duration = "";
     }
 
     public String getPath() {
@@ -45,4 +52,20 @@ public class AudioModel implements Serializable {
     public void setDuration(String duration) {
         this.duration = duration;
     }
+
+    public void setAudioModel(AudioModel audioModel){
+        path = audioModel.getPath();
+        title = audioModel.getTitle();
+        duration = audioModel.getDuration();
+    }
+
+    public boolean isEmpty(){
+        return (path.equals("") || title.equals("") || duration.equals(""));
+    }
+
+
+    public boolean equals(AudioModel audioModel) {
+        return path.equals(audioModel.path) && title.equals(audioModel.title) && duration.equals(audioModel.duration);
+    }
+
 }
