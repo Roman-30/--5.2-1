@@ -4,19 +4,23 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class UserModel {
+
+    @SerializedName("id")
+    @Expose
+    private Integer id;
     @SerializedName("name")
     @Expose
     private String name;
     @SerializedName("surname")
     @Expose
     private String surname;
-    @SerializedName("nickname")
+    @SerializedName("nickName")
     @Expose
     private String nickname;
     @SerializedName("email")
     @Expose
     private String email;
-    @SerializedName("phoneNumber")
+    @SerializedName("phone")
     @Expose
     private String phoneNumber;
     @SerializedName("password")
@@ -30,6 +34,24 @@ public class UserModel {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
+    }
+
+    public UserModel(Integer id, String name, String surname, String nickname, String email, String phoneNumber, String password) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.nickname = nickname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

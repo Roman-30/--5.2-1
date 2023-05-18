@@ -2,6 +2,7 @@ package com.goncharenko.musiczoneapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -71,26 +72,26 @@ public class RegistrationAccountActivity extends AppCompatActivity {
                     .getJSON()
                     .registration(dto)
                     .enqueue(new Callback<String>() {
-                @Override
-                public void onResponse(Call<String> call, Response<String> response) {
-                    if(response.body() != null) {
-                        goToAccount();
-                    } else {
-                        onFailure(call, new Throwable());
-                    }
-                }
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            Log.d("fkldgjfk", "onResponse: ");
+                            if (response.code() == 200) {
+                                goToEntryAccount();
+                            }
+                        }
 
-                @Override
-                public void onFailure(Call<String> call, Throwable t) {
-                    if(dto.getName().equals("admin") && dto.getSurname().equals("admin")){
-                        goToAccount();
-                    } else {
-                        Toast.makeText(view.getContext(),
-                                "Ошибка при регистрации",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Log.d("fkldgjfk", "onFailure: ");
+                            Toast.makeText(view.getContext(),
+                                    "Ошибка при регистрации",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+
+                            //goToAccount();
+                            goToEntryAccount();
+                        }
+                    });
 
             //goToAccount();
         }

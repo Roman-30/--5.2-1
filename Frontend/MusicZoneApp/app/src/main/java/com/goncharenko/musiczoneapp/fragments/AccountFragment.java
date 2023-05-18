@@ -64,17 +64,17 @@ public class AccountFragment extends Fragment {
 
         UserService.getInstance()
                 .getJSON()
-                .getUserFromId(0)
+                .getUserByEmail(emailFrom)
                 .enqueue(new Callback<UserModel>() {
                     @Override
                     public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
                         if(response.body() != null) {
                             UserModel user = response.body();
                             if (user != null) {
-                                name.append(user.getName() + " " + user.getSurname());
-                                nickname.append(user.getNickname());
-                                email.append(user.getEmail());
-                                phoneNumber.append(user.getPhoneNumber());
+                                name.setText(user.getName() + " " + user.getSurname());
+                                nickname.setText(user.getNickname());
+                                email.setText(user.getEmail());
+                                phoneNumber.setText(user.getPhoneNumber());
                             }
                         } else {
                             onFailure(call, new Throwable());

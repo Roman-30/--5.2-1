@@ -7,15 +7,23 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class AudioModel implements Serializable {
-    @SerializedName("path")
+
+    @SerializedName("id")
+    @Expose
+    private Integer id;
+    @SerializedName("link")
     @Expose
     private String path;
-    @SerializedName("title")
+    @SerializedName("name")
     @Expose
     private String title;
-    @SerializedName("duration")
+    @SerializedName("copyright")
     @Expose
     private String duration;
+
+    @SerializedName("genre")
+    @Expose
+    private String genre;
 
     public AudioModel(String path, String title, String duration) {
         this.path = path;
@@ -23,10 +31,34 @@ public class AudioModel implements Serializable {
         this.duration = duration;
     }
 
+    public AudioModel(Integer id, String path, String title, String duration, String genre) {
+        this.id = id;
+        this.path = path;
+        this.title = title;
+        this.duration = duration;
+        this.genre = genre;
+    }
+
     public AudioModel() {
         path = "";
         title = "";
         duration = "";
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public String getPath() {

@@ -79,30 +79,35 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
         checkPlaylistButton = view.findViewById(R.id.check_playlists_button);
         checkPlaylistButton.setOnClickListener(v -> checkPlaylists());
 
-        String[] projection = {
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.DURATION
-        };
+//        String[] projection = {
+//                MediaStore.Audio.Media.TITLE,
+//                MediaStore.Audio.Media.DATA,
+//                MediaStore.Audio.Media.DURATION
+//        };
+//
+//        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
+//
+//        Cursor cursor = getContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, null, null);
+//        while (cursor.moveToNext()) {
+//            AudioModel songData = new AudioModel(cursor.getString(1), cursor.getString(0), cursor.getString(2));
+//            if (new File(songData.getPath()).exists())
+//                songsList.add(songData);
+//        }
 
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
 
-        Cursor cursor = getContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, null, null);
-        while (cursor.moveToNext()) {
-            AudioModel songData = new AudioModel(cursor.getString(1), cursor.getString(0), cursor.getString(2));
-            if (new File(songData.getPath()).exists())
-                songsList.add(songData);
-        }
-
-        if(songsList.size() == 0){
-            // обработка если нет музыки
-        }else{
-            if(savedSongsList.size() != 0){
-                setRecyclerView(savedSongsList);
-            }else {
-                setRecyclerView(songsList);
+        musicViewModel.loadSongs();
+        musicViewModel.getSongsList().observe(getViewLifecycleOwner(), audioModels -> {
+            songsList.addAll(audioModels);
+            if (songsList.size() == 0) {
+                // обработка если нет музыки
+            } else {
+                if (savedSongsList.size() != 0) {
+                    setRecyclerView(savedSongsList);
+                } else {
+                    setRecyclerView(songsList);
+                }
             }
-        }
+        });
 
         return view;
     }

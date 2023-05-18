@@ -20,6 +20,8 @@ import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.activities.MainListener;
 import com.goncharenko.musiczoneapp.activities.RegistrationAccountActivity;
 import com.goncharenko.musiczoneapp.activities.SendingCodeActivity;
+import com.goncharenko.musiczoneapp.models.JwtRequest;
+import com.goncharenko.musiczoneapp.models.JwtResponse;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.validator.InputValidator;
 
@@ -33,6 +35,7 @@ public class EntryFragment extends Fragment {
     private EditText emailInput;
     private EditText passwordInput;
 
+    public static JwtResponse jwt;
     private final String EMAIL_KEY = "email";
     private final String PASSWORD_KEY = "password";
     private String email = "";
@@ -96,20 +99,22 @@ public class EntryFragment extends Fragment {
     }
 
     public void signIn() {
-        if(InputValidator.checkEditText(getActivity(), InputValidator.isValidEmail(emailInput), emailInput) &&
+        if (InputValidator.checkEditText(getActivity(), InputValidator.isValidEmail(emailInput), emailInput) &&
                 InputValidator.checkEditText(getActivity(), InputValidator.isValidPassword(passwordInput), passwordInput)) {
-            if(isCorrectEmailAndPassword()) {
+            if (isCorrectEmailAndPassword()) {
 
                 String email = emailInput.getText().toString().trim();
                 String password = passwordInput.getText().toString().trim();
 
                 UserService.getInstance()
                         .getJSON()
-                        .entry(email, password)
-                        .enqueue(new Callback<String>() {
+                        .login(new JwtRequest(email, password))
+                        .enqueue(new Callback<JwtResponse>() {
                             @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                if(response.body() != null) {
+                            public void onResponse(Call<JwtResponse> call, Response<JwtResponse> response) {
+                                if (response.body() != null) {
+                                    jwt = response.body();
+                                    System.out.println(jwt);
                                     AccountFragment accountFragment = new AccountFragment();
                                     mainListener.onSignedIn(true);
                                     mainListener.setOnEmail(email);
@@ -121,8 +126,8 @@ public class EntryFragment extends Fragment {
                             }
 
                             @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-                                if(email.equals("admin@ad.min") && password.equals("admin111")){
+                            public void onFailure(Call<JwtResponse> call, Throwable t) {
+                                if (email.equals("admin@ad.min") && password.equals("admin111")) {
                                     AccountFragment accountFragment = new AccountFragment();
                                     mainListener.onSignedIn(true);
                                     mainListener.setOnEmail(email);
