@@ -24,7 +24,6 @@ public class MusicService {
     private static final String name = "APP_MUSIC";
     private final MusicMapper mapper;
     private final PlaylistMapper playlistMapper;
-
     private final MusicRepository musicRepository;
     private final PlaylistRepository playlistRepository;
 
@@ -69,7 +68,7 @@ public class MusicService {
     public byte[] getFileByLink(String link) throws IOException {
         String srcFile = new File(link).getAbsolutePath();
 
-        byte[] byteArray = new byte[(int) srcFile.length()];
+        byte[] byteArray = new byte[(int) new File(link).length()];
 
         try (FileInputStream fileInputStream = new FileInputStream(srcFile)) {
             fileInputStream.read(byteArray);
@@ -86,7 +85,7 @@ public class MusicService {
     }
 
     public String downloadFileToServer(String fileName) throws IOException {
-        String url = "https://storage.yandexcloud.net/musik/" + fileName + ".mp3";
+        String url = "https://storage.yandexcloud.net/musik/" + fileName;
 
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
@@ -113,7 +112,7 @@ public class MusicService {
             buffer.write(data, 0, nRead);
         }
 
-        String path = "MusicZoneServer\\src\\main\\resources\\music\\" + fileName + ".mp3";
+        String path = "MusicZoneServer\\src\\main\\resources\\music\\" + fileName;
 
         try (FileOutputStream fos = new FileOutputStream(
                 new File(path).getAbsolutePath())) {
