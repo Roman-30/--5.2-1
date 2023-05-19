@@ -46,8 +46,8 @@ public class PersonService implements UserDetailsService {
         return repository.save(person);
     }
 
-    public Person updateData(Integer id, PersonDto dto) {
-        Optional<Person> person = repository.findById(id);
+    public Person updateData(PersonDto dto) {
+        Optional<Person> person = repository.findById(dto.getId());
         if (person.isPresent()) {
 
             Person oldPerson = person.orElseThrow();

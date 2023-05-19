@@ -18,7 +18,7 @@ public class PersonController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> registration(@Valid @RequestBody PersonDto person) {
+    public ResponseEntity<String> registration(@Valid @RequestBody PersonDto person) {
         var user = service.savePerson(person);
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
@@ -27,9 +27,9 @@ public class PersonController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updatePersonData(@PathVariable Integer id, @RequestBody PersonDto dto) {
-        var user = service.updateData(id, dto);
+    @PutMapping("/update")
+    public ResponseEntity<?> updatePersonData(@RequestBody PersonDto dto) {
+        var user = service.updateData(dto);
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
         } else {
