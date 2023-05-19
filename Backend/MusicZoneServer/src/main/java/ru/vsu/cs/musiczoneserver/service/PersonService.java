@@ -33,6 +33,7 @@ public class PersonService implements UserDetailsService {
         return repository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
     public Person savePerson(PersonDto user) {
         if (repository.findByEmail(user.getEmail()).isPresent()) {
             return null;
@@ -70,6 +71,15 @@ public class PersonService implements UserDetailsService {
             oldPerson.setPassword(bCryptPasswordEncoder.encode(pass));
 
             return repository.save(oldPerson);
+        } else {
+            return null;
+        }
+    }
+
+    public PersonDto getUserByEmail(String email) {
+        var person = repository.findByEmail(email);
+        if (person.isPresent()) {
+            return mapper.toDto(person.orElseThrow());
         } else {
             return null;
         }
