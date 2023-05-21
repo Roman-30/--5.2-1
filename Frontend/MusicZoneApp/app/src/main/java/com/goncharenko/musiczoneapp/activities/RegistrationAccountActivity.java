@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -73,7 +74,7 @@ public class RegistrationAccountActivity extends AppCompatActivity {
                     .registration(dto)
                     .enqueue(new Callback<String>() {
                         @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
+                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                             Log.d("fkldgjfk", "onResponse: ");
                             if (response.code() == 200) {
                                 goToEntryAccount();
@@ -81,7 +82,7 @@ public class RegistrationAccountActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(Call<String> call, Throwable t) {
+                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                             Log.d("fkldgjfk", "onFailure: ");
                             Toast.makeText(view.getContext(),
                                     "Ошибка при регистрации",

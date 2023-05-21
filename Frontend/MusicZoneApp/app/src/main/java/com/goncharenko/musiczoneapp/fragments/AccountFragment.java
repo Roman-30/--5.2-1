@@ -40,6 +40,8 @@ public class AccountFragment extends Fragment {
     private TextView email;
     private TextView phoneNumber;
 
+    private UserModel user;
+
     private MainListener mainListener;
 
     private String emailFrom = "";
@@ -69,7 +71,7 @@ public class AccountFragment extends Fragment {
                     @Override
                     public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
                         if(response.body() != null) {
-                            UserModel user = response.body();
+                            user = response.body();
                             if (user != null) {
                                 name.setText(user.getName() + " " + user.getSurname());
                                 nickname.setText(user.getNickname());
@@ -125,7 +127,15 @@ public class AccountFragment extends Fragment {
 
     public void editAccount() {
         Intent intent = new Intent(getActivity(), EditAccountActivity.class);
+        intent.putExtra("id", user.getId());
+        intent.putExtra("name", user.getName());
+        intent.putExtra("surname", user.getSurname());
+        intent.putExtra("nickname", user.getNickname());
+        intent.putExtra("email", user.getEmail());
+        intent.putExtra("phone", user.getPhoneNumber());
+        intent.putExtra("id", user.getId());
         startActivity(intent);
+        getActivity().finish();
     }
 
     public void singOut() {

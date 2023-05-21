@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -25,6 +26,9 @@ public interface UserInterface {
 
     @GET("/person/{id}")
     Call<UserModel> getUserFromId(@Path("id") int id);
-    @POST("/person/entry{email}-{password}")
-    Call<String> entry(@Path("email") String email, @Path("password") String password);
+
+    @PUT("/person/update")
+    Call<String> userUpdate(@Body UserModel dto);
+    @PUT("/person/pass/{id}")
+    Call<String> changePassword(@Path("id") int id, @Query("pass") String password);
 }

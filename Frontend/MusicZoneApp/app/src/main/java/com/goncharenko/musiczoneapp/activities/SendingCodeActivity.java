@@ -4,17 +4,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.activities.NewPasswordActivity;
+import com.goncharenko.musiczoneapp.models.UserModel;
+import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.validator.InputValidator;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SendingCodeActivity extends AppCompatActivity {
 
     private EditText emailInput;
     private EditText codeInput;
+
+    private UserModel user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +36,48 @@ public class SendingCodeActivity extends AppCompatActivity {
     }
 
     public void sendCode(View view) {
-        InputValidator.checkEditText(this, InputValidator.isValidEmail(emailInput), emailInput);
+        if(InputValidator.checkEditText(this, InputValidator.isValidEmail(emailInput), emailInput)){
+            String emailFrom = emailInput.getText().toString().trim();
+            UserService.getInstance()
+                    .getJSON()
+                    .getUserByEmail(emailFrom)
+                    .enqueue(new Callback<UserModel>() {
+                        @Override
+                        public void onResponse(@NonNull Call<UserModel> call, @NonNull Response<UserModel> response) {
+                            if(response.body() != null) {
+                                user = response.body();
+                                if (user == null) {
+                                    Toast.makeText(view.getContext(),
+                                            "Пользователя с такой почтой не существует",
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(view.getContext(),
+                                            "Письмо отправлено",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                onFailure(call, new Throwable());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
+                            Toast.makeText(view.getContext(),
+                                    "Ошибка при верификации почты",
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+        }
     }
 
     public void verifyCode(View view) {
         if(InputValidator.checkEditText(this, InputValidator.isValidCode(codeInput), codeInput)) {
             Intent intent = new Intent(this, NewPasswordActivity.class);
+            intent.putExtra("email", user.getEmail());
+            intent.putExtra("id", user.getId());
             startActivity(intent);
+            finish();
         }
     }
 
