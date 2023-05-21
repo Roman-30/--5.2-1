@@ -6,9 +6,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +24,13 @@ import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.models.AudioModel;
 import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -86,7 +96,7 @@ public class PlayerFragment extends Fragment {
         previousButton = view.findViewById(R.id.previous);
 
         titleTextView.setSelected(true);
-
+        songsList.clear();
         musicViewModel.getSongsList().observe(getViewLifecycleOwner(), audioModels -> {
             songsList = audioModels;
             setResourcesWithMusic();
@@ -159,7 +169,7 @@ public class PlayerFragment extends Fragment {
         currentSong = songsList.get(MyMediaPlayer.currentIndex);
         titleTextView.setText(currentSong.getTitle());
 
-        totalTimeTextView.setText(convertToMMSS(currentSong.getDuration()));
+        //totalTimeTextView.setText(convertToMMSS(currentSong.getDuration()));
 
         pausePlay.setOnClickListener(v-> pausePlay());
         nextButton.setOnClickListener(v-> playNextSong());
@@ -170,29 +180,32 @@ public class PlayerFragment extends Fragment {
 
 
     private void playMusic(){
-        mediaPlayer.reset();
-        try {
-            mediaPlayer.setDataSource(currentSong.getPath());
-            mediaPlayer.prepare();
-            mediaPlayer.seekTo(progressSeekBar);
-            if(isPlaying) {
-                mediaPlayer.start();
+        musicViewModel.loadSongFile(currentSong.getPath());
+        musicViewModel.getSongFile().observe(getViewLifecycleOwner(), bytes -> {
+            mediaPlayer.reset();
+            try {
+                loadSong(bytes);
+                System.out.println(mediaPlayer.getDuration());
+                //mediaPlayer.setDataSource(currentSong.getPath());
+                mediaPlayer.prepare();
+                mediaPlayer.seekTo(progressSeekBar);
+                if(isPlaying) {
+                    mediaPlayer.start();
+                }
+                seekBar.setProgress(progressSeekBar);
+                seekBar.setMax(mediaPlayer.getDuration());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            seekBar.setProgress(progressSeekBar);
-            seekBar.setMax(mediaPlayer.getDuration());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+        });
     }
 
     private void playNextSong(){
         progressSeekBar = 0;
         isPlaying = true;
-        if(MyMediaPlayer.currentIndex== songsList.size()-1)
+        if(MyMediaPlayer.currentIndex == songsList.size() - 1)
             return;
-        MyMediaPlayer.currentIndex +=1;
+        MyMediaPlayer.currentIndex += 1;
         mediaPlayer.reset();
         setResourcesWithMusic();
 
@@ -201,14 +214,16 @@ public class PlayerFragment extends Fragment {
     private void playPreviousSong(){
         progressSeekBar = 0;
         isPlaying = true;
-        if(MyMediaPlayer.currentIndex== 0)
+        if(MyMediaPlayer.currentIndex == 0)
             return;
-        MyMediaPlayer.currentIndex -=1;
+        MyMediaPlayer.currentIndex -= 1;
         mediaPlayer.reset();
         setResourcesWithMusic();
     }
 
     private void pausePlay(){
+        totalTimeTextView.setText(convertToMMSS(mediaPlayer.getDuration() + ""));
+
         if(mediaPlayer.isPlaying())
             mediaPlayer.pause();
         else
@@ -221,5 +236,43 @@ public class PlayerFragment extends Fragment {
         return String.format("%02d:%02d",
                 TimeUnit.MILLISECONDS.toMinutes(millis) % TimeUnit.HOURS.toMinutes(1),
                 TimeUnit.MILLISECONDS.toSeconds(millis) % TimeUnit.MINUTES.toSeconds(1));
+    }
+
+    private void loadSong(InputStream audioBytes){
+        try {
+            File directory = new File(getContext().getFilesDir(), "MusicZoneTemp");
+
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            File tempFile = new File(directory + "/music_zone_temp_audio.mp3");
+
+            ByteArrayOutputStream bis = new ByteArrayOutputStream();
+            byte[] b = new byte[1024];
+
+            int readNum;
+            while ((readNum = audioBytes.read(b, 0, b.length)) != -1){
+                bis.write(b, 0, readNum);
+            }
+
+            try(FileOutputStream fos = new FileOutputStream(tempFile)) {
+                fos.write(bis.toByteArray());
+            }
+
+            mediaPlayer.setDataSource(tempFile.getPath());
+//            mediaPlayer.prepare();
+//
+//            mediaPlayer.start();
+//            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                @Override
+//                public void onCompletion(MediaPlayer mp) {
+//                    mp.release();
+//                    tempFile.delete();
+//                }
+//            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

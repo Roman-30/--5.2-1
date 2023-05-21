@@ -94,7 +94,7 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
 //                songsList.add(songData);
 //        }
 
-
+        songsList.clear();
         musicViewModel.loadSongs();
         musicViewModel.getSongsList().observe(getViewLifecycleOwner(), audioModels -> {
             songsList.addAll(audioModels);

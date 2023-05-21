@@ -5,6 +5,7 @@ import com.goncharenko.musiczoneapp.models.UserModel;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Body;
@@ -18,6 +19,6 @@ public interface AudioInterface {
     Call<List<AudioModel>> getAllMusic();
 
     @GET("/music/file")
-    Call<byte[]> getMusicFile();
+    Call<ResponseBody> getMusicFile(@Query("link") String link);
 
 }
