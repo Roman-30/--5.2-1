@@ -75,4 +75,14 @@ public class PlaylistController {
         }
     }
 
+    @GetMapping("/musics/get/all")
+    public ResponseEntity<?> getPlaylistMusic(@RequestParam String name) {
+        var playlist = service.findPlayListMusicByName(name);
+        if (playlist == null) {
+            return new ResponseEntity<>("Error!", HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(playlist, HttpStatus.OK);
+        }
+    }
+
 }
