@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.activities.MainListener;
@@ -25,11 +26,16 @@ import com.goncharenko.musiczoneapp.adapters.MusicListAdapter;
 import com.goncharenko.musiczoneapp.clickinterface.ButtonClickInterface;
 import com.goncharenko.musiczoneapp.clickinterface.ItemClickInterface;
 import com.goncharenko.musiczoneapp.models.AudioModel;
+import com.goncharenko.musiczoneapp.service.AudioService;
 import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SearchMusicFragment extends Fragment implements ItemClickInterface, ButtonClickInterface {
     public static final String TAG = SearchMusicFragment.class.getSimpleName();
@@ -185,6 +191,12 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
 
     @Override
     public void onItemButtonClick(int id) {
+        if(!mainListener.getOnSignedIn()){
+            Toast.makeText(getContext(),
+                    "Вы не зарегистрированы",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                 getContext(), R.style.BottomSheetDialogTheme
@@ -197,8 +209,29 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
         bottomSheetView.findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AudioModel audioModel = songsList.get(id);
-                mainListener.setOnAudioModel(audioModel);
+//                AudioModel audioModel = songsList.get(id);
+//                mainListener.setOnAudioModel(audioModel);
+
+                AudioService
+                        .getInstance()
+                        .getJSON()
+                        .addMusic(mainListener.getOnEmail(), songsList.get(id).getId()).enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if(response.isSuccessful()){
+                                    Toast.makeText(getContext(),
+                                            "Трек добавлен",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Toast.makeText(getContext(),
+                                        "Ошибка",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 

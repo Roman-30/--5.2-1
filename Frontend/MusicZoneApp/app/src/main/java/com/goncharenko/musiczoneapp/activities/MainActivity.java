@@ -169,6 +169,11 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     }
 
     @Override
+    public boolean getOnSignedIn() {
+        return isSignIn;
+    }
+
+    @Override
     public void setOnEmail(String email) {
         this.email = email;
     }

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.activities.MainListener;
@@ -24,11 +25,16 @@ import com.goncharenko.musiczoneapp.adapters.MusicListAdapter;
 import com.goncharenko.musiczoneapp.clickinterface.ButtonClickInterface;
 import com.goncharenko.musiczoneapp.clickinterface.ItemClickInterface;
 import com.goncharenko.musiczoneapp.models.AudioModel;
+import com.goncharenko.musiczoneapp.service.AudioService;
 import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyMusicFragment extends Fragment implements ItemClickInterface, ButtonClickInterface {
     public static final String TAG = MyMusicFragment.class.getSimpleName();
@@ -187,8 +193,29 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
         bottomSheetView.findViewById(R.id.remove_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                songsList.remove(id);
-                setRecyclerView(songsList);
+//                songsList.remove(id);
+//                setRecyclerView(songsList);
+
+                AudioService
+                        .getInstance()
+                        .getJSON()
+                        .deleteMusic(mainListener.getOnEmail(), songsList.get(id).getId()).enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if(response.isSuccessful()){
+                                    Toast.makeText(getContext(),
+                                            "Трек добавлен",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Toast.makeText(getContext(),
+                                        "Ошибка",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 

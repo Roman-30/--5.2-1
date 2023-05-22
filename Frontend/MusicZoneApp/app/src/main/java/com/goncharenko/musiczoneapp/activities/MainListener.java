@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface MainListener {
     void onSignedIn(boolean isSignedIn);
+    boolean getOnSignedIn();
     void setOnEmail(String email);
     void setOnPassword(String password);
 
