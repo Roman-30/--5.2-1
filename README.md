@@ -19,4 +19,5 @@
 # Документация
 
 [Диаграммы](https://github.com/Roman-30/TP-5.2-1/tree/main/Диаграммы)<br />
-[Документация](https://github.com/Roman-30/TP-5.2-1/tree/main/Документация)
+[Документация](https://github.com/Roman-30/TP-5.2-1/tree/main/Документация)<br />
+[Swagger](http://217.25.225.200:8888/swagger-ui/index.html#)
