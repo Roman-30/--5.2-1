@@ -46,7 +46,7 @@ public class PlaylistController {
     }
 
     @DeleteMapping("/song/delete")
-    public ResponseEntity<?> deleteMusicOnPlaylist(@RequestParam Integer pl, @RequestParam Integer tr) {
+    public ResponseEntity<?> deleteMusicOnPlaylist(@RequestParam String pl, @RequestParam Integer tr) {
         var playlist = service.deleteMusicOnPlaylist(pl, tr);
         if (playlist == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
@@ -66,7 +66,7 @@ public class PlaylistController {
     }
 
     @PostMapping("/song/add")
-    public ResponseEntity<?> addMusicOnPlaylist(@RequestParam Integer pl, @RequestParam Integer tr) {
+    public ResponseEntity<?> addMusicOnPlaylist(@RequestParam String pl, @RequestParam Integer tr) {
         var playlist = service.addMusicOnPlaylist(pl, tr);
         if (playlist == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
@@ -76,8 +76,8 @@ public class PlaylistController {
     }
 
     @GetMapping("/musics/get/all")
-    public ResponseEntity<?> getPlaylistMusic(@RequestParam String name) {
-        var playlist = service.findPlayListMusicByName(name);
+    public ResponseEntity<?> getPlaylistMusic(@RequestParam String email) {
+        var playlist = service.findPlayListMusicByName(email);
         if (playlist == null) {
             return new ResponseEntity<>("Error!", HttpStatus.CONFLICT);
         } else {

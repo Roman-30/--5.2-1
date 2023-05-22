@@ -80,9 +80,9 @@ public class PlaylistService {
         }
     }
 
-    public Playlist deleteMusicOnPlaylist(Integer id, Integer tr) {
-        var user = personRepository.findById(id).orElseThrow();
-        Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getNickName());
+    public Playlist deleteMusicOnPlaylist(String id, Integer tr) {
+        var user = personRepository.findByEmail(id).orElseThrow();
+        Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getEmail());
         if (oldPlaylist.isPresent()) {
             Playlist playlist = oldPlaylist.orElseThrow();
             playlist.getMusics().remove(musicRepository.findById(tr)
@@ -94,9 +94,9 @@ public class PlaylistService {
         }
     }
 
-    public Playlist addMusicOnPlaylist(Integer id, Integer tr) {
-        var user = personRepository.findById(id).orElseThrow();
-        Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getNickName());
+    public Playlist addMusicOnPlaylist(String id, Integer tr) {
+        var user = personRepository.findByEmail(id).orElseThrow();
+        Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getEmail());
         Playlist playlist;
         if (oldPlaylist.isPresent()) {
             playlist = oldPlaylist.orElseThrow();
