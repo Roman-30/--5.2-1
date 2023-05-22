@@ -23,7 +23,7 @@ import com.goncharenko.musiczoneapp.activities.SendingCodeActivity;
 import com.goncharenko.musiczoneapp.models.JwtRequest;
 import com.goncharenko.musiczoneapp.models.JwtResponse;
 import com.goncharenko.musiczoneapp.service.UserService;
-import com.goncharenko.musiczoneapp.validator.InputValidator;
+import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 
 import retrofit2.Call;
 import retrofit2.Callback;

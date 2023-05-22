@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class JwtRequest {
 
-    @SerializedName("username")
+    @SerializedName("email")
     @Expose
     private String username;
     @SerializedName("password")

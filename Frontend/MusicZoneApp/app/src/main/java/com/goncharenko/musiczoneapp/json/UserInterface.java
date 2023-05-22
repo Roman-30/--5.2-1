@@ -21,8 +21,10 @@ public interface UserInterface {
     @GET("/person/get/user")
     Call<UserModel> getUserByEmail(@Query("email") String email);
 
-    @POST("/auth/login")
+    @POST("/person/login")
     Call<JwtResponse> login(@Body JwtRequest request);
+    @GET("/person/send/{email}")
+    Call<String> sendCode(@Path("email") String email, @Query("code") String code);
 
     @GET("/person/{id}")
     Call<UserModel> getUserFromId(@Path("id") int id);

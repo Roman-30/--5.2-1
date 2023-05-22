@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
-import com.goncharenko.musiczoneapp.validator.InputValidator;
+import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 
 import retrofit2.Call;
 import retrofit2.Callback;

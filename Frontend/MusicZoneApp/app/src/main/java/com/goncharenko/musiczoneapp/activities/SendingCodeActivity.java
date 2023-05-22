@@ -10,10 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.goncharenko.musiczoneapp.R;
-import com.goncharenko.musiczoneapp.activities.NewPasswordActivity;
 import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
-import com.goncharenko.musiczoneapp.validator.InputValidator;
+import com.goncharenko.musiczoneapp.utill.codegenerator.RandomCodeGenerator;
+import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,6 +25,8 @@ public class SendingCodeActivity extends AppCompatActivity {
     private EditText codeInput;
 
     private UserModel user;
+
+    private String code = RandomCodeGenerator.generateCode();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +53,8 @@ public class SendingCodeActivity extends AppCompatActivity {
                                             "Пользователя с такой почтой не существует",
                                             Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(view.getContext(),
-                                            "Письмо отправлено",
-                                            Toast.LENGTH_SHORT).show();
+                                    sendEmail(user.getEmail(), code, view);
+
                                 }
                             } else {
                                 onFailure(call, new Throwable());
@@ -73,11 +74,17 @@ public class SendingCodeActivity extends AppCompatActivity {
 
     public void verifyCode(View view) {
         if(InputValidator.checkEditText(this, InputValidator.isValidCode(codeInput), codeInput)) {
-            Intent intent = new Intent(this, NewPasswordActivity.class);
-            intent.putExtra("email", user.getEmail());
-            intent.putExtra("id", user.getId());
-            startActivity(intent);
-            finish();
+            if(codeInput.getText().toString().trim().equals(code)) {
+                Intent intent = new Intent(this, NewPasswordActivity.class);
+                intent.putExtra("email", user.getEmail());
+                intent.putExtra("id", user.getId());
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(view.getContext(),
+                        "Неверный код",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -91,6 +98,25 @@ public class SendingCodeActivity extends AppCompatActivity {
         intent.putExtra("fragment", "Entry");
         intent.putExtra("isSignIn", false);
         startActivity(intent);
+    }
+
+    private void sendEmail(String email, String code, View view){
+        UserService.getInstance().getJSON().sendCode(email, code).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Toast.makeText(view.getContext(),
+                        "Письмо отправлено",
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Toast.makeText(view.getContext(),
+                        "Письмо отправлено",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 

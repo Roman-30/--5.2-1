@@ -10,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.goncharenko.musiczoneapp.R;
-import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
-import com.goncharenko.musiczoneapp.validator.InputValidator;
+import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 
 import retrofit2.Call;
 import retrofit2.Callback;

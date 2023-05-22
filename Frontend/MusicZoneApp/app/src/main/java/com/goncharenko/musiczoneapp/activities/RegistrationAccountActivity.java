@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,8 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
-import com.goncharenko.musiczoneapp.validator.InputValidator;
-import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
+import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 import com.goncharenko.musiczoneapp.viewmodels.UserViewModel;
 
 import retrofit2.Call;
