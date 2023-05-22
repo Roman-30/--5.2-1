@@ -48,6 +48,8 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
     private MainListener mainListener;
     private MusicViewModel musicViewModel;
 
+    private String email;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,18 +78,37 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
             }
         });
 
-        ArrayList<AudioModel> audioModels = mainListener.getOnAudioModels();
-        songsList = audioModels;
 
-        if(songsList.size() == 0){
-            // обработка если нет музыки
-        }else{
-            if(savedAfterSearchSongsList.size() != 0){
-                setRecyclerView(savedAfterSearchSongsList);
-            }else {
-                setRecyclerView(songsList);
+
+        email = mainListener.getOnEmail();
+
+        songsList.clear();
+        musicViewModel.loadSavedSongsList(email);
+        musicViewModel.getSavedSongsList().observe(getViewLifecycleOwner(), audioModels -> {
+            songsList.addAll(audioModels);
+            if (songsList.size() == 0) {
+                // обработка если нет музыки
+            } else {
+                if (savedAfterSearchSongsList.size() != 0) {
+                    setRecyclerView(savedAfterSearchSongsList);
+                } else {
+                    setRecyclerView(songsList);
+                }
             }
-        }
+        });
+
+//        ArrayList<AudioModel> audioModels = mainListener.getOnAudioModels();
+//        songsList = audioModels;
+//
+//        if(songsList.size() == 0){
+//            // обработка если нет музыки
+//        }else{
+//            if(savedAfterSearchSongsList.size() != 0){
+//                setRecyclerView(savedAfterSearchSongsList);
+//            }else {
+//                setRecyclerView(songsList);
+//            }
+//        }
 
 
         return view;

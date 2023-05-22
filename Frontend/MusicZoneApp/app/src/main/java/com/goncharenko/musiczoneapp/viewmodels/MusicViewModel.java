@@ -1,23 +1,15 @@
 package com.goncharenko.musiczoneapp.viewmodels;
 
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
 import com.goncharenko.musiczoneapp.models.AudioModel;
 import com.goncharenko.musiczoneapp.service.AudioService;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -29,13 +21,15 @@ import retrofit2.Response;
 
 public class MusicViewModel extends ViewModel implements LifecycleObserver {
     private MutableLiveData<ArrayList<AudioModel>> songsList = new MutableLiveData<>();
+
+    private MutableLiveData<ArrayList<AudioModel>> savedSongsList = new MutableLiveData<>();
     private MutableLiveData<InputStream> songFile = new MutableLiveData<>();
 
     private MutableLiveData<Boolean> isReady = new MutableLiveData<>();
     private Executor executor = Executors.newSingleThreadExecutor();
     private Executor executorFile = Executors.newSingleThreadExecutor();
 
-    public void doSomethingAsync() {
+    public void loadSongsList() {
         executor.execute(() -> {
             AudioService.getInstance().getJSON().getAllMusic().enqueue(new Callback<List<AudioModel>>() {
                 @Override
@@ -43,6 +37,27 @@ public class MusicViewModel extends ViewModel implements LifecycleObserver {
                     if (response.isSuccessful()) {
                         if (response.body() != null) {
                             songsList.postValue((ArrayList<AudioModel>) response.body());
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<AudioModel>> call, Throwable t) {
+
+                }
+            });
+        });
+    }
+
+    public void loadSavedSongsList(String email) {
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            AudioService.getInstance().getJSON().getSavedMusic(email).enqueue(new Callback<List<AudioModel>>() {
+                @Override
+                public void onResponse(Call<List<AudioModel>> call, Response<List<AudioModel>> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            savedSongsList.postValue((ArrayList<AudioModel>) response.body());
                         }
                     }
                 }
@@ -101,7 +116,7 @@ public class MusicViewModel extends ViewModel implements LifecycleObserver {
     }
 
     public void loadSongs() {
-        doSomethingAsync();
+        loadSongsList();
     }
 
     public void loadSongFile(String link){
@@ -132,4 +147,11 @@ public class MusicViewModel extends ViewModel implements LifecycleObserver {
         return isReady;
     }
 
+    public LiveData<ArrayList<AudioModel>> getSavedSongsList() {
+        return savedSongsList;
+    }
+
+    public void setSavedSongsList(ArrayList<AudioModel> savedSongsList) {
+        this.savedSongsList.setValue(savedSongsList);
+    }
 }

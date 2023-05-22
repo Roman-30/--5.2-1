@@ -18,6 +18,9 @@ public interface AudioInterface {
     @GET("/music/get/all")
     Call<List<AudioModel>> getAllMusic();
 
+    @GET("/playlist/musics/get/all")
+    Call<List<AudioModel>> getSavedMusic(@Query("email") String email);
+
     @GET("/music/file")
     Call<ResponseBody> getMusicFile(@Query("link") String link);
 

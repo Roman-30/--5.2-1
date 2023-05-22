@@ -156,6 +156,7 @@ public class AccountFragment extends Fragment {
         } else {
             myMusicFragment = new MyMusicFragment();
         }
+        mainListener.setOnEmail(email.getText().toString().trim());
         setNewFragment(myMusicFragment, MyMusicFragment.TAG);
     }
 
