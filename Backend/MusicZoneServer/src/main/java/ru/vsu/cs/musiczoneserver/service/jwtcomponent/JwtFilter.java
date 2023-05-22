@@ -1,4 +1,4 @@
-package ru.vsu.cs.musiczoneserver.filter;
+package ru.vsu.cs.musiczoneserver.service.jwtcomponent;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
 import ru.vsu.cs.musiczoneserver.entity.jwt.JwtAuthentication;
-import ru.vsu.cs.musiczoneserver.service.jwtcomponent.JwtProvider;
-import ru.vsu.cs.musiczoneserver.service.jwtcomponent.JwtUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
