@@ -1,5 +1,6 @@
 package ru.vsu.cs.musiczoneserver.service;
 
+import lombok.SneakyThrows;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -9,6 +10,7 @@ import ru.vsu.cs.musiczoneserver.dto.MusicDto;
 import ru.vsu.cs.musiczoneserver.dto.PlaylistDto;
 import ru.vsu.cs.musiczoneserver.entity.Music;
 import ru.vsu.cs.musiczoneserver.entity.Playlist;
+import ru.vsu.cs.musiczoneserver.exception.MyException;
 import ru.vsu.cs.musiczoneserver.mapper.MusicMapper;
 import ru.vsu.cs.musiczoneserver.mapper.PlaylistMapper;
 import ru.vsu.cs.musiczoneserver.repository.MusicRepository;
@@ -123,5 +125,27 @@ public class MusicService {
         }
 
         return path;
+    }
+
+    @SneakyThrows
+    public void deleteMusic(Integer id) {
+        var music = musicRepository.findById(id);
+        if (music.isEmpty()) {
+            throw new MyException("Трек не найден!");
+        } else {
+            Music music1 = music.orElseThrow();
+
+            deleteMusicFile(music1.getLink());
+
+            musicRepository.delete(music1);
+        }
+    }
+
+    private void deleteMusicFile(String link) {
+        try {
+            new File(link).delete();
+        } catch (NullPointerException e) {
+            e.fillInStackTrace();
+        }
     }
 }

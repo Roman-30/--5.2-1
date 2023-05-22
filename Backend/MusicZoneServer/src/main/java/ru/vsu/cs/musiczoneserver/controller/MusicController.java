@@ -58,7 +58,8 @@ public class MusicController {
     }
 
     @DeleteMapping("/file/delete")
-    public ResponseEntity<?> deleteMusicFile(@RequestParam String link) {
-        return ResponseEntity.ok(link);
+    public ResponseEntity<?> deleteMusicFile(@RequestParam Integer id) {
+        service.deleteMusic(id);
+        return new ResponseEntity<>("ОК", HttpStatus.OK);
     }
 }
