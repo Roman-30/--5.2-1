@@ -125,7 +125,7 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
             savedAfterSearchSongsList = new ArrayList<>();
             for (AudioModel song : songsList) {
                 if (song.getTitle().toLowerCase().contains(searchQuery.toLowerCase()) ||
-                        song.getDuration().toLowerCase().contains(searchQuery.toLowerCase())) {
+                        song.getAuthor().toLowerCase().contains(searchQuery.toLowerCase())) {
                     savedAfterSearchSongsList.add(song);
                 }
             }

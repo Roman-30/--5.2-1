@@ -184,6 +184,11 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     }
 
     @Override
+    public void setOnAudioModel(List<AudioModel> audioModel) {
+        audioModels.addAll(audioModel);
+    }
+
+    @Override
     public String getOnEmail() {
         return this.email;
     }

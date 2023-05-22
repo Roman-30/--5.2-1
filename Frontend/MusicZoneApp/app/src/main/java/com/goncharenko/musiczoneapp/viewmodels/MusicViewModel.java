@@ -31,8 +31,7 @@ public class MusicViewModel extends ViewModel implements LifecycleObserver {
     private MutableLiveData<ArrayList<AudioModel>> songsList = new MutableLiveData<>();
     private MutableLiveData<InputStream> songFile = new MutableLiveData<>();
 
-
-
+    private MutableLiveData<Boolean> isReady = new MutableLiveData<>();
     private Executor executor = Executors.newSingleThreadExecutor();
     private Executor executorFile = Executors.newSingleThreadExecutor();
 
@@ -96,7 +95,6 @@ public class MusicViewModel extends ViewModel implements LifecycleObserver {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-
                 }
             });
         });
@@ -125,4 +123,13 @@ public class MusicViewModel extends ViewModel implements LifecycleObserver {
     public void setSongFile(InputStream songFile) {
         this.songFile.setValue(songFile);
     }
+
+    public void setIsReady(Boolean isReady) {
+        this.isReady.setValue(isReady);
+    }
+
+    public LiveData<Boolean> getIsReady() {
+        return isReady;
+    }
+
 }

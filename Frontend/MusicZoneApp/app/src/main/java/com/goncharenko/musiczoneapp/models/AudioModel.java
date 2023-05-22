@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class AudioModel implements Serializable {
 
@@ -19,30 +18,30 @@ public class AudioModel implements Serializable {
     private String title;
     @SerializedName("copyright")
     @Expose
-    private String duration;
+    private String author;
 
     @SerializedName("genre")
     @Expose
     private String genre;
 
-    public AudioModel(String path, String title, String duration) {
+    public AudioModel(String path, String title, String author) {
         this.path = path;
         this.title = title;
-        this.duration = duration;
+        this.author = author;
     }
 
-    public AudioModel(Integer id, String path, String title, String duration, String genre) {
+    public AudioModel(Integer id, String path, String title, String author, String genre) {
         this.id = id;
         this.path = path;
         this.title = title;
-        this.duration = duration;
+        this.author = author;
         this.genre = genre;
     }
 
     public AudioModel() {
         path = "";
         title = "";
-        duration = "";
+        author = "";
     }
 
     public Integer getId() {
@@ -77,27 +76,27 @@ public class AudioModel implements Serializable {
         this.title = title;
     }
 
-    public String getDuration() {
-        return duration;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public void setAudioModel(AudioModel audioModel){
         path = audioModel.getPath();
         title = audioModel.getTitle();
-        duration = audioModel.getDuration();
+        author = audioModel.getAuthor();
     }
 
     public boolean isEmpty(){
-        return (path.equals("") || title.equals("") || duration.equals(""));
+        return (path.equals("") || title.equals("") || author.equals(""));
     }
 
 
     public boolean equals(AudioModel audioModel) {
-        return path.equals(audioModel.path) && title.equals(audioModel.title) && duration.equals(audioModel.duration);
+        return path.equals(audioModel.path) && title.equals(audioModel.title) && author.equals(audioModel.author);
     }
 
 }

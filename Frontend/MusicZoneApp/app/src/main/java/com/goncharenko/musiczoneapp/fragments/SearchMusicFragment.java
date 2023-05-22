@@ -1,7 +1,6 @@
 package com.goncharenko.musiczoneapp.fragments;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +28,6 @@ import com.goncharenko.musiczoneapp.models.AudioModel;
 import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -61,6 +58,8 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
             search = savedInstanceState.getString(SEARCH_KEY);
             savedSongsList = (ArrayList<AudioModel>) savedInstanceState.getSerializable(LIST_KEY);
         }
+
+        songsList.clear();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -143,7 +142,8 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
             savedSongsList = new ArrayList<>();
             for (AudioModel song : songsList) {
                 if (song.getTitle().toLowerCase().contains(searchQuery.toLowerCase()) ||
-                        song.getDuration().toLowerCase().contains(searchQuery.toLowerCase())) {
+                        song.getAuthor().toLowerCase().contains(searchQuery.toLowerCase()) ||
+                        song.getGenre().toLowerCase().contains(searchQuery.toLowerCase())) {
                     savedSongsList.add(song);
                 }
             }
@@ -168,8 +168,10 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
         MyMediaPlayer.currentIndex = id;
 
         if(savedSongsList.size() != 0){
+            mainListener.setOnAudioModel(savedSongsList);
             musicViewModel.setSongsList(savedSongsList);
         } else {
+            mainListener.setOnAudioModel(songsList);
             musicViewModel.setSongsList(songsList);
         }
 
