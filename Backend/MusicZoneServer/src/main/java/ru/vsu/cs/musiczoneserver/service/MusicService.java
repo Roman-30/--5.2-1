@@ -15,7 +15,6 @@ import ru.vsu.cs.musiczoneserver.repository.MusicRepository;
 import ru.vsu.cs.musiczoneserver.repository.PlaylistRepository;
 
 import java.io.*;
-import java.net.Socket;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,44 +65,18 @@ public class MusicService {
         return music;
     }
 
-    public ObjectOutputStream getFileByLink(String link) {
+    public byte[] getFileByLink(String link) {
         String srcFile = new File(link).getAbsolutePath();
 
-        byte[] byteArray = new byte[(int) new File(link).length()];
 
-//        Byte[] df = new Byte[(int) new File(link).length()];
+        byte[] byteArray = new byte[(int) (new File(link).length())];
 
         try (FileInputStream fileInputStream = new FileInputStream(srcFile)) {
             fileInputStream.read(byteArray);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        Socket socket = new Socket();
-
-        ObjectOutputStream oos = null;
-        try {
-            oos = new ObjectOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            oos.writeObject(new File(link));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            oos.flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-
-//        for (int i = 0; i < byteArray.length; i++) {
-//            df[i] = byteArray[i];
-//        }
-        System.out.println(oos.toString());
-        return oos;
+        return byteArray;
     }
 
     public List<MusicDto> findAll() {

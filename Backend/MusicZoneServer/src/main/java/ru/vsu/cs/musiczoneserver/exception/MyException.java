@@ -6,4 +6,7 @@ public class MyException extends Exception {
         return super.getMessage();
     }
 
+    public MyException(String message) {
+        super(message);
+    }
 }

@@ -4,8 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.musiczoneserver.dto.PersonDto;
+import ru.vsu.cs.musiczoneserver.entity.jwt.JwtRequest;
+import ru.vsu.cs.musiczoneserver.entity.jwt.JwtResponse;
 import ru.vsu.cs.musiczoneserver.service.PersonService;
 
+import javax.security.auth.message.AuthException;
 import javax.validation.Valid;
 
 @RestController
@@ -47,6 +50,17 @@ public class PersonController {
         }
     }
 
+    @GetMapping("/send/{email}")
+    public ResponseEntity<?> sendMessage(@PathVariable String email, @RequestParam String code) {
+        service.sendMail(email, code);
+        return ResponseEntity.ok("OK!");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest authRequest) throws AuthException {
+        final JwtResponse token = service.login(authRequest);
+        return ResponseEntity.ok(token);
+    }
     @GetMapping("/get/user")
     public ResponseEntity<?> getPersonByEmail(@RequestParam String email) {
         var user = service.getUserByEmail(email);
