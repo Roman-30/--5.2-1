@@ -99,9 +99,9 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
 //                songsList.add(songData);
 //        }
 
-        songsList.clear();
         musicViewModel.loadSongs();
         musicViewModel.getSongsList().observe(getViewLifecycleOwner(), audioModels -> {
+            songsList.clear();
             songsList.addAll(audioModels);
             if (songsList.size() == 0) {
                 // обработка если нет музыки
@@ -132,7 +132,7 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(SEARCH_KEY, inputSearch.toString().trim());
-        outState.putSerializable(LIST_KEY, (Serializable) songsList);
+        outState.putSerializable(LIST_KEY, (Serializable) savedSongsList);
     }
 
     public void searchMusic() {
@@ -249,6 +249,8 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
                                     Toast.makeText(getContext(),
                                             "Трек добавлен",
                                             Toast.LENGTH_SHORT).show();
+
+                                    songsList.remove(id);
                                 }
                             }
 
@@ -257,8 +259,12 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
                                 Toast.makeText(getContext(),
                                         "Ошибка",
                                         Toast.LENGTH_SHORT).show();
+                                songsList.remove(id);
+
                             }
                         });
+
+                setRecyclerView(songsList);
             }
         });
         bottomSheetView.findViewById(R.id.edit_button).setVisibility(View.GONE);

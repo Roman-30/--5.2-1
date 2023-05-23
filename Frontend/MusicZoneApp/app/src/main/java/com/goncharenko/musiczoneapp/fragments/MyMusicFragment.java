@@ -88,9 +88,9 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
 
         email = mainListener.getOnEmail();
 
-        songsList.clear();
         musicViewModel.loadSavedSongsList(email);
         musicViewModel.getSavedSongsList().observe(getViewLifecycleOwner(), audioModels -> {
+            songsList.clear();
             songsList.addAll(audioModels);
             if (songsList.size() == 0) {
                 // обработка если нет музыки
@@ -206,6 +206,8 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
                                     Toast.makeText(getContext(),
                                             "Трек добавлен",
                                             Toast.LENGTH_SHORT).show();
+
+                                    songsList.remove(id);
                                 }
                             }
 
@@ -214,8 +216,12 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
                                 Toast.makeText(getContext(),
                                         "Ошибка",
                                         Toast.LENGTH_SHORT).show();
+
+                                songsList.remove(songsList);
                             }
                         });
+
+                setRecyclerView(songsList);
             }
         });
 
