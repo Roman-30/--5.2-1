@@ -235,7 +235,32 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
             }
         });
 
-        bottomSheetView.findViewById(R.id.remove_button).setVisibility(View.GONE);
+        //bottomSheetView.findViewById(R.id.remove_button).setVisibility(View.GONE);
+        bottomSheetView.findViewById(R.id.remove_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AudioService
+                        .getInstance()
+                        .getJSON()
+                        .deleteNewMusic(songsList.get(id).getId()).enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if(response.isSuccessful()){
+                                    Toast.makeText(getContext(),
+                                            "Трек добавлен",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Toast.makeText(getContext(),
+                                        "Ошибка",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        });
         bottomSheetView.findViewById(R.id.edit_button).setVisibility(View.GONE);
 
         bottomSheetDialog.setContentView(bottomSheetView);

@@ -7,8 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
+import com.goncharenko.musiczoneapp.models.AudioModel;
+import com.goncharenko.musiczoneapp.service.AudioService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddMusicActivity extends AppCompatActivity {
 
@@ -33,29 +40,55 @@ public class AddMusicActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> goBack());
 
         addMusicButton = findViewById(R.id.add_track_button);
-        addMusicButton.setOnClickListener(v -> addMusic());
+        addMusicButton.setOnClickListener(v -> addMusic(v));
 
         saveButton = findViewById(R.id.save_button);
-        saveButton.setOnClickListener(v -> save());
+        saveButton.setOnClickListener(v -> save(v));
     }
 
     public void goBack(){
         goToAccount();
     }
 
-    public void save(){
+    public void save(View view){
+        String trackName = trackNameInput.getText().toString().trim();
+        String author = authorInput.getText().toString().trim();
+        String genre = genreInput.getText().toString().trim();
+
+
+        AudioModel dto = new AudioModel(0, "", trackName, author, genre);
+        AudioService
+                .getInstance()
+                .getJSON()
+                .addNewMusic(dto)
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        if(response.isSuccessful()){
+                            Toast.makeText(view.getContext(),
+                                    "Трек добавился",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Toast.makeText(view.getContext(),
+                                "Ошибка при добавлении",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
         goToAccount();
     }
 
-    public void addMusic(){
-
+    public void addMusic(View view){
     }
 
     private void goToAccount(){
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("fragment", "Account");
-        intent.putExtra("isSignIn", true);
+        intent.putExtra("fragment", "Entry");
+        intent.putExtra("isSignIn", false);
         startActivity(intent);
     }
 }

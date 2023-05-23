@@ -31,4 +31,10 @@ public interface AudioInterface {
     @DELETE("/playlist/song/delete")
     Call<String> deleteMusic(@Query("pl") String email, @Query("tr") Integer tr);
 
+    @POST("/music/file/add")
+    Call<String> addNewMusic(@Body AudioModel dto);
+
+    @DELETE("/music/file/delete")
+    Call<String> deleteNewMusic(@Query("id") Integer id);
+
 }
