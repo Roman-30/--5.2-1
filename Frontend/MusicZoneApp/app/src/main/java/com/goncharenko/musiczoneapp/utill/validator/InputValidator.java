@@ -1,4 +1,4 @@
-package com.goncharenko.musiczoneapp.validator;
+package com.goncharenko.musiczoneapp.utill.validator;
 
 import android.content.Context;
 import android.util.Patterns;

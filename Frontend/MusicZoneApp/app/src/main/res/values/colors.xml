@@ -8,4 +8,10 @@
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="background">#FFFFFFFF</color>
+
+    <color name="textLogo">#FF000000</color>
+    <color name="logoOne">#EE543A</color>
+    <color name="logoTwo">#4BA7F4</color>
 </resources>

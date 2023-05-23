@@ -1,26 +1,40 @@
 package com.goncharenko.musiczoneapp.json;
 
 import com.goncharenko.musiczoneapp.models.AudioModel;
+import com.goncharenko.musiczoneapp.models.UserModel;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface AudioInterface {
-    @GET("/audio/{id}")
-    public Call<AudioModel> getPostWithID(@Path("id") int id);
+    @GET("/music/get/all")
+    Call<List<AudioModel>> getAllMusic();
 
-    @GET("/audio")
-    public Call<List<AudioModel>> getAllPosts();
+    @GET("/playlist/musics/get/all")
+    Call<List<AudioModel>> getSavedMusic(@Query("email") String email);
 
-    @GET("/audio")
-    public Call<List<AudioModel>> getPostOfUser(@Query("userId") int id);
+    @GET("/music/file")
+    Call<ResponseBody> getMusicFile(@Query("link") String link);
 
-    @POST("/audio")
-    public Call<AudioModel> postData(@Body AudioModel data);
+    @POST("/playlist/song/add")
+    Call<String> addMusic(@Query("pl") String email, @Query("tr") Integer tr);
+
+    @DELETE("/playlist/song/delete")
+    Call<String> deleteMusic(@Query("pl") String email, @Query("tr") Integer tr);
+
+    @POST("/music/file/add")
+    Call<String> addNewMusic(@Body AudioModel dto);
+
+    @DELETE("/music/file/delete")
+    Call<String> deleteNewMusic(@Query("id") Integer id);
+
 }

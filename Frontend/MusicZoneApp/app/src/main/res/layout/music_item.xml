@@ -14,11 +14,11 @@
 
     <TextView
         android:id="@+id/music_title_text"
-        android:layout_width="288dp"
+        android:layout_width="150dp"
         android:layout_height="46dp"
         android:layout_centerVertical="true"
         android:layout_marginEnd="-1dp"
-        android:layout_toStartOf="@+id/options_button"
+        android:layout_toStartOf="@+id/music_author_text"
         android:layout_toEndOf="@id/icon_view"
         android:ellipsize="marquee"
         android:padding="10dp"
@@ -26,10 +26,25 @@
         android:textColor="@color/black"
         tools:text="Music" />
 
-    <Button
+    <TextView
+        android:id="@+id/music_author_text"
+        android:layout_width="100dp"
+        android:layout_height="46dp"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="-1dp"
+        android:layout_toStartOf="@+id/options_button"
+        android:ellipsize="marquee"
+        android:padding="7dp"
+        android:singleLine="true"
+        android:textAlignment="textEnd"
+        android:textColor="@color/black"
+        tools:text="Author" />
+
+    <ImageButton
         android:id="@+id/options_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_more" />
 
 </RelativeLayout>
