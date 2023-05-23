@@ -1,5 +1,6 @@
 package ru.vsu.cs.musiczoneserver.service;
 
+import lombok.SneakyThrows;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -9,6 +10,7 @@ import ru.vsu.cs.musiczoneserver.dto.MusicDto;
 import ru.vsu.cs.musiczoneserver.dto.PlaylistDto;
 import ru.vsu.cs.musiczoneserver.entity.Music;
 import ru.vsu.cs.musiczoneserver.entity.Playlist;
+import ru.vsu.cs.musiczoneserver.exception.MyException;
 import ru.vsu.cs.musiczoneserver.mapper.MusicMapper;
 import ru.vsu.cs.musiczoneserver.mapper.PlaylistMapper;
 import ru.vsu.cs.musiczoneserver.repository.MusicRepository;
@@ -24,7 +26,6 @@ public class MusicService {
     private static final String name = "APP_MUSIC";
     private final MusicMapper mapper;
     private final PlaylistMapper playlistMapper;
-
     private final MusicRepository musicRepository;
     private final PlaylistRepository playlistRepository;
 
@@ -66,15 +67,17 @@ public class MusicService {
         return music;
     }
 
-    public byte[] getFileByLink(String link) throws IOException {
+    public byte[] getFileByLink(String link) {
         String srcFile = new File(link).getAbsolutePath();
 
-        byte[] byteArray = new byte[(int) srcFile.length()];
+
+        byte[] byteArray = new byte[(int) (new File(link).length())];
 
         try (FileInputStream fileInputStream = new FileInputStream(srcFile)) {
             fileInputStream.read(byteArray);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
         return byteArray;
     }
 
@@ -86,7 +89,7 @@ public class MusicService {
     }
 
     public String downloadFileToServer(String fileName) throws IOException {
-        String url = "https://storage.yandexcloud.net/musik/" + fileName + ".mp3";
+        String url = "https://storage.yandexcloud.net/musik/" + fileName;
 
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
@@ -113,7 +116,7 @@ public class MusicService {
             buffer.write(data, 0, nRead);
         }
 
-        String path = "MusicZoneServer\\src\\main\\resources\\music\\" + fileName + ".mp3";
+        String path = "MusicZoneServer\\src\\main\\resources\\music\\" + fileName;
 
         try (FileOutputStream fos = new FileOutputStream(
                 new File(path).getAbsolutePath())) {
@@ -122,5 +125,27 @@ public class MusicService {
         }
 
         return path;
+    }
+
+    @SneakyThrows
+    public void deleteMusic(Integer id) {
+        var music = musicRepository.findById(id);
+        if (music.isEmpty()) {
+            throw new MyException("Трек не найден!");
+        } else {
+            Music music1 = music.orElseThrow();
+
+            deleteMusicFile(music1.getLink());
+
+            musicRepository.delete(music1);
+        }
+    }
+
+    private void deleteMusicFile(String link) {
+        try {
+            new File(link).delete();
+        } catch (NullPointerException e) {
+            e.fillInStackTrace();
+        }
     }
 }

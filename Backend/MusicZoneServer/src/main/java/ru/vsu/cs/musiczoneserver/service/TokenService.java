@@ -2,12 +2,8 @@ package ru.vsu.cs.musiczoneserver.service;
 
 import io.jsonwebtoken.Claims;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.vsu.cs.musiczoneserver.entity.Person;
-import ru.vsu.cs.musiczoneserver.entity.jwt.JwtAuthentication;
-import ru.vsu.cs.musiczoneserver.entity.jwt.JwtRequest;
 import ru.vsu.cs.musiczoneserver.entity.jwt.JwtResponse;
 import ru.vsu.cs.musiczoneserver.repository.PersonRepository;
 import ru.vsu.cs.musiczoneserver.service.jwtcomponent.JwtProvider;
@@ -15,27 +11,13 @@ import ru.vsu.cs.musiczoneserver.service.jwtcomponent.JwtProvider;
 import javax.security.auth.message.AuthException;
 
 @Service
-public class AuthService {
+public class TokenService {
     private final PersonRepository personRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
 
-    public AuthService(PersonRepository personRepository, BCryptPasswordEncoder passwordEncoder, JwtProvider jwtProvider) {
+    public TokenService(PersonRepository personRepository, JwtProvider jwtProvider) {
         this.personRepository = personRepository;
-        this.passwordEncoder = passwordEncoder;
         this.jwtProvider = jwtProvider;
-    }
-
-    public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
-        final Person user = personRepository.findByEmail(authRequest.getUsername()).orElseThrow();
-
-        if (passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
-            final String accessToken = jwtProvider.generateAccessToken(user);
-            final String refreshToken = jwtProvider.generateRefreshToken(user);
-            return new JwtResponse(accessToken, refreshToken);
-        } else {
-            throw new AuthException("Invalid password");
-        }
     }
 
     public JwtResponse getAccessToken(@NonNull String refreshToken) {
@@ -62,9 +44,5 @@ public class AuthService {
 
         }
         throw new AuthException("Invalid JWT token");
-    }
-
-    public JwtAuthentication getAuthInfo() {
-        return (JwtAuthentication) SecurityContextHolder.getContext().getAuthentication();
     }
 }

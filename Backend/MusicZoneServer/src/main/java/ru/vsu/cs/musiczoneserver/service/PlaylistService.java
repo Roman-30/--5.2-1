@@ -3,8 +3,10 @@ package ru.vsu.cs.musiczoneserver.service;
 
 import org.springframework.stereotype.Service;
 
+import ru.vsu.cs.musiczoneserver.dto.MusicDto;
 import ru.vsu.cs.musiczoneserver.dto.PlaylistDto;
 import ru.vsu.cs.musiczoneserver.entity.Playlist;
+import ru.vsu.cs.musiczoneserver.mapper.MusicMapper;
 import ru.vsu.cs.musiczoneserver.mapper.PlaylistMapper;
 import ru.vsu.cs.musiczoneserver.repository.MusicRepository;
 import ru.vsu.cs.musiczoneserver.repository.PersonRepository;
@@ -21,13 +23,15 @@ public class PlaylistService {
     private final PersonRepository personRepository;
 
     private final MusicRepository musicRepository;
+    private final MusicMapper musicMapper;
 
     private final PlaylistMapper mapper;
 
-    public PlaylistService(PlaylistRepository playlistRepository, PersonRepository personRepository, MusicRepository musicRepository, PlaylistMapper mapper) {
+    public PlaylistService(PlaylistRepository playlistRepository, PersonRepository personRepository, MusicRepository musicRepository, MusicMapper musicMapper, PlaylistMapper mapper) {
         this.playlistRepository = playlistRepository;
         this.personRepository = personRepository;
         this.musicRepository = musicRepository;
+        this.musicMapper = musicMapper;
         this.mapper = mapper;
     }
 
@@ -43,6 +47,20 @@ public class PlaylistService {
             addMusicOnPlaylist(playlist, dto.getIds());
 
             return playlistRepository.save(playlist);
+        }
+    }
+
+    public List<MusicDto> findPlayListMusicByName(String name) {
+        var playlist = playlistRepository.findByName(name);
+        if (playlist.isEmpty()) {
+            return null;
+        } else {
+            Playlist cur = playlist.orElseThrow();
+
+            return cur.getMusics()
+                    .stream()
+                    .map(musicMapper::toDto)
+                    .collect(Collectors.toList());
         }
     }
 
@@ -62,9 +80,9 @@ public class PlaylistService {
         }
     }
 
-    public Playlist deleteMusicOnPlaylist(Integer id, Integer tr) {
-        var user = personRepository.findById(id).orElseThrow();
-        Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getNickName());
+    public Playlist deleteMusicOnPlaylist(String id, Integer tr) {
+        var user = personRepository.findByEmail(id).orElseThrow();
+        Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getEmail());
         if (oldPlaylist.isPresent()) {
             Playlist playlist = oldPlaylist.orElseThrow();
             playlist.getMusics().remove(musicRepository.findById(tr)
@@ -76,9 +94,9 @@ public class PlaylistService {
         }
     }
 
-    public Playlist addMusicOnPlaylist(Integer id, Integer tr) {
-        var user = personRepository.findById(id).orElseThrow();
-        Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getNickName());
+    public Playlist addMusicOnPlaylist(String id, Integer tr) {
+        var user = personRepository.findByEmail(id).orElseThrow();
+        Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getEmail());
         Playlist playlist;
         if (oldPlaylist.isPresent()) {
             playlist = oldPlaylist.orElseThrow();

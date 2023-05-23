@@ -1,7 +1,5 @@
 package ru.vsu.cs.musiczoneserver.entity;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.persistence.*;

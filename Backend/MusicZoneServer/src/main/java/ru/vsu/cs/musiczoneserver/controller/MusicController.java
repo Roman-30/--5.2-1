@@ -1,5 +1,6 @@
 package ru.vsu.cs.musiczoneserver.controller;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+//@Tag(name = "Music controller", description = "Music management APIs")
 @RequestMapping("/music")
 public class MusicController {
 
@@ -49,12 +51,15 @@ public class MusicController {
     }
 
     @GetMapping("/file")
-    public ResponseEntity<?> getMusic(@RequestParam String link) throws IOException {
-        return ResponseEntity.ok(service.getFileByLink(link));
+    public ResponseEntity<byte[]> getMusic(@RequestParam String link) {
+        return ResponseEntity.ok().body(service.getFileByLink(link));
+//        Byte[][] sd = new Byte[2][];
+//        return List.of(sd);
     }
 
     @DeleteMapping("/file/delete")
-    public ResponseEntity<?> deleteMusicFile(@RequestParam String link) {
-        return ResponseEntity.ok(link);
+    public ResponseEntity<?> deleteMusicFile(@RequestParam Integer id) {
+        service.deleteMusic(id);
+        return new ResponseEntity<>("ОК", HttpStatus.OK);
     }
 }
