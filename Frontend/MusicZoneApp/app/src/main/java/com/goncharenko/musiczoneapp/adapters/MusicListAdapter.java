@@ -69,7 +69,7 @@ public class MusicListAdapter extends RecyclerView.Adapter<MusicListAdapter.View
         TextView authorTextView;
         ImageView iconImageView;
 
-        ImageButton optionsButton;
+        ImageView optionsButton;
         public ViewHolder(View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.music_title_text);

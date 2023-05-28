@@ -90,7 +90,6 @@ public class PlayerFragment extends Fragment {
             totalTime = savedInstanceState.getString(TOTAL_TIME_KEY);
             progressSeekBar = savedInstanceState.getInt(PROGRESS_KEY);
             isPlaying = savedInstanceState.getBoolean(PLAYING_KEY);
-            songsList.clear();
         }
     }
 
@@ -137,7 +136,6 @@ public class PlayerFragment extends Fragment {
         }
 
         setResourcesWithMusic();
-        totalTimeTextView.setText(convertToMMSS(mediaPlayer.getDuration() + ""));
 
 
         getActivity().runOnUiThread(new Runnable() {
@@ -245,17 +243,19 @@ public class PlayerFragment extends Fragment {
                             }
                             seekBar.setProgress(progressSeekBar);
                             seekBar.setMax(mediaPlayer.getDuration());
-                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                @Override
-                                public void onCompletion(MediaPlayer mp) {
-                                    playNextSong();
-                                }
-                            });
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
                         totalTimeTextView.setText(convertToMMSS(mediaPlayer.getDuration() + ""));
+
+//                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                            @Override
+//                            public void onCompletion(MediaPlayer mp) {
+//                                mp.release();
+//                                // playNextSong();
+//                            }
+//                        });
                     }
                 }
             }

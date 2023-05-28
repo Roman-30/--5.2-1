@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
@@ -41,7 +42,7 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
     public static final String TAG = SearchMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
 
-    private ImageButton searchButton;
+    private ImageView searchButton;
 
     private Button checkPlaylistButton;
     private EditText inputSearch;
@@ -99,6 +100,7 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
 //                songsList.add(songData);
 //        }
 
+        songsList.clear();
         musicViewModel.loadSongs();
         musicViewModel.getSongsList().observe(getViewLifecycleOwner(), audioModels -> {
             songsList.clear();

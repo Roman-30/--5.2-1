@@ -11,6 +11,7 @@
         android:textAlignment="center"
         android:textSize="40sp"
         android:layout_centerHorizontal="true"
+        android:textAppearance="@style/text_20_black"
         android:layout_marginTop="16dp"
         android:textAllCaps="false" />
 
@@ -21,28 +22,31 @@
         android:layout_below="@+id/logo"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="23dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/input_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:autofillHints=""
-            android:background="@drawable/round_border"
+            android:background="@drawable/custom_round_border"
             android:ems="10"
             android:hint="@string/hint_search_name"
             android:inputType="textPersonName"
             android:padding="16dp"
             android:textAlignment="viewStart" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/search_button"
-            android:layout_width="51dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:src="@android:drawable/ic_menu_search" />
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/round_bg"
+            android:contentDescription="TODO"
+            android:paddingStart="2dp"
+            android:src="@drawable/ic_search" />
 
     </LinearLayout>
 

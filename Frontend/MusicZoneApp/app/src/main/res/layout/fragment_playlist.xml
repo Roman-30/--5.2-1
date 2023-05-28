@@ -16,6 +16,7 @@
         android:text="@string/playlists_logo"
         android:textAlignment="center"
         android:textSize="40sp"
+        android:textAppearance="@style/text_20_black"
         app:textAllCaps="false" />
 
 

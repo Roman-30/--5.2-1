@@ -1,5 +1,6 @@
 package com.goncharenko.musiczoneapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -13,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.SparseArray;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -25,6 +27,7 @@ import com.goncharenko.musiczoneapp.fragments.MyMusicFragment;
 import com.goncharenko.musiczoneapp.fragments.PlayerFragment;
 import com.goncharenko.musiczoneapp.fragments.SearchMusicFragment;
 import com.goncharenko.musiczoneapp.models.AudioModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,26 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 
     //@State
     SparseArray<Fragment.SavedState> savedStateSparseArray = new SparseArray<>();
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener(){
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    goHome();
+                    return true;
+                case R.id.navigation_player:
+                    goPlayer();
+                    return true;
+                case R.id.navigation_account:
+                    goAccount();
+                    return true;
+            }
+            return false;
+        }
+    };
 
     private boolean isSignIn = false;
     private String email = "";
@@ -73,27 +96,30 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 
         showFragments(fragmentName);
 
-        homeButton = findViewById(R.id.home_button);
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goHome();
-            }
-        });
-        playerButton = findViewById(R.id.player_button);
-        playerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goPlayer();
-            }
-        });
-        accountButton = findViewById(R.id.account_button);
-        accountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goAccount();
-            }
-        });
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.nav_view);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+//        homeButton = findViewById(R.id.home_button);
+//        homeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goHome();
+//            }
+//        });
+//        playerButton = findViewById(R.id.player_button);
+//        playerButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goPlayer();
+//            }
+//        });
+//        accountButton = findViewById(R.id.account_button);
+//        accountButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goAccount();
+//            }
+//        });
 
         if(!checkPermission()){
             requestPermission();
@@ -190,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 
     @Override
     public void setOnAudioModel(List<AudioModel> audioModel) {
+        audioModels.clear();
         audioModels.addAll(audioModel);
     }
 
