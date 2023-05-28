@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
@@ -40,7 +41,7 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
     public static final String TAG = MyMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
 
-    private ImageButton searchButton;
+    private ImageView searchButton;
     private EditText inputSearch;
 
     private final String SEARCH_KEY = "search";

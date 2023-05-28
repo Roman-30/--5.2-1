@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.activities.AddMusicActivity;
@@ -31,7 +32,7 @@ public class AdminMusicFragment extends Fragment implements ItemClickInterface, 
 
     public static final String TAG = AdminMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
-    private ImageButton addMusicButton;
+    private ImageView addMusicButton;
 
     private ArrayList<AudioModel> addSongsList = new ArrayList<>();
 
