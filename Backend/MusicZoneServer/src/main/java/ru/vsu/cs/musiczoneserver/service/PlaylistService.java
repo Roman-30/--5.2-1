@@ -105,7 +105,7 @@ public class PlaylistService {
 
         } else {
             playlist = playlistRepository.save(
-                    mapper.toEntity(new PlaylistDto(user.getNickName(), "User tracks"))
+                    mapper.toEntity(new PlaylistDto(user.getEmail(), "User tracks"))
             );
 
 

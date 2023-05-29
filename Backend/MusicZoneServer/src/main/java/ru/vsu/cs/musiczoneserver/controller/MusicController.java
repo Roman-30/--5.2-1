@@ -5,10 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.musiczoneserver.dto.MusicDto;
-import ru.vsu.cs.musiczoneserver.entity.Music;
 import ru.vsu.cs.musiczoneserver.service.MusicService;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,15 +21,15 @@ public class MusicController {
         this.service = service;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> saveMusic(@RequestBody @Valid MusicDto dto) throws IOException {
+    @PostMapping("/file/add")
+    public ResponseEntity<?> saveMusic(@RequestBody MusicDto dto) throws IOException {
         String link = service.downloadFileToServer(dto.getName());
         dto.setLink(link);
         var music = service.saveMusic(dto);
         if (music == null) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>(music, HttpStatus.OK);
+            return new ResponseEntity<>("Added is successful", HttpStatus.OK);
         }
     }
 
