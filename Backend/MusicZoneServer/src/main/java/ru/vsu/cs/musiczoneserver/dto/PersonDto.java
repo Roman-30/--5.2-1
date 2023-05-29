@@ -3,6 +3,7 @@ package ru.vsu.cs.musiczoneserver.dto;
 import lombok.Data;
 import ru.vsu.cs.musiczoneserver.entity.model.Role;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.util.Set;
@@ -17,13 +18,12 @@ public class PersonDto {
             message = "Не соответствует формату email!")
     private String email;
     @NotEmpty(message = "Password cannot be null")
-//    @Min(value = 5, message = "Age should not be less than 5")
-//    @Max(value = 65, message = "Age should not be greater than 65")
+    @Min(value = 6, message = "Age should not be less than 5")
     private String password;
     @NotEmpty(message = "Name cannot be null")
     private String name;
     @NotEmpty(message = "Nickname cannot be null")
-    private String nickName;
+    private String nickname;
     @NotEmpty(message = "Phone cannot be null")
     @Pattern(regexp = "\\d{10}",
             message = "Не соответствует формату номера телефона!")

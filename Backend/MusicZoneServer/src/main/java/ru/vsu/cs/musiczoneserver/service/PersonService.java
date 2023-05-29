@@ -65,6 +65,7 @@ public class PersonService implements UserDetailsService {
         Person person = personMapper.toEntity(user);
         person.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         person.setRoles(Collections.singleton(Role.USER));
+        person.setEmail(user.getEmail().toLowerCase());
 
         return personRepository.save(person);
     }
@@ -88,9 +89,9 @@ public class PersonService implements UserDetailsService {
 
             Person oldPerson = person.orElseThrow();
             oldPerson.setName(dto.getName());
-            oldPerson.setNickName(dto.getNickName());
+            oldPerson.setNickname(dto.getNickname());
             oldPerson.setSurname(dto.getSurname());
-            oldPerson.setEmail(dto.getEmail());
+            oldPerson.setEmail(dto.getEmail().toLowerCase());
             oldPerson.setPhone(dto.getPhone());
 
             return personRepository.save(oldPerson);

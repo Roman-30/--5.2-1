@@ -31,7 +31,7 @@ public class PersonController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updatePersonData(@RequestBody PersonDto dto) {
+    public ResponseEntity<?> updatePersonData(@RequestBody @Valid PersonDto dto) {
         var user = service.updateData(dto);
         if (user == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
