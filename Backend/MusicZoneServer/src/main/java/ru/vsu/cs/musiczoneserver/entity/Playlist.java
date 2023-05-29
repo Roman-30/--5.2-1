@@ -23,6 +23,9 @@ public class Playlist {
     @NonNull
     private String description;
 
+    @NonNull
+    private String nickname;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(name = "music_in_playlist",
             joinColumns = {
@@ -38,7 +41,4 @@ public class Playlist {
             inverseJoinColumns = {
                     @JoinColumn(name = "user_id", referencedColumnName = "id")})
     private Set<Person> people = new HashSet<>();
-
-
-
 }

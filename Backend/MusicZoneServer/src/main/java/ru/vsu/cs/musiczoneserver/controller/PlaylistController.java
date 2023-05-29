@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.musiczoneserver.dto.PlaylistDto;
 import ru.vsu.cs.musiczoneserver.service.PlaylistService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public class PlaylistController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addPlaylist(@RequestBody PlaylistDto dto,
+    public ResponseEntity<?> addPlaylist(@RequestBody @Valid PlaylistDto dto,
                                          @RequestParam String email
     ) {
         var playlist = service.savePlayList(dto, email);
@@ -31,7 +32,7 @@ public class PlaylistController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updatePlaylist(@RequestBody PlaylistDto dto) {
+    public ResponseEntity<?> updatePlaylist(@RequestBody @Valid PlaylistDto dto) {
         var playlist = service.updatePlaylist(dto);
         if (playlist == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
