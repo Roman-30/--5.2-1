@@ -32,6 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -88,21 +89,53 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
 
 
         email = mainListener.getOnEmail();
+        if(email.equals("")){
+            return view;
+        }
+        songsList.clear();
 
-        musicViewModel.loadSavedSongsList(email);
-        musicViewModel.getSavedSongsList().observe(getViewLifecycleOwner(), audioModels -> {
-            songsList.clear();
-            songsList.addAll(audioModels);
-            if (songsList.size() == 0) {
-                // обработка если нет музыки
-            } else {
-                if (savedAfterSearchSongsList.size() != 0) {
-                    setRecyclerView(savedAfterSearchSongsList);
-                } else {
-                    setRecyclerView(songsList);
+        AudioService.getInstance().getJSON().getSavedMusic(email).enqueue(new Callback<List<AudioModel>>() {
+            @Override
+            public void onResponse(Call<List<AudioModel>> call, Response<List<AudioModel>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        songsList.clear();
+                        songsList.addAll(response.body());
+
+                        if (songsList.size() == 0) {
+                            // обработка если нет музыки
+                        } else {
+                            if (savedAfterSearchSongsList.size() != 0) {
+                                setRecyclerView(savedAfterSearchSongsList);
+                            } else {
+                                setRecyclerView(songsList);
+                            }
+                        }
+                    }
                 }
             }
+
+            @Override
+            public void onFailure(Call<List<AudioModel>> call, Throwable t) {
+
+            }
         });
+
+
+//        musicViewModel.loadSavedSongsList(email);
+//        musicViewModel.getSavedSongsList().observe(getViewLifecycleOwner(), audioModels -> {
+//            songsList.clear();
+//            songsList.addAll(audioModels);
+//            if (songsList.size() == 0) {
+//                // обработка если нет музыки
+//            } else {
+//                if (savedAfterSearchSongsList.size() != 0) {
+//                    setRecyclerView(savedAfterSearchSongsList);
+//                } else {
+//                    setRecyclerView(songsList);
+//                }
+//            }
+//        });
 
 //        ArrayList<AudioModel> audioModels = mainListener.getOnAudioModels();
 //        songsList = audioModels;
@@ -168,8 +201,10 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
         MyMediaPlayer.currentIndex = id;
 
         if(savedAfterSearchSongsList.size() != 0){
+            mainListener.setOnAudioModel(savedAfterSearchSongsList);
             musicViewModel.setSongsList(savedAfterSearchSongsList);
         } else {
+            mainListener.setOnAudioModel(songsList);
             musicViewModel.setSongsList(songsList);
         }
 

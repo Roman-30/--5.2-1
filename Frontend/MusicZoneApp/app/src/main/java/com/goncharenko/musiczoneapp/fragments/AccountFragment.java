@@ -59,10 +59,26 @@ public class AccountFragment extends Fragment {
         email = view.findViewById(R.id.account_email);
         phoneNumber = view.findViewById(R.id.account_phone);
 
-        Bundle extras = getActivity().getIntent().getExtras();
-
         emailFrom = mainListener.getOnEmail();
         passwordFrom = mainListener.getOnPassword();
+
+        Bundle extras = getActivity().getIntent().getExtras();
+        if(extras != null && emailFrom.equals("")){
+            if(extras.getString("email") != null) {
+                emailFrom = extras.getString("email");
+            } else {
+                emailFrom = mainListener.getOnEmail();
+            }
+
+            if(extras.getString("password") != null) {
+                passwordFrom = extras.getString("password");
+            } else {
+                passwordFrom = mainListener.getOnPassword();
+            }
+        } else {
+            emailFrom = mainListener.getOnEmail();
+            passwordFrom = mainListener.getOnPassword();
+        }
 
         UserService.getInstance()
                 .getJSON()
@@ -74,9 +90,9 @@ public class AccountFragment extends Fragment {
                             user = response.body();
                             if (user != null) {
                                 name.setText(user.getName() + " " + user.getSurname());
-                                nickname.setText(user.getNickname());
+                                nickname.setText("Nickname: " + user.getNickname());
                                 email.setText(user.getEmail());
-                                phoneNumber.setText(user.getPhoneNumber());
+                                phoneNumber.setText("Phone: " + user.getPhoneNumber());
                             }
                         } else {
                             onFailure(call, new Throwable());
@@ -147,6 +163,17 @@ public class AccountFragment extends Fragment {
         }
         setNewFragment(entryFragment, EntryFragment.TAG);
         mainListener.onSignedIn(false);
+        mainListener.setOnEmail("");
+
+        Bundle extras = getActivity().getIntent().getExtras();
+
+        if(extras != null){
+            getActivity().getIntent().getExtras().remove("email");
+            getActivity().getIntent().getExtras().remove("password");
+            extras.remove("email");
+            extras.remove("password");
+        }
+
     }
 
     public void checkMusic() {

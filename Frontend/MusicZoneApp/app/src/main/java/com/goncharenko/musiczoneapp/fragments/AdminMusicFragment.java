@@ -1,9 +1,11 @@
 package com.goncharenko.musiczoneapp.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,6 +21,7 @@ import android.widget.ImageView;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.activities.AddMusicActivity;
+import com.goncharenko.musiczoneapp.activities.MainListener;
 import com.goncharenko.musiczoneapp.adapters.MusicListAdapter;
 import com.goncharenko.musiczoneapp.clickinterface.ButtonClickInterface;
 import com.goncharenko.musiczoneapp.clickinterface.ItemClickInterface;
@@ -37,6 +40,8 @@ public class AdminMusicFragment extends Fragment implements ItemClickInterface, 
     private ArrayList<AudioModel> addSongsList = new ArrayList<>();
 
     private MusicViewModel musicViewModel;
+
+    private MainListener mainListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,8 +78,20 @@ public class AdminMusicFragment extends Fragment implements ItemClickInterface, 
         return view;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof MainListener) {
+            mainListener = (MainListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement SignInListener");
+        }
+    }
+
     public void addMusic(){
         Intent intent = new Intent(getActivity(), AddMusicActivity.class);
+        intent.putExtra("email", mainListener.getOnEmail());
         startActivity(intent);
     }
 

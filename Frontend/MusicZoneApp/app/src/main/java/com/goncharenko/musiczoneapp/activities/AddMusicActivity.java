@@ -27,10 +27,17 @@ public class AddMusicActivity extends AppCompatActivity {
     private Button saveButton;
     private Button backButton;
 
+    private String email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_music);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            email = extras.getString("email");
+        }
 
         trackNameInput = findViewById(R.id.track_name_input);
         authorInput = findViewById(R.id.author_input);
@@ -87,8 +94,9 @@ public class AddMusicActivity extends AppCompatActivity {
     private void goToAccount(){
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("fragment", "Entry");
-        intent.putExtra("isSignIn", false);
+        intent.putExtra("fragment", "Account");
+        intent.putExtra("isSignIn", true);
+        intent.putExtra("email", email);
         startActivity(intent);
     }
 }

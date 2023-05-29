@@ -282,16 +282,27 @@ public class PlayerFragment extends Fragment {
     }
 
     private void playPreviousSong(){
-        progressSeekBar = 0;
-        isPlaying = true;
-        if(MyMediaPlayer.currentIndex == 0) {
-            MyMediaPlayer.currentIndex = songsList.size() - 1;
-        } else {
-            MyMediaPlayer.currentIndex -= 1;
+        if(progressSeekBar <= 100){
+            progressSeekBar = 0;
+            isPlaying = true;
+            if(MyMediaPlayer.currentIndex == 0) {
+                MyMediaPlayer.currentIndex = songsList.size() - 1;
+            } else {
+                MyMediaPlayer.currentIndex -= 1;
+            }
+            mediaPlayer.reset();
+            totalTimeTextView.setText(convertToMMSS("0"));
+            setResourcesWithMusic();
+        }else {
+            progressSeekBar = 0;
+            isPlaying = true;
+
+            mediaPlayer.seekTo(progressSeekBar);
+            mediaPlayer.start();
+
+            seekBar.setProgress(progressSeekBar);
+            seekBar.setMax(mediaPlayer.getDuration());
         }
-        mediaPlayer.reset();
-        totalTimeTextView.setText(convertToMMSS("0"));
-        setResourcesWithMusic();
     }
 
     private void pausePlay(){

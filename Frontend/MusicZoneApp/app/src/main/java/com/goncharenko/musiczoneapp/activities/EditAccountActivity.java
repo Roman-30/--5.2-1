@@ -116,8 +116,9 @@ public class EditAccountActivity extends AppCompatActivity {
     private void goToAccount(){
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("fragment", "Entry");
-        intent.putExtra("isSignIn", false);
+        intent.putExtra("fragment", "Account");
+        intent.putExtra("isSignIn", true);
+        intent.putExtra("email", emailInput.getText().toString().trim());
         startActivity(intent);
     }
 }

@@ -36,8 +36,14 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 
     private FrameLayout frameLayout;
 
+    private MenuItem itemHome;
+    private MenuItem itemPlayer;
+    private MenuItem itemAccount;
+
     //@State
-    SparseArray<Fragment.SavedState> savedStateSparseArray = new SparseArray<>();
+    private SparseArray<Fragment.SavedState> savedStateSparseArray = new SparseArray<>();
+
+    private BottomNavigationView bottomNavigationView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener(){
@@ -96,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 
         showFragments(fragmentName);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.nav_view);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 //        homeButton = findViewById(R.id.home_button);
 //        homeButton.setOnClickListener(new View.OnClickListener() {
@@ -265,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements MainListener{
             case "Player":
                 activeFragment = new PlayerFragment();
                 tag = PlayerFragment.TAG;
+
                 break;
             case "My music":
                 activeFragment = new MyMusicFragment();
