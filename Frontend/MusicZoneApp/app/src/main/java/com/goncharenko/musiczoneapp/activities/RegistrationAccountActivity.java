@@ -17,6 +17,8 @@ import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 import com.goncharenko.musiczoneapp.viewmodels.UserViewModel;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,24 +72,19 @@ public class RegistrationAccountActivity extends AppCompatActivity {
             UserService.getInstance()
                     .getJSON()
                     .registration(dto)
-                    .enqueue(new Callback<String>() {
+                    .enqueue(new Callback<List<String>>() {
                         @Override
-                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                            Log.d("fkldgjfk", "onResponse: ");
-                            if (response.code() == 200) {
-                                goToEntryAccount();
-                            }
+                        public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                            goToEntryAccount();
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                            Log.d("fkldgjfk", "onFailure: ");
+                        public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
                             Toast.makeText(view.getContext(),
-                                    "Ошибка при регистрации",
+                                    "Error",
                                     Toast.LENGTH_SHORT
                             ).show();
 
-                            //goToAccount();
                             goToEntryAccount();
                         }
                     });

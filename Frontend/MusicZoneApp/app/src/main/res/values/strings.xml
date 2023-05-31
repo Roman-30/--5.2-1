@@ -46,9 +46,10 @@
 
     <string name="adminMusic">Admins Music</string>
 
-    <string name="track_name">Track name</string>
+    <string name="song_name">Song name</string>
     <string name="author">Author</string>
     <string name="genre">Genre</string>
+    <string name="track_name">Track name</string>
     <string name="track_path">Track</string>
     <string name="add_track">Add track</string>
 

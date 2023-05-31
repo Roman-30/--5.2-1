@@ -14,6 +14,8 @@ import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,19 +85,19 @@ public class EditAccountActivity extends AppCompatActivity {
             UserService.getInstance()
                     .getJSON()
                     .userUpdate(dto)
-                    .enqueue(new Callback<String>() {
+                    .enqueue(new Callback<List<String>>() {
                         @Override
-                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
                             Toast.makeText(view.getContext(),
-                                    "Аккаунт успешно изменен",
+                                    "Update is successful",
                                     Toast.LENGTH_SHORT).show();
                             goToAccount();
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
                             Toast.makeText(view.getContext(),
-                                    "Ошибка",
+                                    "Error",
                                     Toast.LENGTH_SHORT).show();
                             goToAccount();
                         }

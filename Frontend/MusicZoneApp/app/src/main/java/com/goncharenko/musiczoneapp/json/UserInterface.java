@@ -16,7 +16,7 @@ import retrofit2.http.Query;
 
 public interface UserInterface {
     @POST("/person/registration")
-    Call<String> registration(@Body UserModel dto);
+    Call<List<String>> registration(@Body UserModel dto);
     ///get/email
     @GET("/person/get/user")
     Call<UserModel> getUserByEmail(@Query("email") String email);
@@ -24,13 +24,13 @@ public interface UserInterface {
     @POST("/person/login")
     Call<JwtResponse> login(@Body JwtRequest request);
     @GET("/person/send/{email}")
-    Call<String> sendCode(@Path("email") String email, @Query("code") String code);
+    Call<List<String>> sendCode(@Path("email") String email, @Query("code") String code);
 
     @GET("/person/{id}")
     Call<UserModel> getUserFromId(@Path("id") int id);
 
     @PUT("/person/update")
-    Call<String> userUpdate(@Body UserModel dto);
+    Call<List<String>> userUpdate(@Body UserModel dto);
     @PUT("/person/pass/{id}")
-    Call<String> changePassword(@Path("id") int id, @Query("pass") String password);
+    Call<List<String>> changePassword(@Path("id") int id, @Query("pass") String password);
 }

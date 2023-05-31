@@ -15,6 +15,8 @@ import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.codegenerator.RandomCodeGenerator;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -101,18 +103,18 @@ public class SendingCodeActivity extends AppCompatActivity {
     }
 
     private void sendEmail(String email, String code, View view){
-        UserService.getInstance().getJSON().sendCode(email, code).enqueue(new Callback<String>() {
+        UserService.getInstance().getJSON().sendCode(email, code).enqueue(new Callback<List<String>>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                 Toast.makeText(view.getContext(),
-                        "Письмо отправлено",
+                        "Mail is send",
                         Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<List<String>> call, Throwable t) {
                 Toast.makeText(view.getContext(),
-                        "Письмо отправлено",
+                        "Error",
                         Toast.LENGTH_SHORT).show();
             }
         });

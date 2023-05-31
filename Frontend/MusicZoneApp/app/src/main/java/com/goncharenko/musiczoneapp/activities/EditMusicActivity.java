@@ -21,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddMusicActivity extends AppCompatActivity {
+public class EditMusicActivity extends AppCompatActivity {
 
     private EditText songNameInput;
     private EditText trackNameInput;
@@ -35,22 +35,42 @@ public class AddMusicActivity extends AppCompatActivity {
     private TextView trackPathTextView;
     private String trackPath;
     private String email;
+    private Integer id;
+    private String title;
+    private String author;
+    private String genre;
+    private String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_music);
+        setContentView(R.layout.activity_edit_music);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             email = extras.getString("email");
+            id = extras.getInt("id");
+            title = extras.getString("title");
+            author = extras.getString("author");
+            genre = extras.getString("genre");
+            path = extras.getString("path");
         }
 
         songNameInput = findViewById(R.id.song_name_input);
+        songNameInput.setText(title);
+
         trackNameInput = findViewById(R.id.track_name_input);
+
         authorInput = findViewById(R.id.author_input);
+        authorInput.setText(author);
+
         genreInput = findViewById(R.id.genre_input);
+        genreInput.setText(genre);
+
         trackPathTextView = findViewById(R.id.track_path);
+        String[] strs = path.replace("\\", " ").split(" ");
+        trackPathTextView.setText(strs[strs.length - 1]);
+        trackPath = path;
 
         backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> goBack());
@@ -63,7 +83,7 @@ public class AddMusicActivity extends AppCompatActivity {
     }
 
     public void goBack(){
-        goToAccount();
+        goToMain();
     }
 
     public void save(View view){
@@ -72,16 +92,16 @@ public class AddMusicActivity extends AppCompatActivity {
         String genre = genreInput.getText().toString().trim();
 
 
-        AudioModel dto = new AudioModel(0, trackPath, songName, author, genre);
+        AudioModel dto = new AudioModel(id, trackPath, songName, author, genre);
         AudioService
                 .getInstance()
                 .getJSON()
-                .addNewMusic(dto)
+                .updateMusic(dto)
                 .enqueue(new Callback<List<String>>() {
                     @Override
                     public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                         Toast.makeText(view.getContext(),
-                                "Song is added",
+                                "Song is updated",
                                 Toast.LENGTH_SHORT).show();
                     }
 
@@ -92,7 +112,7 @@ public class AddMusicActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
-        goToAccount();
+        goToMain();
     }
 
     public void addMusic(View view){
@@ -101,35 +121,35 @@ public class AddMusicActivity extends AppCompatActivity {
                 getJSON().
                 loadMusic(trackNameInput.getText().toString().trim()).
                 enqueue(new Callback<List<String>>() {
-            @Override
-            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
-                trackPath = response.body().get(0);
-                String[] strs = trackPath.replace("\\", " ").split(" ");
-                trackPathTextView.setText(strs[strs.length - 1]);
-                Toast.makeText(view.getContext(),
-                        "Song is loaded",
-                        Toast.LENGTH_SHORT).show();
-            }
+                    @Override
+                    public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                        trackPath = response.body().get(0);
+                        String[] strs = trackPath.replace("\\", " ").split(" ");
+                        trackPathTextView.setText(strs[strs.length - 1]);
+                        Toast.makeText(view.getContext(),
+                                "Song is loaded",
+                                Toast.LENGTH_SHORT).show();
+                    }
 
-            @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {
-                try {
-                    trackPath = call.execute().body().get(0);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                trackNameInput.setText(trackPath);
-                Toast.makeText(view.getContext(),
-                        "Error",
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onFailure(Call<List<String>> call, Throwable t) {
+                        try {
+                            trackPath = call.execute().body().get(0);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        trackNameInput.setText(trackPath);
+                        Toast.makeText(view.getContext(),
+                                "Error",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    private void goToAccount(){
+    private void goToMain(){
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("fragment", "Account");
+        intent.putExtra("fragment", "Search");
         intent.putExtra("isSignIn", true);
         intent.putExtra("email", email);
         startActivity(intent);

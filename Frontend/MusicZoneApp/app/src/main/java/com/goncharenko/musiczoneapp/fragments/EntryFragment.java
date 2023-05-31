@@ -127,17 +127,9 @@ public class EntryFragment extends Fragment {
 
                             @Override
                             public void onFailure(Call<JwtResponse> call, Throwable t) {
-                                if (email.equals("admin@ad.min") && password.equals("admin111")) {
-                                    AccountFragment accountFragment = new AccountFragment();
-                                    mainListener.onSignedIn(true);
-                                    mainListener.setOnEmail(email);
-                                    mainListener.setOnPassword(password);
-                                    setNewFragment(accountFragment);
-                                } else {
-                                    Toast.makeText(getContext(),
-                                            "Ошибка при входе",
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                                Toast.makeText(getContext(),
+                                        "Ошибка при входе",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
             }

@@ -3,6 +3,9 @@ package com.goncharenko.musiczoneapp.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+import java.util.Set;
+
 public class UserModel {
 
     @SerializedName("id")
@@ -14,7 +17,7 @@ public class UserModel {
     @SerializedName("surname")
     @Expose
     private String surname;
-    @SerializedName("nickName")
+    @SerializedName("nickname")
     @Expose
     private String nickname;
     @SerializedName("email")
@@ -26,6 +29,10 @@ public class UserModel {
     @SerializedName("password")
     @Expose
     private String password;
+
+    @SerializedName("roles")
+    @Expose
+    private Set<String> role;
 
     public UserModel(String name, String surname, String nickname, String email, String phoneNumber, String password) {
         this.name = name;

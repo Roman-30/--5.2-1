@@ -60,8 +60,8 @@ public class InputValidator {
         if(phoneNumber.isEmpty()) {
             phoneNumberInput.setError("Введите номер телефона");
             return false;
-        } else if(!phoneNumber.matches("\\d{10}")) {
-            phoneNumberInput.setError("Введите правильный номер телефона (10 цифр)");
+        } else if(!phoneNumber.matches("\\d{11}")) {
+            phoneNumberInput.setError("Введите правильный номер телефона (11 цифр)");
             return false;
         }
         return true;

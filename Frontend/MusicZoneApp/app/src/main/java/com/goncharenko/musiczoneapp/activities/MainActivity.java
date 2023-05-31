@@ -271,7 +271,6 @@ public class MainActivity extends AppCompatActivity implements MainListener{
             case "Player":
                 activeFragment = new PlayerFragment();
                 tag = PlayerFragment.TAG;
-
                 break;
             case "My music":
                 activeFragment = new MyMusicFragment();

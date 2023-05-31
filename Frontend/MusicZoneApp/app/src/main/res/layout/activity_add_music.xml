@@ -23,7 +23,7 @@
 
 
   <EditText
-      android:id="@+id/track_name_input"
+      android:id="@+id/song_name_input"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_below="@id/back_button"
@@ -33,7 +33,7 @@
       android:drawableStart="@drawable/custom_write_ic"
       android:drawablePadding="16dp"
       android:ems="10"
-      android:hint="@string/track_name"
+      android:hint="@string/song_name"
       android:inputType="textPersonName"
       android:padding="16dp" />
 
@@ -41,7 +41,7 @@
       android:id="@+id/author_input"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@id/track_name_input"
+      android:layout_below="@id/song_name_input"
       android:layout_marginHorizontal="20dp"
       android:layout_marginTop="30dp"
       android:background="@drawable/custom_round_border"
@@ -67,11 +67,26 @@
       android:inputType="textPersonName"
       android:padding="16dp" />
 
+  <EditText
+      android:id="@+id/track_name_input"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/genre_input"
+      android:layout_marginHorizontal="20dp"
+      android:layout_marginTop="30dp"
+      android:background="@drawable/custom_round_border"
+      android:drawableStart="@drawable/custom_write_ic"
+      android:drawablePadding="16dp"
+      android:ems="10"
+      android:hint="@string/track_name"
+      android:inputType="textPersonName"
+      android:padding="16dp" />
+
   <TextView
       android:id="@+id/track_path"
       android:layout_width="168dp"
       android:layout_height="wrap_content"
-      android:layout_below="@id/genre_input"
+      android:layout_below="@id/track_name_input"
       android:layout_marginHorizontal="20dp"
       android:layout_marginTop="60dp"
       android:ems="10"
@@ -101,9 +116,9 @@
       android:id="@+id/save_button"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@id/add_track_button"
+      android:layout_alignParentBottom="true"
       android:layout_marginHorizontal="100dp"
-      android:layout_marginTop="83dp"
+      android:layout_marginBottom="10dp"
       android:background="@drawable/round_bg"
       android:text="@string/save"
       android:textColor="@color/textButtonColor"

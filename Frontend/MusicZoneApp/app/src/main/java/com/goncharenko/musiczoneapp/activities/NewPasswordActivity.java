@@ -13,6 +13,8 @@ import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,19 +49,19 @@ public class NewPasswordActivity extends AppCompatActivity {
                 UserService.getInstance()
                         .getJSON()
                         .changePassword(id, password)
-                        .enqueue(new Callback<String>() {
+                        .enqueue(new Callback<List<String>>() {
                             @Override
-                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                            public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
                                 Toast.makeText(view.getContext(),
-                                        "Пароль успешно изменен",
+                                        "Update is successful",
                                         Toast.LENGTH_SHORT).show();
                                 goToEntryAccount();
                             }
 
                             @Override
-                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                            public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
                                 Toast.makeText(view.getContext(),
-                                        "Ошибка при изменении пароля",
+                                        "Error",
                                         Toast.LENGTH_SHORT).show();
                                 goToEntryAccount();
                             }
@@ -84,7 +86,7 @@ public class NewPasswordActivity extends AppCompatActivity {
         intent.putExtra("isSignIn", false);
         startActivity(intent);
 
-        MainActivity mainActivity = (MainActivity) this.getParent();
-        mainActivity.goAccount();
+//        MainActivity mainActivity = (MainActivity) this.getParent();
+//        mainActivity.goAccount();
     }
 }

@@ -235,22 +235,20 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
                 AudioService
                         .getInstance()
                         .getJSON()
-                        .deleteMusic(mainListener.getOnEmail(), songsList.get(id).getId()).enqueue(new Callback<String>() {
+                        .deleteMusic(mainListener.getOnEmail(), songsList.get(id).getId()).enqueue(new Callback<List<String>>() {
                             @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                if(response.isSuccessful()){
-                                    Toast.makeText(getContext(),
-                                            "Трек добавлен",
-                                            Toast.LENGTH_SHORT).show();
+                            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                                Toast.makeText(getContext(),
+                                        "Song is deleted",
+                                        Toast.LENGTH_SHORT).show();
 
-                                    songsList.remove(id);
-                                }
+                                songsList.remove(id);
                             }
 
                             @Override
-                            public void onFailure(Call<String> call, Throwable t) {
+                            public void onFailure(Call<List<String>> call, Throwable t) {
                                 Toast.makeText(getContext(),
-                                        "Ошибка",
+                                        "Error",
                                         Toast.LENGTH_SHORT).show();
 
                                 songsList.remove(songsList);
