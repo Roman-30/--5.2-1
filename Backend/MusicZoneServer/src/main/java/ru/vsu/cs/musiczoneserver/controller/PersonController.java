@@ -10,6 +10,7 @@ import ru.vsu.cs.musiczoneserver.service.PersonService;
 
 import javax.security.auth.message.AuthException;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/person")
@@ -21,12 +22,12 @@ public class PersonController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<String> registration(@Valid @RequestBody PersonDto person) {
+    public ResponseEntity<?> registration(@Valid @RequestBody PersonDto person) {
         var user = service.savePerson(person);
         if (user == null) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Registration error!", HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<>("Registration Successful!", HttpStatus.OK);
+            return new ResponseEntity<>(List.of("Registration successful!"), HttpStatus.OK);
         }
     }
 
@@ -34,9 +35,9 @@ public class PersonController {
     public ResponseEntity<?> updatePersonData(@RequestBody @Valid PersonDto dto) {
         var user = service.updateData(dto);
         if (user == null) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Update error!", HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<>("Update Successful!", HttpStatus.OK);
+            return new ResponseEntity<>(List.of("Update is successful!"), HttpStatus.OK);
         }
     }
 
@@ -44,16 +45,16 @@ public class PersonController {
     public ResponseEntity<?> updatePassword(@PathVariable Integer id, @RequestParam String pass) {
         var user = service.updatePassword(id, pass);
         if (user == null) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Update error!", HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<>("Update Successful!", HttpStatus.OK);
+            return new ResponseEntity<>(List.of("Update is successful!"), HttpStatus.OK);
         }
     }
 
     @GetMapping("/send/{email}")
     public ResponseEntity<?> sendMessage(@PathVariable String email, @RequestParam String code) {
         service.sendMail(email, code);
-        return ResponseEntity.ok("OK!");
+        return ResponseEntity.ok(List.of("Email is send!"));
     }
 
     @PostMapping("/login")

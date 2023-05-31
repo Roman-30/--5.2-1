@@ -17,16 +17,13 @@ public class PersonDto {
     @Pattern(regexp = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$",
             message = "Не соответствует формату email!")
     private String email;
-    @NotEmpty(message = "Password cannot be null")
-    @Min(value = 6, message = "Age should not be less than 5")
+
     private String password;
     @NotEmpty(message = "Name cannot be null")
     private String name;
     @NotEmpty(message = "Nickname cannot be null")
     private String nickname;
     @NotEmpty(message = "Phone cannot be null")
-    @Pattern(regexp = "\\d{10}",
-            message = "Не соответствует формату номера телефона!")
     private String phone;
     @NotEmpty(message = "Surname cannot be null")
     private String surname;

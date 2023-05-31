@@ -20,7 +20,7 @@ public class TokenService {
         this.jwtProvider = jwtProvider;
     }
 
-    public JwtResponse getAccessToken(@NonNull String refreshToken) {
+    public JwtResponse getAccessToken(@NonNull String refreshToken) throws AuthException {
         if (jwtProvider.validateRefreshToken(refreshToken)) {
             final Claims claims = jwtProvider.getRefreshClaims(refreshToken);
             final String username = claims.getSubject();
@@ -29,7 +29,7 @@ public class TokenService {
             final String accessToken = jwtProvider.generateAccessToken(user);
             return new JwtResponse(accessToken, null);
         }
-        return new JwtResponse(null, null);
+        throw new AuthException("Invalid refresh token");
     }
 
     public JwtResponse refresh(@NonNull String refreshToken) throws AuthException {
