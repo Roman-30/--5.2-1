@@ -90,7 +90,6 @@ public class PlayerFragment extends Fragment {
             totalTime = savedInstanceState.getString(TOTAL_TIME_KEY);
             progressSeekBar = savedInstanceState.getInt(PROGRESS_KEY);
             isPlaying = savedInstanceState.getBoolean(PLAYING_KEY);
-            songsList.clear();
         }
     }
 
@@ -137,7 +136,6 @@ public class PlayerFragment extends Fragment {
         }
 
         setResourcesWithMusic();
-        totalTimeTextView.setText(convertToMMSS(mediaPlayer.getDuration() + ""));
 
 
         getActivity().runOnUiThread(new Runnable() {
@@ -245,17 +243,19 @@ public class PlayerFragment extends Fragment {
                             }
                             seekBar.setProgress(progressSeekBar);
                             seekBar.setMax(mediaPlayer.getDuration());
-                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                @Override
-                                public void onCompletion(MediaPlayer mp) {
-                                    playNextSong();
-                                }
-                            });
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
                         totalTimeTextView.setText(convertToMMSS(mediaPlayer.getDuration() + ""));
+
+//                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                            @Override
+//                            public void onCompletion(MediaPlayer mp) {
+//                                mp.release();
+//                                // playNextSong();
+//                            }
+//                        });
                     }
                 }
             }
@@ -282,16 +282,27 @@ public class PlayerFragment extends Fragment {
     }
 
     private void playPreviousSong(){
-        progressSeekBar = 0;
-        isPlaying = true;
-        if(MyMediaPlayer.currentIndex == 0) {
-            MyMediaPlayer.currentIndex = songsList.size() - 1;
-        } else {
-            MyMediaPlayer.currentIndex -= 1;
+        if(progressSeekBar <= 100){
+            progressSeekBar = 0;
+            isPlaying = true;
+            if(MyMediaPlayer.currentIndex == 0) {
+                MyMediaPlayer.currentIndex = songsList.size() - 1;
+            } else {
+                MyMediaPlayer.currentIndex -= 1;
+            }
+            mediaPlayer.reset();
+            totalTimeTextView.setText(convertToMMSS("0"));
+            setResourcesWithMusic();
+        }else {
+            progressSeekBar = 0;
+            isPlaying = true;
+
+            mediaPlayer.seekTo(progressSeekBar);
+            mediaPlayer.start();
+
+            seekBar.setProgress(progressSeekBar);
+            seekBar.setMax(mediaPlayer.getDuration());
         }
-        mediaPlayer.reset();
-        totalTimeTextView.setText(convertToMMSS("0"));
-        setResourcesWithMusic();
     }
 
     private void pausePlay(){

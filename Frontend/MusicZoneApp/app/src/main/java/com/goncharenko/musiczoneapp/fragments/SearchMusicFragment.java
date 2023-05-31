@@ -1,6 +1,7 @@
 package com.goncharenko.musiczoneapp.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,9 +19,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
+import com.goncharenko.musiczoneapp.activities.EditAccountActivity;
+import com.goncharenko.musiczoneapp.activities.EditMusicActivity;
 import com.goncharenko.musiczoneapp.activities.MainListener;
 import com.goncharenko.musiczoneapp.adapters.MusicListAdapter;
 import com.goncharenko.musiczoneapp.clickinterface.ButtonClickInterface;
@@ -32,6 +36,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,7 +46,7 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
     public static final String TAG = SearchMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
 
-    private ImageButton searchButton;
+    private ImageView searchButton;
 
     private Button checkPlaylistButton;
     private EditText inputSearch;
@@ -102,6 +107,7 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
         songsList.clear();
         musicViewModel.loadSongs();
         musicViewModel.getSongsList().observe(getViewLifecycleOwner(), audioModels -> {
+            songsList.clear();
             songsList.addAll(audioModels);
             if (songsList.size() == 0) {
                 // обработка если нет музыки
@@ -132,7 +138,7 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(SEARCH_KEY, inputSearch.toString().trim());
-        outState.putSerializable(LIST_KEY, (Serializable) songsList);
+        outState.putSerializable(LIST_KEY, (Serializable) savedSongsList);
     }
 
     public void searchMusic() {
@@ -193,7 +199,7 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
     public void onItemButtonClick(int id) {
         if(!mainListener.getOnSignedIn()){
             Toast.makeText(getContext(),
-                    "Вы не зарегистрированы",
+                    "You are not registered",
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -215,20 +221,18 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
                 AudioService
                         .getInstance()
                         .getJSON()
-                        .addMusic(mainListener.getOnEmail(), songsList.get(id).getId()).enqueue(new Callback<String>() {
+                        .addMusic(mainListener.getOnEmail(), songsList.get(id).getId()).enqueue(new Callback<List<String>>() {
                             @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                if(response.isSuccessful()){
-                                    Toast.makeText(getContext(),
-                                            "Трек добавлен",
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                                Toast.makeText(getContext(),
+                                        "Song is added",
+                                        Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
-                            public void onFailure(Call<String> call, Throwable t) {
+                            public void onFailure(Call<List<String>> call, Throwable t) {
                                 Toast.makeText(getContext(),
-                                        "Ошибка",
+                                        "Error",
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -242,26 +246,45 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
                 AudioService
                         .getInstance()
                         .getJSON()
-                        .deleteNewMusic(songsList.get(id).getId()).enqueue(new Callback<String>() {
+                        .deleteNewMusic(songsList.get(id).getId()).enqueue(new Callback<List<String>>() {
                             @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                if(response.isSuccessful()){
-                                    Toast.makeText(getContext(),
-                                            "Трек добавлен",
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                                Toast.makeText(getContext(),
+                                        "Song is removed",
+                                        Toast.LENGTH_SHORT).show();
+
+                                songsList.remove(id);
                             }
 
                             @Override
-                            public void onFailure(Call<String> call, Throwable t) {
+                            public void onFailure(Call<List<String>> call, Throwable t) {
                                 Toast.makeText(getContext(),
-                                        "Ошибка",
+                                        "Error",
                                         Toast.LENGTH_SHORT).show();
+                                songsList.remove(id);
+
                             }
                         });
+
+                setRecyclerView(songsList);
             }
         });
-        bottomSheetView.findViewById(R.id.edit_button).setVisibility(View.GONE);
+        //bottomSheetView.findViewById(R.id.edit_button).setVisibility(View.GONE);
+
+        bottomSheetView.findViewById(R.id.edit_button).setOnClickListener(new View.OnClickListener() {
+            AudioModel song = songsList.get(id);
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EditMusicActivity.class);
+                intent.putExtra("email", mainListener.getOnEmail());
+                intent.putExtra("id", song.getId());
+                intent.putExtra("title", song.getTitle());
+                intent.putExtra("author", song.getAuthor());
+                intent.putExtra("genre", song.getGenre());
+                intent.putExtra("path", song.getPath());
+                startActivity(intent);
+            }
+        });
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();

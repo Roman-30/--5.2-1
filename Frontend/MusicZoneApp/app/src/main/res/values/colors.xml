@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimary">#2E2E2E</color>
+    <color name="colorPrimaryDark">#2E2E2E</color>
     <color name="colorAccent">#03DAC5</color>
 
     <color name="textButtonColor">#FFFFFFFF</color>
@@ -11,7 +11,11 @@
 
     <color name="background">#FFFFFFFF</color>
 
-    <color name="textLogo">#FF000000</color>
-    <color name="logoOne">#EE543A</color>
-    <color name="logoTwo">#4BA7F4</color>
+    <color name="textLogo">#FFFFFFFF</color>
+    <color name="logoOne">#FF537F</color>
+    <color name="logoTwo">#00B3FD</color>
+
+    <color name="focused">#FF537F</color>
+
+
 </resources>

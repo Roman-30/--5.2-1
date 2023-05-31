@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.goncharenko.musiczoneapp.R;
@@ -31,6 +32,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,7 +42,7 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
     public static final String TAG = MyMusicFragment.class.getSimpleName();
     private RecyclerView recyclerView;
 
-    private ImageButton searchButton;
+    private ImageView searchButton;
     private EditText inputSearch;
 
     private final String SEARCH_KEY = "search";
@@ -87,21 +89,53 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
 
 
         email = mainListener.getOnEmail();
-
+        if(email.equals("")){
+            return view;
+        }
         songsList.clear();
-        musicViewModel.loadSavedSongsList(email);
-        musicViewModel.getSavedSongsList().observe(getViewLifecycleOwner(), audioModels -> {
-            songsList.addAll(audioModels);
-            if (songsList.size() == 0) {
-                // обработка если нет музыки
-            } else {
-                if (savedAfterSearchSongsList.size() != 0) {
-                    setRecyclerView(savedAfterSearchSongsList);
-                } else {
-                    setRecyclerView(songsList);
+
+        AudioService.getInstance().getJSON().getSavedMusic(email).enqueue(new Callback<List<AudioModel>>() {
+            @Override
+            public void onResponse(Call<List<AudioModel>> call, Response<List<AudioModel>> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() != null) {
+                        songsList.clear();
+                        songsList.addAll(response.body());
+
+                        if (songsList.size() == 0) {
+                            // обработка если нет музыки
+                        } else {
+                            if (savedAfterSearchSongsList.size() != 0) {
+                                setRecyclerView(savedAfterSearchSongsList);
+                            } else {
+                                setRecyclerView(songsList);
+                            }
+                        }
+                    }
                 }
             }
+
+            @Override
+            public void onFailure(Call<List<AudioModel>> call, Throwable t) {
+
+            }
         });
+
+
+//        musicViewModel.loadSavedSongsList(email);
+//        musicViewModel.getSavedSongsList().observe(getViewLifecycleOwner(), audioModels -> {
+//            songsList.clear();
+//            songsList.addAll(audioModels);
+//            if (songsList.size() == 0) {
+//                // обработка если нет музыки
+//            } else {
+//                if (savedAfterSearchSongsList.size() != 0) {
+//                    setRecyclerView(savedAfterSearchSongsList);
+//                } else {
+//                    setRecyclerView(songsList);
+//                }
+//            }
+//        });
 
 //        ArrayList<AudioModel> audioModels = mainListener.getOnAudioModels();
 //        songsList = audioModels;
@@ -167,8 +201,10 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
         MyMediaPlayer.currentIndex = id;
 
         if(savedAfterSearchSongsList.size() != 0){
+            mainListener.setOnAudioModel(savedAfterSearchSongsList);
             musicViewModel.setSongsList(savedAfterSearchSongsList);
         } else {
+            mainListener.setOnAudioModel(songsList);
             musicViewModel.setSongsList(songsList);
         }
 
@@ -199,23 +235,27 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
                 AudioService
                         .getInstance()
                         .getJSON()
-                        .deleteMusic(mainListener.getOnEmail(), songsList.get(id).getId()).enqueue(new Callback<String>() {
+                        .deleteMusic(mainListener.getOnEmail(), songsList.get(id).getId()).enqueue(new Callback<List<String>>() {
                             @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                if(response.isSuccessful()){
-                                    Toast.makeText(getContext(),
-                                            "Трек добавлен",
-                                            Toast.LENGTH_SHORT).show();
-                                }
+                            public void onResponse(Call<List<String>> call, Response<List<String>> response) {
+                                Toast.makeText(getContext(),
+                                        "Song is deleted",
+                                        Toast.LENGTH_SHORT).show();
+
+                                songsList.remove(id);
                             }
 
                             @Override
-                            public void onFailure(Call<String> call, Throwable t) {
+                            public void onFailure(Call<List<String>> call, Throwable t) {
                                 Toast.makeText(getContext(),
-                                        "Ошибка",
+                                        "Error",
                                         Toast.LENGTH_SHORT).show();
+
+                                songsList.remove(songsList);
                             }
                         });
+
+                setRecyclerView(songsList);
             }
         });
 
