@@ -25,9 +25,9 @@ public class MusicController {
     public ResponseEntity<?> saveMusicFile(@RequestParam String name) throws IOException {
         String link = service.downloadFileToServer(name);
         if (link == null) {
-            return new ResponseEntity<>("Download error", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Download error!", HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>(link, HttpStatus.OK);
+            return new ResponseEntity<>(List.of(link), HttpStatus.OK);
         }
     }
 
@@ -35,9 +35,9 @@ public class MusicController {
     public ResponseEntity<?> saveMusic(@RequestBody @Valid MusicDto dto) {
         var music = service.saveMusic(dto);
         if (music == null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Save error!", HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>("Added is successful", HttpStatus.OK);
+            return new ResponseEntity<>(List.of("Added is successful"), HttpStatus.OK);
         }
     }
 
@@ -54,16 +54,16 @@ public class MusicController {
     @DeleteMapping("/file/delete")
     public ResponseEntity<?> deleteMusicFile(@RequestParam Integer id) {
         service.deleteMusic(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok(List.of("Delete is successful!"));
     }
 
     @PutMapping("/update")
     public ResponseEntity<?> updateMusic(@RequestBody MusicDto dto) {
         var music = service.updateMusic(dto);
         if (music == null) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Update error!", HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>("Update is successful", HttpStatus.OK);
+            return new ResponseEntity<>(List.of("Update is successful!"), HttpStatus.OK);
         }
     }
 }
