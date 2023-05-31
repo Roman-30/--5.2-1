@@ -10,9 +10,7 @@ public class PlaylistDto {
 
     private Integer id;
     private String name;
-    @NotEmpty(message = "Description cannot be null")
     private String description;
-    @NotEmpty(message = "nickname cannot be null")
     private String nickname;
     private Set<Integer> ids;
 

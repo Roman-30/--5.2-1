@@ -23,7 +23,6 @@ public class Playlist {
     @NonNull
     private String description;
 
-    @NonNull
     private String nickname;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

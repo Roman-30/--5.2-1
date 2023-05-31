@@ -50,9 +50,9 @@ public class PlaylistController {
     public ResponseEntity<?> deleteMusicOnPlaylist(@RequestParam String pl, @RequestParam Integer tr) {
         var playlist = service.deleteMusicOnPlaylist(pl, tr);
         if (playlist == null) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Delete error!", HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<>("Deleted is successful!", HttpStatus.OK);
+            return new ResponseEntity<>(List.of("Deleted is successful!"), HttpStatus.OK);
         }
     }
 
@@ -68,11 +68,13 @@ public class PlaylistController {
 
     @PostMapping("/song/add")
     public ResponseEntity<?> addMusicOnPlaylist(@RequestParam String pl, @RequestParam Integer tr) {
+        System.out.println(pl);
+        System.out.println(tr);
         var playlist = service.addMusicOnPlaylist(pl, tr);
         if (playlist == null) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Added error!", HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<>("Added is successful!", HttpStatus.OK);
+            return new ResponseEntity<>(List.of("Added is successful!"), HttpStatus.OK);
         }
     }
 
