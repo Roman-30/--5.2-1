@@ -41,7 +41,7 @@ public class PlaylistService {
             return null;
         } else {
             Playlist playlist = mapper.toEntity(dto);
-            playlist.getPeople().add(personRepository.findByEmail(email)
+            playlist.getPeople().add(personRepository.findByEmail(email.toLowerCase())
                     .orElseThrow());
 
             addMusicOnPlaylist(playlist, dto.getIds());
@@ -81,7 +81,7 @@ public class PlaylistService {
     }
 
     public Playlist deleteMusicOnPlaylist(String id, Integer tr) {
-        var user = personRepository.findByEmail(id).orElseThrow();
+        var user = personRepository.findByEmail(id.toLowerCase()).orElseThrow();
         Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getEmail());
         if (oldPlaylist.isPresent()) {
             Playlist playlist = oldPlaylist.orElseThrow();
@@ -95,7 +95,7 @@ public class PlaylistService {
     }
 
     public Playlist addMusicOnPlaylist(String id, Integer tr) {
-        var user = personRepository.findByEmail(id).orElseThrow();
+        var user = personRepository.findByEmail(id.toLowerCase()).orElseThrow();
         Optional<Playlist> oldPlaylist = playlistRepository.findByName(user.getEmail());
         Playlist playlist;
         if (oldPlaylist.isPresent()) {
