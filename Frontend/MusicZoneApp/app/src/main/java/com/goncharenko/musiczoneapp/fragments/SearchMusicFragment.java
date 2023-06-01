@@ -86,9 +86,6 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
         searchButton = view.findViewById(R.id.search_button);
         searchButton.setOnClickListener(v -> searchMusic());
 
-        checkPlaylistButton = view.findViewById(R.id.check_playlists_button);
-        checkPlaylistButton.setOnClickListener(v -> checkPlaylists());
-
 //        String[] projection = {
 //                MediaStore.Audio.Media.TITLE,
 //                MediaStore.Audio.Media.DATA,
@@ -162,16 +159,6 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
 
             setRecyclerView(savedSongsList);
         }
-    }
-
-    public void checkPlaylists(){
-        Fragment checkPlaylistsFragment = getActivity().getSupportFragmentManager().findFragmentByTag(CheckPlaylistsFragment.TAG);
-        if(checkPlaylistsFragment != null){
-            //saveFragmentState(1, myMusicFragment);
-        } else {
-            checkPlaylistsFragment = new CheckPlaylistsFragment();
-        }
-        setNewFragment(checkPlaylistsFragment, CheckPlaylistsFragment.TAG);
     }
 
     @Override
