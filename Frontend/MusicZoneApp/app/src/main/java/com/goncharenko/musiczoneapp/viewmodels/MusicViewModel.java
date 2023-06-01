@@ -81,29 +81,8 @@ public class MusicViewModel extends ViewModel implements LifecycleObserver {
                         if (responseBody != null) {
                             InputStream stream;
                             stream = response.body().byteStream();
-//                            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-//
-//                            int nRead;
-//                            byte[] data = new byte[7496685];
-//
-//                            while (true) {
-//                                try {
-//                                    if (!((nRead = stream.read(data, 0, data.length)) != -1)) break;
-//                                } catch (IOException e) {
-//                                    throw new RuntimeException(e);
-//                                }
-//                                buffer.write(data, 0, nRead);
-//                            }
-
                             songFile.postValue(stream);
 
-//                            try (FileOutputStream fos = new FileOutputStream(
-//                                    new File("music.mp3"))) {
-//                                fos.write(buffer.toByteArray());
-//                                fos.close();
-//                            } catch (IOException e) {
-//                                throw new RuntimeException(e);
-//                            }
                         }
                     }
                 }

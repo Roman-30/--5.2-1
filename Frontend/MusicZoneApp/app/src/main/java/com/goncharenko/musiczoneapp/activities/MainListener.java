@@ -16,6 +16,8 @@ public interface MainListener {
 
     String getOnEmail();
     String getOnPassword();
-
     ArrayList<AudioModel> getOnAudioModels();
+
+    boolean isAdmin();
+    void setAdmin(boolean isAdmin);
 }
