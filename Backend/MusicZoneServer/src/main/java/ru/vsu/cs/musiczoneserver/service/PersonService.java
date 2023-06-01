@@ -40,8 +40,7 @@ public class PersonService implements UserDetailsService {
     }
 
     public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
-        final Person user = personRepository.findByEmail(authRequest.getEmail()).orElseThrow();
-
+        final Person user = personRepository.findByEmail(authRequest.getEmail().toLowerCase()).orElseThrow();
         if (bCryptPasswordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
             final String refreshToken = jwtProvider.generateRefreshToken(user);
@@ -53,12 +52,12 @@ public class PersonService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return personRepository.findByEmail(email)
+        return personRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     public Person savePerson(PersonDto user) {
-        if (personRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (personRepository.findByEmail(user.getEmail().toLowerCase()).isPresent()) {
             return null;
         }
 
@@ -72,7 +71,7 @@ public class PersonService implements UserDetailsService {
 
     @SneakyThrows
     public void sendMail(String email, String code) {
-        var person = personRepository.findByEmail(email);
+        var person = personRepository.findByEmail(email.toLowerCase());
 
         if (person.isPresent()) {
             MailSender sender = new MailSender(email);
@@ -114,7 +113,7 @@ public class PersonService implements UserDetailsService {
     }
 
     public PersonDto getUserByEmail(String email) {
-        var person = personRepository.findByEmail(email);
+        var person = personRepository.findByEmail(email.toLowerCase());
         if (person.isPresent()) {
             return personMapper.toDto(person.orElseThrow());
         } else {

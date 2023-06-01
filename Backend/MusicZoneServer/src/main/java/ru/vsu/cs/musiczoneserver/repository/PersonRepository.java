@@ -8,7 +8,7 @@ import javax.naming.InsufficientResourcesException;
 import java.util.Optional;
 
 @Repository
-public interface PersonRepository extends JpaRepository<Person, InsufficientResourcesException> {
+public interface PersonRepository extends JpaRepository<Person, Integer> {
     Optional<Person> findByEmail(String email);
 
     Optional<Person> findById(Integer id);
