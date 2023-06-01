@@ -33,7 +33,7 @@ public class Person implements UserDetails {
     @NonNull
     private String password;
 
-    private String nickName;
+    private String nickname;
     private String phone;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

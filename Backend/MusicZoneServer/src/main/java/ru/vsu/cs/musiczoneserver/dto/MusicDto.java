@@ -13,7 +13,6 @@ public class MusicDto {
     private String name;
     @NotNull(message = "Copyright cannot be null")
     private String copyright;
-
     private String link;
     @NotNull(message = "Genre cannot be null")
     private String genre;

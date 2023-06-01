@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class MusicService {
 
-    private static final String name = "APP_MUSIC";
+    private static final String NAME = "APP_MUSIC";
     private final MusicMapper mapper;
     private final PlaylistMapper playlistMapper;
     private final MusicRepository musicRepository;
@@ -41,12 +41,12 @@ public class MusicService {
             return null;
         }
 
-        var playlist = playlistRepository.findByName(name);
+        var playlist = playlistRepository.findByName(NAME);
         Playlist playlist1;
 
         if (playlist.isEmpty()) {
             playlist1 = playlistRepository.save(playlistMapper
-                    .toEntity(new PlaylistDto(name, "All app music")));
+                    .toEntity(new PlaylistDto(NAME, "All app music")));
         } else {
             playlist1 = playlist.orElseThrow();
         }
@@ -56,15 +56,6 @@ public class MusicService {
         music.getPlaylists().add(playlist1);
 
         return mapper.toDto(musicRepository.save(music));
-    }
-
-    public Music deleteMusic(MusicDto musicDto) {
-        var music = musicRepository.findByLink(musicDto.getLink()).
-                orElseThrow();
-
-        musicRepository.delete(music);
-
-        return music;
     }
 
     public byte[] getFileByLink(String link) {
@@ -89,7 +80,7 @@ public class MusicService {
     }
 
     public String downloadFileToServer(String fileName) throws IOException {
-        String url = "https://storage.yandexcloud.net/musik/" + fileName;
+        String url = "https://storage.yandexcloud.net/musik/" + fileName + ".mp3";
 
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);
@@ -116,7 +107,7 @@ public class MusicService {
             buffer.write(data, 0, nRead);
         }
 
-        String path = "MusicZoneServer\\src\\main\\resources\\music\\" + fileName;
+        String path = "MusicZoneServer\\src\\main\\resources\\music\\" + fileName + ".mp3";
 
         try (FileOutputStream fos = new FileOutputStream(
                 new File(path).getAbsolutePath())) {
@@ -135,17 +126,34 @@ public class MusicService {
         } else {
             Music music1 = music.orElseThrow();
 
-            deleteMusicFile(music1.getLink());
-
-            musicRepository.delete(music1);
+            if (deleteMusicFile(music1.getLink())) {
+                musicRepository.delete(music1);
+            } else {
+                throw new MyException("Ошибка удаления!");
+            }
         }
     }
 
-    private void deleteMusicFile(String link) {
+    private boolean deleteMusicFile(String link) {
         try {
-            new File(link).delete();
+            return new File(link).delete();
         } catch (NullPointerException e) {
             e.fillInStackTrace();
+            return false;
+        }
+    }
+
+    public Music updateMusic(MusicDto dto) {
+        var oldMusic = musicRepository.findById(dto.getId());
+        if (oldMusic.isPresent()) {
+            Music music = oldMusic.orElseThrow();
+            music.setName(dto.getName());
+            music.setLink(dto.getLink());
+            music.setCopyright(dto.getCopyright());
+            music.setGenre(dto.getGenre());
+            return musicRepository.save(music);
+        } else {
+            return null;
         }
     }
 }

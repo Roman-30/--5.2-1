@@ -1,13 +1,15 @@
 package ru.vsu.cs.musiczoneserver.controller;
 
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.vsu.cs.musiczoneserver.dto.PlaylistDto;
 import ru.vsu.cs.musiczoneserver.service.PlaylistService;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/playlist")
@@ -19,7 +21,12 @@ public class PlaylistController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addPlaylist(@RequestBody PlaylistDto dto,
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "The request has succeeded or (your message)"),
+//            @ApiResponse(code = 401, message = "The request requires user authentication or (your message)"),
+//            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden or (your message)"),
+//            @ApiResponse(code = 404, message = "The server has not found anything matching the Request-URI or (your message)")})
+            public ResponseEntity<?> addPlaylist(@RequestBody @Valid PlaylistDto dto,
                                          @RequestParam String email
     ) {
         var playlist = service.savePlayList(dto, email);
@@ -31,7 +38,7 @@ public class PlaylistController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updatePlaylist(@RequestBody PlaylistDto dto) {
+    public ResponseEntity<?> updatePlaylist(@RequestBody @Valid PlaylistDto dto) {
         var playlist = service.updatePlaylist(dto);
         if (playlist == null) {
             return new ResponseEntity<>(null, HttpStatus.CONFLICT);
@@ -49,9 +56,9 @@ public class PlaylistController {
     public ResponseEntity<?> deleteMusicOnPlaylist(@RequestParam String pl, @RequestParam Integer tr) {
         var playlist = service.deleteMusicOnPlaylist(pl, tr);
         if (playlist == null) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Delete error!", HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<>("Deleted is successful!", HttpStatus.OK);
+            return new ResponseEntity<>(List.of("Deleted is successful!"), HttpStatus.OK);
         }
     }
 
@@ -69,9 +76,9 @@ public class PlaylistController {
     public ResponseEntity<?> addMusicOnPlaylist(@RequestParam String pl, @RequestParam Integer tr) {
         var playlist = service.addMusicOnPlaylist(pl, tr);
         if (playlist == null) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            return new ResponseEntity<>("Added error!", HttpStatus.CONFLICT);
         } else {
-            return new ResponseEntity<>("Added is successful!", HttpStatus.OK);
+            return new ResponseEntity<>(List.of("Added is successful!"), HttpStatus.OK);
         }
     }
 

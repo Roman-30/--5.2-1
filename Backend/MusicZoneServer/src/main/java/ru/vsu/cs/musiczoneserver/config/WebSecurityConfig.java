@@ -18,37 +18,37 @@ import java.security.SecureRandom;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class WebSecurityConfig extends WebMvcConfigurerAdapter  {
+public class WebSecurityConfig extends WebMvcConfigurerAdapter {
     private final JwtFilter jwtFilter;
 
     public WebSecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("swagger-ui.html")
-                .addResourceLocations("classpath:/META-INF/resources/");
-
-        registry.addResourceHandler("/webjars/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("swagger-ui.html")
+//                .addResourceLocations("classpath:/META-INF/resources/");
+//
+//        registry.addResourceHandler("/webjars/**")
+//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+//    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 8, new SecureRandom());
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests()
-//                .antMatchers( "/playlist/**").hasAnyAuthority("ADMIN", "USER")
-//                .antMatchers( "/music/**").hasAnyAuthority("USER")
-//                .antMatchers( "/music/**").authenticated()
-                //.antMatchers("/music/get/all", "/playlist/**").authenticated()
                 .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v2/api-docs", "/swagger-resources/**", "/webjars/**").permitAll()
-                .antMatchers("/person/registration", "/auth/**", "/music/**","/playlist/**", "/person/**").permitAll()
+                .antMatchers("/playlist/add", "/playlist/update", "/playlist/file", "/playlist/get/all",
+                        "/playlist/song/delete", "/playlist/delete/{id}", "/playlist/song/add", "/playlist/musics/get/all").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/music/update", "/music/file/delete", "/music/save", "/music/file/add").hasAnyAuthority("ADMIN")
+                .antMatchers("/person/**", "/music/file", "/music/get/all").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
