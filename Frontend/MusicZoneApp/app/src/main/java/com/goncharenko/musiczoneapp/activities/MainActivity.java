@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     private String password = "";
 
     private ArrayList<AudioModel> audioModels = new ArrayList<>();
+    private boolean isAdmin = false;
 
     private Fragment activeFragment;
     private String fragmentName = "Search";
@@ -239,6 +240,16 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     @Override
     public ArrayList<AudioModel> getOnAudioModels() {
         return audioModels;
+    }
+
+    @Override
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    @Override
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     boolean checkPermission(){

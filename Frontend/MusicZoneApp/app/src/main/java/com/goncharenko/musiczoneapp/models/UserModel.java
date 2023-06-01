@@ -3,7 +3,6 @@ package com.goncharenko.musiczoneapp.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
 import java.util.Set;
 
 public class UserModel {
@@ -32,7 +31,7 @@ public class UserModel {
 
     @SerializedName("roles")
     @Expose
-    private Set<String> role;
+    private Set<String> roles;
 
     public UserModel(String name, String surname, String nickname, String email, String phoneNumber, String password) {
         this.name = name;
@@ -51,6 +50,17 @@ public class UserModel {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
+    }
+
+    public UserModel(Integer id, String name, String surname, String nickname, String email, String phoneNumber, String password, Set<String> roles) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.nickname = nickname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.roles = roles;
     }
 
     public Integer getId() {
@@ -107,5 +117,17 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isAdmin(){
+        return this.roles.contains("ADMIN");
     }
 }

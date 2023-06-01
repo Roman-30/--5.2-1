@@ -93,6 +93,12 @@ public class AccountFragment extends Fragment {
                                 nickname.setText("Nickname: " + user.getNickname());
                                 email.setText(user.getEmail());
                                 phoneNumber.setText("Phone: " + user.getPhoneNumber());
+                                mainListener.setAdmin(user.isAdmin());
+                                if(mainListener.isAdmin()){
+                                    checkMusicButton.setVisibility(View.GONE);
+                                }else {
+                                    addMusicButton.setVisibility(View.GONE);
+                                }
                             }
                         } else {
                             onFailure(call, new Throwable());
@@ -101,17 +107,10 @@ public class AccountFragment extends Fragment {
 
                     @Override
                     public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
-                        if(emailFrom.equals("admin@ad.min") && passwordFrom.equals("admin111")){
-                            name.setText("Admin");
-                            nickname.setText("");
-                            email.setText("");
-                            phoneNumber.setText("");
-                        } else {
-                            Toast.makeText(view.getContext(),
-                                    "Ошибка при входе в аккаунт",
+                        Toast.makeText(view.getContext(),
+                                    "Error",
                                     Toast.LENGTH_SHORT).show();
-                            singOut();
-                        }
+                        singOut();
                     }
                 });
 
@@ -164,6 +163,7 @@ public class AccountFragment extends Fragment {
         setNewFragment(entryFragment, EntryFragment.TAG);
         mainListener.onSignedIn(false);
         mainListener.setOnEmail("");
+        mainListener.setAdmin(false);
 
         Bundle extras = getActivity().getIntent().getExtras();
 
@@ -173,7 +173,6 @@ public class AccountFragment extends Fragment {
             extras.remove("email");
             extras.remove("password");
         }
-
     }
 
     public void checkMusic() {
