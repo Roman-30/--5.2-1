@@ -10,8 +10,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.SparseArray;
 import android.view.MenuItem;
@@ -83,6 +87,26 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences prefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+                boolean isFirstStart = prefs.getBoolean("isFirstStart", true);
+
+                if (isFirstStart) {
+                    Intent i = new Intent(MainActivity.this, CustomIntro.class);
+                    startActivity(i);
+
+                    SharedPreferences.Editor e = prefs.edit();
+                    e.putBoolean("isFirstStart", false);
+                    e.apply();
+                }
+            }
+        });
+
+        // Start the thread
+        t.start();
         setContentView(R.layout.activity_main);
 
         frameLayout = findViewById(R.id.frame_layout);

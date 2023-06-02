@@ -72,4 +72,8 @@
     <string name="search_bottom">Search</string>
     <string name="home_bottom">Home</string>
     <string name="account_bottom">Account</string>
+    <string name="intro_header">Welcome to MusicZone</string>
+    <string name="intro_search">Here you can find music and add it to yourself</string>
+    <string name="intro_player">Here you can listen to the selected music</string>
+    <string name="intro_account">Here you can log in to your account and view the saved music</string>
 </resources>
