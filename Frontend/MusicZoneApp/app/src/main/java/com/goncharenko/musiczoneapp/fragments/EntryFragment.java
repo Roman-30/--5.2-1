@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.goncharenko.musiczoneapp.activities.RegistrationAccountActivity;
 import com.goncharenko.musiczoneapp.activities.SendingCodeActivity;
 import com.goncharenko.musiczoneapp.models.JwtRequest;
 import com.goncharenko.musiczoneapp.models.JwtResponse;
+import com.goncharenko.musiczoneapp.service.AudioService;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 
@@ -120,6 +122,9 @@ public class EntryFragment extends Fragment {
                                     mainListener.setOnEmail(email);
                                     mainListener.setOnPassword(password);
                                     setNewFragment(accountFragment);
+
+                                    UserService.getInstance().setAccess(jwt.getAccessToken());
+                                    AudioService.getInstance().setAccess(jwt.getAccessToken());
                                 } else {
                                     onFailure(call, new Throwable());
                                 }
@@ -128,7 +133,7 @@ public class EntryFragment extends Fragment {
                             @Override
                             public void onFailure(Call<JwtResponse> call, Throwable t) {
                                 Toast.makeText(getContext(),
-                                        "Ошибка при входе",
+                                        "Error",
                                         Toast.LENGTH_SHORT).show();
                             }
                         });
