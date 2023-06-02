@@ -2,10 +2,10 @@ create table public.music
 (
     id        serial
         primary key,
-    copyright varchar(255),
-    genre     varchar(255),
+    copyright varchar(60),
+    genre     varchar(60),
     link      varchar(255),
-    name      varchar(255)
+    name      varchar(60)
 );
 
 alter table public.music
@@ -13,14 +13,14 @@ alter table public.music
 
 create table public.person
 (
-    id        serial
+    id       serial
         primary key,
-    email     varchar(255),
-    name      varchar(255),
-    nick_name varchar(255),
-    password  varchar(255),
-    phone     varchar(255),
-    surname   varchar(255)
+    email    varchar(255),
+    name     varchar(60),
+    nickname varchar(60),
+    password varchar(255),
+    phone    varchar(11),
+    surname  varchar(60)
 );
 
 alter table public.person
@@ -31,7 +31,8 @@ create table public.playlist
     id          serial
         primary key,
     description varchar(255),
-    name        varchar(255)
+    name        varchar(255),
+    nickname    varchar(60)
 );
 
 alter table public.playlist
