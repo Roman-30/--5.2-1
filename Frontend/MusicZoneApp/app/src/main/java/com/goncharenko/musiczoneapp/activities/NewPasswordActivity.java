@@ -70,7 +70,7 @@ public class NewPasswordActivity extends AppCompatActivity {
                         });
                 finish();
             }else {
-                verifyPasswordInput.setError("Пароль несоответствует набранному до этого");
+                verifyPasswordInput.setError("The password does not match the one typed before");
                 Toast.makeText(this, verifyPasswordInput.getError().toString(), Toast.LENGTH_SHORT).show();
             }
         }

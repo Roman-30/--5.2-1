@@ -1,9 +1,12 @@
 package com.goncharenko.musiczoneapp.activities;
 
+import static androidx.test.InstrumentationRegistry.getContext;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,6 +36,8 @@ public class RegistrationAccountActivity extends AppCompatActivity {
     private EditText phoneNumberInput;
     private EditText passwordInput;
 
+    private Button signUuButton;
+
     private UserViewModel userViewModel;
 
     private MainListener mainListener;
@@ -51,6 +56,9 @@ public class RegistrationAccountActivity extends AppCompatActivity {
         emailInput = findViewById(R.id.email_input);
         phoneNumberInput = findViewById(R.id.phone_input);
         passwordInput = findViewById(R.id.password_input);
+
+        signUuButton = findViewById(R.id.sign_up);
+        signUuButton.setOnClickListener(v -> signUp());
     }
 
     public void goBack(View view) {
@@ -58,7 +66,7 @@ public class RegistrationAccountActivity extends AppCompatActivity {
         goToEntryAccount();
     }
 
-    public void signUp(View view) {
+    public void signUp() {
         if(checkAllTextView()) {
             String firstName = this.firstNameInput.getText().toString();
             String secondName = this.secondNameInput.getText().toString();
@@ -84,7 +92,7 @@ public class RegistrationAccountActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
-                            Toast.makeText(view.getContext(),
+                            Toast.makeText(getContext(),
                                     "Error",
                                     Toast.LENGTH_SHORT
                             ).show();
