@@ -12,8 +12,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AudioService {
     private static AudioService mInstance;
-    private static final String BASE_URL = "http://217.25.225.200:8888";
-    private static final String OLD_BASE_URL = "http://2.56.242.93:4080";
+    private static final String OLD_BASE_URL = "http://217.25.225.200:8888";
+    private static final String BASE_URL = "http://2.56.242.93:4080";
     private Retrofit mRetrofit;
 
     private String access = "";

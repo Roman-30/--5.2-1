@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.List;
 
@@ -55,6 +56,7 @@ public class NewPasswordActivity extends AppCompatActivity {
                                 Toast.makeText(view.getContext(),
                                         "Update is successful",
                                         Toast.LENGTH_SHORT).show();
+                                YandexMetrica.reportEvent("Пользователь изменил свой пароль");
                                 goToEntryAccount();
                             }
 

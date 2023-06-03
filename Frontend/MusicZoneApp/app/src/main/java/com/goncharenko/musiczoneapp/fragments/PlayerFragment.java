@@ -23,6 +23,7 @@ import com.goncharenko.musiczoneapp.activities.MainListener;
 import com.goncharenko.musiczoneapp.models.AudioModel;
 import com.goncharenko.musiczoneapp.service.AudioService;
 import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
+import com.yandex.metrica.YandexMetrica;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -75,6 +76,7 @@ public class PlayerFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        YandexMetrica.reportEvent("Пользователь зашел в плеер");
         directory = new File(getContext().getFilesDir(), "MusicZoneTemp");
         if (!directory.exists()) {
             directory.mkdirs();
@@ -249,6 +251,8 @@ public class PlayerFragment extends Fragment {
 
                         totalTimeTextView.setText(convertToMMSS(mediaPlayer.getDuration() + ""));
 
+                        YandexMetrica.reportEvent("Пользователь слушает музыку");
+
 //                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 //                            @Override
 //                            public void onCompletion(MediaPlayer mp) {
@@ -268,6 +272,7 @@ public class PlayerFragment extends Fragment {
     }
 
     private void playNextSong(){
+        YandexMetrica.reportEvent("Пользователь включил следующую музыку");
         progressSeekBar = 0;
         isPlaying = true;
         if(MyMediaPlayer.currentIndex == songsList.size() - 1) {
@@ -282,6 +287,7 @@ public class PlayerFragment extends Fragment {
     }
 
     private void playPreviousSong(){
+        YandexMetrica.reportEvent("Пользователь перемотал музыку");
         if(progressSeekBar <= 100){
             progressSeekBar = 0;
             isPlaying = true;
@@ -308,10 +314,12 @@ public class PlayerFragment extends Fragment {
     private void pausePlay(){
         totalTimeTextView.setText(convertToMMSS(mediaPlayer.getDuration() + ""));
         if(mediaPlayer.isPlaying()) {
-            isPlaying = true;
+            isPlaying = false;
+            YandexMetrica.reportEvent("Пользователь остановил прослушивание музыки");
             mediaPlayer.pause();
         } else {
-            isPlaying = false;
+            isPlaying = true;
+            YandexMetrica.reportEvent("Пользователь возобновил прослушивание музыки");
             mediaPlayer.start();
         }
     }

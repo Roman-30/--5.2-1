@@ -13,6 +13,7 @@ import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class EditAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
+        YandexMetrica.reportEvent("Пользователь зашел редактирует свой аккаунт");
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
@@ -67,6 +69,7 @@ public class EditAccountActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
+        YandexMetrica.reportEvent("Пользователь вышел из редактирования аккаунта");
         goToAccount();
     }
 
@@ -91,6 +94,7 @@ public class EditAccountActivity extends AppCompatActivity {
                             Toast.makeText(view.getContext(),
                                     "Update is successful",
                                     Toast.LENGTH_SHORT).show();
+                            YandexMetrica.reportEvent("Пользователь сохранил новые данные о себе");
                             goToAccount();
                         }
 

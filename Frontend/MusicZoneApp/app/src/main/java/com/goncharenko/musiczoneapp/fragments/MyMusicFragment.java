@@ -29,6 +29,7 @@ import com.goncharenko.musiczoneapp.models.AudioModel;
 import com.goncharenko.musiczoneapp.service.AudioService;
 import com.goncharenko.musiczoneapp.viewmodels.MusicViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.yandex.metrica.YandexMetrica;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,6 +73,7 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_music, container, false);
 
+        YandexMetrica.reportEvent("Пользователь зашел на фрагмент со своей добаленной музыкой");
         musicViewModel = new ViewModelProvider(requireActivity()).get(MusicViewModel.class);
 
         recyclerView = view.findViewById(R.id.recycler_view);
@@ -174,6 +176,7 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
     }
 
     public void searchMusic() {
+        YandexMetrica.reportEvent("Пользователь ищет музыку");
         String searchQuery = inputSearch.getText().toString().trim();
         if (searchQuery.equals("")){
             if(songsList.size() == 0){
@@ -197,6 +200,7 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
 
     @Override
     public void onItemClick(int id) {
+        YandexMetrica.reportEvent("Пользователь выбрал музыку для прослушивания");
         MyMediaPlayer.getInstance().reset();
         MyMediaPlayer.currentIndex = id;
 
@@ -241,6 +245,7 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
                                 Toast.makeText(getContext(),
                                         "Song is deleted",
                                         Toast.LENGTH_SHORT).show();
+                                YandexMetrica.reportEvent("Пользователь удалил музыку из своего списка");
 
                                 songsList.remove(id);
                             }

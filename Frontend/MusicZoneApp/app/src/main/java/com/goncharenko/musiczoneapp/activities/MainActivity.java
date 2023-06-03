@@ -32,6 +32,7 @@ import com.goncharenko.musiczoneapp.fragments.PlayerFragment;
 import com.goncharenko.musiczoneapp.fragments.SearchMusicFragment;
 import com.goncharenko.musiczoneapp.models.AudioModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,17 +87,18 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 SharedPreferences prefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-
                 boolean isFirstStart = prefs.getBoolean("isFirstStart", true);
 
                 if (isFirstStart) {
                     Intent i = new Intent(MainActivity.this, CustomIntro.class);
                     startActivity(i);
+                    YandexMetrica.reportEvent("Пользователь посмотрел инструкцию к приложению");
 
                     SharedPreferences.Editor e = prefs.edit();
                     e.putBoolean("isFirstStart", false);
@@ -104,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements MainListener{
                 }
             }
         });
+
+        YandexMetrica.reportEvent("Пользователь перешел на главную активность");
 
         // Start the thread
         t.start();
@@ -159,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     }
 
     public void goHome(){
+        YandexMetrica.reportEvent("Пользователь зашел на фрагмент поиска музыки");
         Fragment searchMusicFragment = getSupportFragmentManager().findFragmentByTag(SearchMusicFragment.TAG);
         if(searchMusicFragment != null){
             saveFragmentState(1, searchMusicFragment);
@@ -169,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements MainListener{
     }
 
     public void goPlayer(){
+        YandexMetrica.reportEvent("Пользователь зашел на фрагмент прослушивания музыки");
         Fragment playerFragment = getSupportFragmentManager().findFragmentByTag(PlayerFragment.TAG);
         if(playerFragment != null){
             saveFragmentState(1, playerFragment);
@@ -180,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements MainListener{
 
     public void goAccount(){
         if(isSignIn) {
+            YandexMetrica.reportEvent("Пользователь зашел на фрагмент входа в аккаунт");
             Fragment accountFragment = getSupportFragmentManager().findFragmentByTag(AccountFragment.TAG);
             if(accountFragment != null){
                 saveFragmentState(1, accountFragment);
@@ -188,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements MainListener{
             }
             setNewFragment(accountFragment, AccountFragment.TAG);
         }else {
-
+            YandexMetrica.reportEvent("Пользователь зашел на фрагмент со своим аккаунтом");
             Fragment entryFragment = getSupportFragmentManager().findFragmentByTag(EntryFragment.TAG);
             if (entryFragment != null) {
                 saveFragmentState(1, entryFragment);
@@ -296,22 +303,27 @@ public class MainActivity extends AppCompatActivity implements MainListener{
         String tag = "";
         switch (fragment) {
             case "Account":
+                YandexMetrica.reportEvent("Пользователь зашел на фрагмент со своим аккаунтом");
                 activeFragment = new AccountFragment();
                 tag = AccountFragment.TAG;
                 break;
             case "Entry":
+                YandexMetrica.reportEvent("Пользователь зашел на фрагмент со входом в аккаунт");
                 activeFragment = new EntryFragment();
                 tag = EntryFragment.TAG;
                 break;
             case "Player":
+                YandexMetrica.reportEvent("Пользователь зашел на фрагмент прослушивания музыки");
                 activeFragment = new PlayerFragment();
                 tag = PlayerFragment.TAG;
                 break;
             case "My music":
+                YandexMetrica.reportEvent("Пользователь зашел на фрагмент своей музыки");
                 activeFragment = new MyMusicFragment();
                 tag = MyMusicFragment.TAG;
                 break;
             case "Search":
+                YandexMetrica.reportEvent("Пользователь зашел на фрагмент поиска музыки");
                 activeFragment = new SearchMusicFragment();
                 tag = SearchMusicFragment.TAG;
                 break;

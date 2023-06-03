@@ -16,6 +16,7 @@ import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 import com.goncharenko.musiczoneapp.viewmodels.UserViewModel;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class RegistrationAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        YandexMetrica.reportEvent("Пользователь регистрируется в приложении");
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
@@ -52,6 +54,7 @@ public class RegistrationAccountActivity extends AppCompatActivity {
     }
 
     public void goBack(View view) {
+        YandexMetrica.reportEvent("Пользователь вышел из формы регистрации");
         goToEntryAccount();
     }
 
@@ -75,6 +78,7 @@ public class RegistrationAccountActivity extends AppCompatActivity {
                     .enqueue(new Callback<List<String>>() {
                         @Override
                         public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                            YandexMetrica.reportEvent("Пользователь успешно зарегистрировался");
                             goToEntryAccount();
                         }
 
