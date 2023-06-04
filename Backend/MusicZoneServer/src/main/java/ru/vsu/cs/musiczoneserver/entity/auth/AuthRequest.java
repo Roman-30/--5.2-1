@@ -1,9 +1,9 @@
-package ru.vsu.cs.musiczoneserver.entity.jwt;
+package ru.vsu.cs.musiczoneserver.entity.auth;
 
 import lombok.Data;
 
 @Data
-public class JwtRequest {
+public class AuthRequest {
 
     private String email;
     private String password;
