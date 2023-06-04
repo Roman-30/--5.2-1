@@ -1,4 +1,4 @@
-package ru.vsu.cs.musiczoneserver.service.jwtcomponent;
+package ru.vsu.cs.musiczoneserver.security;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
-import ru.vsu.cs.musiczoneserver.entity.jwt.JwtAuthentication;
+import ru.vsu.cs.musiczoneserver.entity.model.ModelAuthentication;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -31,7 +31,7 @@ public class JwtFilter extends GenericFilterBean {
         final String token = getTokenFromRequest((HttpServletRequest) request);
         if (token != null && jwtProvider.validateAccessToken(token)) {
             final Claims claims = jwtProvider.getAccessClaims(token);
-            final JwtAuthentication jwtInfoToken = JwtUtils.generate(claims);
+            final ModelAuthentication jwtInfoToken = JwtUtils.generate(claims);
             jwtInfoToken.setAuthenticated(true);
             SecurityContextHolder.getContext().setAuthentication(jwtInfoToken);
         }

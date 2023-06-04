@@ -9,13 +9,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.vsu.cs.musiczoneserver.dto.PersonDto;
 import ru.vsu.cs.musiczoneserver.entity.Person;
-import ru.vsu.cs.musiczoneserver.entity.jwt.JwtRequest;
-import ru.vsu.cs.musiczoneserver.entity.jwt.JwtResponse;
+import ru.vsu.cs.musiczoneserver.entity.auth.AuthRequest;
+import ru.vsu.cs.musiczoneserver.entity.auth.AuthResponse;
 import ru.vsu.cs.musiczoneserver.entity.model.Role;
 import ru.vsu.cs.musiczoneserver.exception.MyException;
 import ru.vsu.cs.musiczoneserver.mapper.PersonMapper;
 import ru.vsu.cs.musiczoneserver.repository.PersonRepository;
-import ru.vsu.cs.musiczoneserver.service.jwtcomponent.JwtProvider;
+import ru.vsu.cs.musiczoneserver.security.JwtProvider;
 
 import javax.security.auth.message.AuthException;
 import java.util.Collections;
@@ -31,7 +31,6 @@ public class PersonService implements UserDetailsService {
 
     private final JwtProvider jwtProvider;
 
-
     public PersonService(PersonRepository personRepository, PersonMapper personMapper, BCryptPasswordEncoder bCryptPasswordEncoder, JwtProvider jwtProvider) {
         this.personRepository = personRepository;
         this.personMapper = personMapper;
@@ -39,12 +38,11 @@ public class PersonService implements UserDetailsService {
         this.jwtProvider = jwtProvider;
     }
 
-    public JwtResponse login(@NonNull JwtRequest authRequest) throws AuthException {
+    public AuthResponse login(@NonNull AuthRequest authRequest) throws AuthException {
         final Person user = personRepository.findByEmail(authRequest.getEmail().toLowerCase()).orElseThrow();
         if (bCryptPasswordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
-            final String refreshToken = jwtProvider.generateRefreshToken(user);
-            return new JwtResponse(accessToken, refreshToken);
+            return new AuthResponse(accessToken, null);
         } else {
             throw new AuthException("Invalid password");
         }
