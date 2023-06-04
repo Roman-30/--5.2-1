@@ -1,11 +1,13 @@
 package ru.vsu.cs.musiczoneserver.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class PlaylistDto {
 
     private Integer id;

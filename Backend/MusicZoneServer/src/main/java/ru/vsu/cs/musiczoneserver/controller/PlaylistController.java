@@ -1,7 +1,5 @@
 package ru.vsu.cs.musiczoneserver.controller;
 
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +19,7 @@ public class PlaylistController {
     }
 
     @PostMapping("/add")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "The request has succeeded or (your message)"),
-//            @ApiResponse(code = 401, message = "The request requires user authentication or (your message)"),
-//            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden or (your message)"),
-//            @ApiResponse(code = 404, message = "The server has not found anything matching the Request-URI or (your message)")})
-            public ResponseEntity<?> addPlaylist(@RequestBody @Valid PlaylistDto dto,
+    public ResponseEntity<?> addPlaylist(@RequestBody @Valid PlaylistDto dto,
                                          @RequestParam String email
     ) {
         var playlist = service.savePlayList(dto, email);
