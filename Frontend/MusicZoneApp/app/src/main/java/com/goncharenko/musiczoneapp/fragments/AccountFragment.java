@@ -22,6 +22,7 @@ import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.viewmodels.UserViewModel;
+import com.yandex.metrica.YandexMetrica;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -94,7 +95,9 @@ public class AccountFragment extends Fragment {
                                 email.setText(user.getEmail());
                                 phoneNumber.setText("Phone: " + user.getPhoneNumber());
                                 mainListener.setAdmin(user.isAdmin());
+                                YandexMetrica.reportEvent("Пользователь вошел в свой аккаунт");
                                 if(mainListener.isAdmin()){
+                                    editAccountButton.setVisibility(View.GONE);
                                     checkMusicButton.setVisibility(View.GONE);
                                 }else {
                                     addMusicButton.setVisibility(View.GONE);
@@ -110,7 +113,7 @@ public class AccountFragment extends Fragment {
                         Toast.makeText(view.getContext(),
                                     "Error",
                                     Toast.LENGTH_SHORT).show();
-                        singOut();
+                        signOut();
                     }
                 });
 
@@ -118,7 +121,7 @@ public class AccountFragment extends Fragment {
         editAccountButton.setOnClickListener(v -> editAccount());
 
         signOutButton = view.findViewById(R.id.sign_out);
-        signOutButton.setOnClickListener(v -> singOut());
+        signOutButton.setOnClickListener(v -> signOut());
 
         checkMusicButton = view.findViewById(R.id.check_music);
         checkMusicButton.setOnClickListener(v -> checkMusic());
@@ -153,7 +156,8 @@ public class AccountFragment extends Fragment {
         getActivity().finish();
     }
 
-    public void singOut() {
+    public void signOut() {
+        YandexMetrica.reportEvent("Пользователь вышел из своего аккаунта");
         Fragment entryFragment = getActivity().getSupportFragmentManager().findFragmentByTag(EntryFragment.TAG);
         if(entryFragment != null){
             //saveFragmentState(1, myMusicFragment);

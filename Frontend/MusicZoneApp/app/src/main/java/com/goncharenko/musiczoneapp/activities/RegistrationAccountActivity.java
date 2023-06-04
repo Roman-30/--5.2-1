@@ -1,9 +1,12 @@
 package com.goncharenko.musiczoneapp.activities;
 
+import static androidx.test.InstrumentationRegistry.getContext;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,6 +19,7 @@ import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
 import com.goncharenko.musiczoneapp.viewmodels.UserViewModel;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.List;
 
@@ -32,6 +36,8 @@ public class RegistrationAccountActivity extends AppCompatActivity {
     private EditText phoneNumberInput;
     private EditText passwordInput;
 
+    private Button signUuButton;
+
     private UserViewModel userViewModel;
 
     private MainListener mainListener;
@@ -40,6 +46,7 @@ public class RegistrationAccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        YandexMetrica.reportEvent("Пользователь регистрируется в приложении");
 
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
@@ -49,13 +56,17 @@ public class RegistrationAccountActivity extends AppCompatActivity {
         emailInput = findViewById(R.id.email_input);
         phoneNumberInput = findViewById(R.id.phone_input);
         passwordInput = findViewById(R.id.password_input);
+
+        signUuButton = findViewById(R.id.sign_up);
+        signUuButton.setOnClickListener(v -> signUp());
     }
 
     public void goBack(View view) {
+        YandexMetrica.reportEvent("Пользователь вышел из формы регистрации");
         goToEntryAccount();
     }
 
-    public void signUp(View view) {
+    public void signUp() {
         if(checkAllTextView()) {
             String firstName = this.firstNameInput.getText().toString();
             String secondName = this.secondNameInput.getText().toString();
@@ -75,12 +86,13 @@ public class RegistrationAccountActivity extends AppCompatActivity {
                     .enqueue(new Callback<List<String>>() {
                         @Override
                         public void onResponse(@NonNull Call<List<String>> call, @NonNull Response<List<String>> response) {
+                            YandexMetrica.reportEvent("Пользователь успешно зарегистрировался");
                             goToEntryAccount();
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<List<String>> call, @NonNull Throwable t) {
-                            Toast.makeText(view.getContext(),
+                            Toast.makeText(getContext(),
                                     "Error",
                                     Toast.LENGTH_SHORT
                             ).show();

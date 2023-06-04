@@ -14,6 +14,7 @@ import com.goncharenko.musiczoneapp.models.UserModel;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.codegenerator.RandomCodeGenerator;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
+import com.yandex.metrica.YandexMetrica;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class SendingCodeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sending_code);
+        YandexMetrica.reportEvent("Пользователь зашел активность для изменения пароля");
 
         emailInput = findViewById(R.id.email_input);
         codeInput = findViewById(R.id.code_input);
@@ -52,7 +54,7 @@ public class SendingCodeActivity extends AppCompatActivity {
                                 user = response.body();
                                 if (user == null) {
                                     Toast.makeText(view.getContext(),
-                                            "Пользователя с такой почтой не существует",
+                                            "There is no user with such mail",
                                             Toast.LENGTH_SHORT).show();
                                 } else {
                                     sendEmail(user.getEmail(), code, view);
@@ -66,7 +68,7 @@ public class SendingCodeActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Call<UserModel> call, @NonNull Throwable t) {
                             Toast.makeText(view.getContext(),
-                                    "Ошибка при верификации почты",
+                                    "Error",
                                     Toast.LENGTH_SHORT).show();
 
                         }
@@ -84,13 +86,14 @@ public class SendingCodeActivity extends AppCompatActivity {
                 finish();
             } else {
                 Toast.makeText(view.getContext(),
-                        "Неверный код",
+                        "Invalid code",
                         Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     public void cancel(View view) {
+        YandexMetrica.reportEvent("Пользователь вышел из формы изменения пароля");
         goToEntryAccount();
     }
 
@@ -109,6 +112,7 @@ public class SendingCodeActivity extends AppCompatActivity {
                 Toast.makeText(view.getContext(),
                         "Mail is send",
                         Toast.LENGTH_SHORT).show();
+                YandexMetrica.reportEvent("Пользователь отправил код на почту");
             }
 
             @Override
