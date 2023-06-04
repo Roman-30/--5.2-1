@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import ru.vsu.cs.musiczoneserver.dto.MusicDto;
 import ru.vsu.cs.musiczoneserver.dto.PlaylistDto;
+import ru.vsu.cs.musiczoneserver.entity.Music;
 import ru.vsu.cs.musiczoneserver.entity.Playlist;
 import ru.vsu.cs.musiczoneserver.mapper.MusicMapper;
 import ru.vsu.cs.musiczoneserver.mapper.PlaylistMapper;
@@ -12,6 +13,7 @@ import ru.vsu.cs.musiczoneserver.repository.MusicRepository;
 import ru.vsu.cs.musiczoneserver.repository.PersonRepository;
 import ru.vsu.cs.musiczoneserver.repository.PlaylistRepository;
 
+import javax.persistence.ManyToOne;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -108,10 +110,10 @@ public class PlaylistService {
                     mapper.toEntity(new PlaylistDto(user.getEmail(), "User tracks"))
             );
 
+            Music ms = musicRepository.findById(tr)
+                    .orElseThrow();
 
-            playlist.getMusics().add(musicRepository.findById(tr)
-                    .orElseThrow());
-
+            playlist.getMusics().add(ms);
         }
 
         var s = playlistRepository.save(playlist);

@@ -1,4 +1,4 @@
-package ru.vsu.cs.musiczoneserver.entity.jwt;
+package ru.vsu.cs.musiczoneserver.entity.model;
 
 import lombok.Data;
 import org.springframework.security.core.Authentication;
@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Set;
 
 @Data
-public class JwtAuthentication implements Authentication {
+public class ModelAuthentication implements Authentication {
 
     private boolean authenticated;
     private String username;

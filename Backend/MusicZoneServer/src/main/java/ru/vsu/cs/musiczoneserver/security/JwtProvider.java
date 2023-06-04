@@ -1,4 +1,4 @@
-package ru.vsu.cs.musiczoneserver.service.jwtcomponent;
+package ru.vsu.cs.musiczoneserver.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -46,23 +46,8 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateRefreshToken(@NonNull Person owner) {
-        final LocalDateTime now = LocalDateTime.now();
-        final Instant refreshExpirationInstant = now.plusDays(30).atZone(ZoneId.systemDefault()).toInstant();
-        final Date refreshExpiration = Date.from(refreshExpirationInstant);
-        return Jwts.builder()
-                .setSubject(owner.getUsername())
-                .setExpiration(refreshExpiration)
-                .signWith(jwtRefreshSecret)
-                .compact();
-    }
-
     public boolean validateAccessToken(@NonNull String accessToken) {
         return validateToken(accessToken, jwtAccessSecret);
-    }
-
-    public boolean validateRefreshToken(@NonNull String refreshToken) {
-        return validateToken(refreshToken, jwtRefreshSecret);
     }
 
     private boolean validateToken(@NonNull String token, @NonNull Key secret) {
@@ -86,10 +71,6 @@ public class JwtProvider {
 
     public Claims getAccessClaims(@NonNull String token) {
         return getClaims(token, jwtAccessSecret);
-    }
-
-    public Claims getRefreshClaims(@NonNull String token) {
-        return getClaims(token, jwtRefreshSecret);
     }
 
     private Claims getClaims(@NonNull String token, @NonNull Key secret) {

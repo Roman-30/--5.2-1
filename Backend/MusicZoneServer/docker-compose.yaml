@@ -2,15 +2,15 @@ version: "3.9"
 services:
   db:
     image: postgres:alpine
-    container_name: db
+    container_name: db1
     ports:
-      - "5432:5433"
+      - "5434:5432"
     environment:
-      - POSTGRES_USER=admin1
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123
-      - POSTGRES_DB=music
+      - POSTGRES_DB=music_zone
   service:
-    container_name: server
+    container_name: server1
     build:
       context: .
     expose:
@@ -18,8 +18,8 @@ services:
     depends_on:
       - db
     environment:
-      - DB_URL=jdbc:postgresql://db:5433/music
-      - DB_USER=admin1
+      - DB_URL=jdbc:postgresql://db:5432/music_zone
+      - DB_USER=postgres
       - DB_PASS=123
       - SERVER_PORT=8080
 

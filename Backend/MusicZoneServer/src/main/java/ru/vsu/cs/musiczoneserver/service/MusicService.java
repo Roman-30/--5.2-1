@@ -61,7 +61,6 @@ public class MusicService {
     public byte[] getFileByLink(String link) {
         String srcFile = new File(link).getAbsolutePath();
 
-
         byte[] byteArray = new byte[(int) (new File(link).length())];
 
         try (FileInputStream fileInputStream = new FileInputStream(srcFile)) {
@@ -134,7 +133,7 @@ public class MusicService {
         }
     }
 
-    private boolean deleteMusicFile(String link) {
+    public boolean deleteMusicFile(String link) {
         try {
             return new File(link).delete();
         } catch (NullPointerException e) {
