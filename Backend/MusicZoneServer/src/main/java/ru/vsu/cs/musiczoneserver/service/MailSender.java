@@ -7,8 +7,8 @@ import java.util.Properties;
 
 public class MailSender {
     private final Properties props;
-    private final String FROM = "romses2016@yandex.ru";
-    private final String PASS = "rfnjodkzdsqyncxb";
+    private final String FROM = "Romses2016@yandex.ru";
+    private final String PASS = "mrlspvbracorwyxi";
     private final String to;
 
     public MailSender(String to) {
@@ -45,7 +45,7 @@ public class MailSender {
             Transport.send(message);
 
         } catch (MessagingException e) {
-            e.fillInStackTrace();
+            System.out.println(e);
         }
     }
 }

@@ -9,9 +9,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import ru.vsu.cs.musiczoneserver.service.jwtcomponent.JwtFilter;
+import ru.vsu.cs.musiczoneserver.security.JwtFilter;
 
 import java.security.SecureRandom;
 
@@ -24,15 +23,6 @@ public class WebSecurityConfig extends WebMvcConfigurerAdapter {
     public WebSecurityConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
-
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("swagger-ui.html")
-//                .addResourceLocations("classpath:/META-INF/resources/");
-//
-//        registry.addResourceHandler("/webjars/**")
-//                .addResourceLocations("classpath:/META-INF/resources/webjars/");
-//    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
