@@ -1,7 +1,7 @@
-package ru.vsu.cs.musiczoneserver.service.jwtcomponent;
+package ru.vsu.cs.musiczoneserver.security;
 
 import io.jsonwebtoken.Claims;
-import ru.vsu.cs.musiczoneserver.entity.jwt.JwtAuthentication;
+import ru.vsu.cs.musiczoneserver.entity.model.ModelAuthentication;
 import ru.vsu.cs.musiczoneserver.entity.model.Role;
 
 import java.util.List;
@@ -9,8 +9,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class JwtUtils {
-    public static JwtAuthentication generate(Claims claims) {
-        final JwtAuthentication jwtInfoToken = new JwtAuthentication();
+    public static ModelAuthentication generate(Claims claims) {
+        final ModelAuthentication jwtInfoToken = new ModelAuthentication();
         jwtInfoToken.setRoles(getRoles(claims));
         jwtInfoToken.setFirstName(claims.get("email", String.class));
         jwtInfoToken.setUsername(claims.getSubject());
