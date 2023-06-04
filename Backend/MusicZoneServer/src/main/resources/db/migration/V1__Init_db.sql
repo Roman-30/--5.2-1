@@ -8,9 +8,6 @@ create table public.music
     name      varchar(60)
 );
 
-alter table public.music
-    owner to postgres;
-
 create table public.person
 (
     id       serial
@@ -23,9 +20,6 @@ create table public.person
     surname  varchar(60)
 );
 
-alter table public.person
-    owner to postgres;
-
 create table public.playlist
 (
     id          serial
@@ -35,8 +29,6 @@ create table public.playlist
     nickname    varchar(60)
 );
 
-alter table public.playlist
-    owner to postgres;
 
 create table public.music_in_playlist
 (
@@ -49,8 +41,6 @@ create table public.music_in_playlist
     primary key (music_id, playlist_id)
 );
 
-alter table public.music_in_playlist
-    owner to postgres;
 
 create table public.user_playlist
 (
@@ -63,17 +53,11 @@ create table public.user_playlist
     primary key (user_id, playlist_id)
 );
 
-alter table public.user_playlist
-    owner to postgres;
-
 create table public.user_role
 (
     user_id integer not null
         constraint fks92q0x8xfwil0ac1k3ucsnr93
-            references public.person,
+            references person,
     roles   varchar(255)
 );
-
-alter table public.user_role
-    owner to postgres;
 
