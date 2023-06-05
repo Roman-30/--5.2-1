@@ -3,9 +3,9 @@
 
 Выполняют студенты 5.2:<br />
 
-1. [Шевцов Роман](https://github.com/Roman-30) <br />
-2. [Гончаренко Максим](https://github.com/MaximilianProrock) <br />
-3. [Артемьев Марк](https://github.com/PUNKerry) <br />
+1. [Шевцов Роман](https://github.com/Roman-30) - Серверная часть <br />
+2. [Гончаренко Максим](https://github.com/MaximilianProrock) - Клиентская часть<br />
+3. [Артемьев Марк](https://github.com/PUNKerry) - Документация <br />
 
 # Тема: 
 Каталог музыкальных произведений, записанных в электронной форме. <br />
@@ -41,7 +41,7 @@
 [Презентация проекта](https://github.com/Roman-30/TP-5.2-1/blob/frontend_final/Документация/Презентация%20Music_Zone.pptx)<br />
 [Техническое задание](https://github.com/Roman-30/TP-5.2-1/blob/frontend_final/Документация/Техническое%20задание.pdf)<br />
 [Сопроводительное письмо](https://github.com/Roman-30/TP-5.2-1/blob/frontend_final/Документация/Сопроводительное%20письмо.pdf)<br />
-[Swagger](http://2.56.242.93:4080/swagger-ui/index.html#)
+[Swagger](http://2.56.242.93:4080/swagger-ui/index.html#)<br />
 
 # Видео
 [Видео-презентация приложения](https://youtu.be/wQxsqcErAXc)<br />
