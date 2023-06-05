@@ -37,10 +37,10 @@
 
 [Диаграммы](https://github.com/Roman-30/TP-5.2-1/tree/main/Диаграммы)<br />
 [Документация](https://github.com/Roman-30/TP-5.2-1/tree/main/Документация)<br />
-[Курсовая работа]()<br />
-[Презентация проекта]()<br />
-[Техническое задание]()<br />
-[Сопроводительное письмо]()<br />
+[Курсовая работа](https://github.com/Roman-30/TP-5.2-1/blob/frontend_final/Документация/Курсовой%20проект.pdf)<br />
+[Презентация проекта](https://github.com/Roman-30/TP-5.2-1/blob/frontend_final/Документация/Презентация%20Music_Zone.pptx)<br />
+[Техническое задание](https://github.com/Roman-30/TP-5.2-1/blob/frontend_final/Документация/Техническое%20задание.pdf)<br />
+[Сопроводительное письмо](https://github.com/Roman-30/TP-5.2-1/blob/frontend_final/Документация/Сопроводительное%20письмо.pdf)<br />
 [Swagger](http://2.56.242.93:4080/swagger-ui/index.html#)
 
 # Видео
