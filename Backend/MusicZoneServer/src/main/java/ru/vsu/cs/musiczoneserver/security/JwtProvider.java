@@ -24,25 +24,20 @@ import java.util.Date;
 @Component
 public class JwtProvider {
     private final SecretKey jwtAccessSecret;
-    private final SecretKey jwtRefreshSecret;
 
-    public JwtProvider(
-            @Value("${jwt.secret.access}") String jwtAccessSecret,
-            @Value("${jwt.secret.refresh}") String jwtRefreshSecret
-    ) {
+    public JwtProvider(@Value("${jwt.secret.access}") String jwtAccessSecret) {
         this.jwtAccessSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtAccessSecret));
-        this.jwtRefreshSecret = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtRefreshSecret));
     }
 
-    public String generateAccessToken(@NonNull Person owner) {
+    public String generateAccessToken(@NonNull Person person) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusMinutes(30).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant = now.plusDays(30).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
         return Jwts.builder()
-                .setSubject(owner.getUsername())
+                .setSubject(person.getUsername())
                 .setExpiration(accessExpiration)
                 .signWith(jwtAccessSecret)
-                .claim("roles", owner.getRoles())
+                .claim("roles", person.getRoles())
                 .compact();
     }
 
@@ -57,8 +52,6 @@ public class JwtProvider {
                     .build()
                     .parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException expEx) {
-            log.error("Token expired", expEx);
         } catch (UnsupportedJwtException unsEx) {
             log.error("Unsupported jwt", unsEx);
         } catch (MalformedJwtException mjEx) {

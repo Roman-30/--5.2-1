@@ -9,5 +9,5 @@ public class AuthResponse {
 
     private final String type = "Bearer";
     private String accessToken;
-    private String refreshToken;
+
 }
