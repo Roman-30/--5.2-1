@@ -42,7 +42,7 @@ public class PersonService implements UserDetailsService {
         final Person user = personRepository.findByEmail(authRequest.getEmail().toLowerCase()).orElseThrow();
         if (bCryptPasswordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
             final String accessToken = jwtProvider.generateAccessToken(user);
-            return new AuthResponse(accessToken, null);
+            return new AuthResponse(accessToken);
         } else {
             throw new AuthException("Invalid password");
         }

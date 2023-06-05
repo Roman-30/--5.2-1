@@ -17,10 +17,10 @@ public abstract class IntegrationEnvironment {
     public static final JdbcDatabaseContainer<?> DB_CONTAINER;
 
     static {
-        DB_CONTAINER = new PostgreSQLContainer<>("postgres:15-alpine")
+        DB_CONTAINER = new PostgreSQLContainer<>("postgres:14-alpine")
                 .withDatabaseName("music_zone")
                 .withUsername("postgres")
-                .withPassword("12345");
+                .withPassword("123");
         DB_CONTAINER.start();
     }
 
@@ -31,6 +31,5 @@ public abstract class IntegrationEnvironment {
         registry.add("spring.datasource.password", DB_CONTAINER::getPassword);
 
         Startables.deepStart(DB_CONTAINER);
-        //.thenAccept(unused -> runMigrations(DB_CONTAINER));
     }
 }
