@@ -134,28 +134,6 @@ public class MainActivity extends AppCompatActivity implements MainListener{
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-//        homeButton = findViewById(R.id.home_button);
-//        homeButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                goHome();
-//            }
-//        });
-//        playerButton = findViewById(R.id.player_button);
-//        playerButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                goPlayer();
-//            }
-//        });
-//        accountButton = findViewById(R.id.account_button);
-//        accountButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                goAccount();
-//            }
-//        });
-
         if(!checkPermission()){
             requestPermission();
             return;

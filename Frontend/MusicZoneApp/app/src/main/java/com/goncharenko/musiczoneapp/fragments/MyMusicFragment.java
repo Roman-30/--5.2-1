@@ -123,36 +123,6 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
             }
         });
 
-
-//        musicViewModel.loadSavedSongsList(email);
-//        musicViewModel.getSavedSongsList().observe(getViewLifecycleOwner(), audioModels -> {
-//            songsList.clear();
-//            songsList.addAll(audioModels);
-//            if (songsList.size() == 0) {
-//                // обработка если нет музыки
-//            } else {
-//                if (savedAfterSearchSongsList.size() != 0) {
-//                    setRecyclerView(savedAfterSearchSongsList);
-//                } else {
-//                    setRecyclerView(songsList);
-//                }
-//            }
-//        });
-
-//        ArrayList<AudioModel> audioModels = mainListener.getOnAudioModels();
-//        songsList = audioModels;
-//
-//        if(songsList.size() == 0){
-//            // обработка если нет музыки
-//        }else{
-//            if(savedAfterSearchSongsList.size() != 0){
-//                setRecyclerView(savedAfterSearchSongsList);
-//            }else {
-//                setRecyclerView(songsList);
-//            }
-//        }
-
-
         return view;
     }
 
@@ -233,9 +203,6 @@ public class MyMusicFragment extends Fragment implements ItemClickInterface, But
         bottomSheetView.findViewById(R.id.remove_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                songsList.remove(id);
-//                setRecyclerView(songsList);
-
                 AudioService
                         .getInstance()
                         .getJSON()

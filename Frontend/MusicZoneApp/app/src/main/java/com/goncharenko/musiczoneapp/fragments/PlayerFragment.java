@@ -124,15 +124,6 @@ public class PlayerFragment extends Fragment {
         titleTextView.setSelected(true);
         songsList = mainListener.getOnAudioModels();
 
-//        musicViewModel.getSongsList().observe(getViewLifecycleOwner(), audioModels -> {
-//            songsList = audioModels;
-//            setResourcesWithMusic();
-//        });
-
-//        Bundle extras = getActivity().getIntent().getExtras();
-//        if(extras != null){
-//            songsList = (ArrayList<AudioModel>) getActivity().getIntent().getSerializableExtra("LIST");
-//        }
         if(songsList == null || songsList.isEmpty() || songsList.size() == 0){
             return view;
         }
@@ -211,8 +202,6 @@ public class PlayerFragment extends Fragment {
         titleTextView.setText(currentSong.getTitle());
         authorTextView.setText(currentSong.getAuthor());
 
-        //totalTimeTextView.setText(convertToMMSS(currentSong.getDuration()));
-
         pausePlay.setOnClickListener(v-> pausePlay());
         nextButton.setOnClickListener(v-> playNextSong());
         previousButton.setOnClickListener(v-> playPreviousSong());
@@ -252,14 +241,6 @@ public class PlayerFragment extends Fragment {
                         totalTimeTextView.setText(convertToMMSS(mediaPlayer.getDuration() + ""));
 
                         YandexMetrica.reportEvent("Пользователь слушает музыку");
-
-//                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                            @Override
-//                            public void onCompletion(MediaPlayer mp) {
-//                                mp.release();
-//                                // playNextSong();
-//                            }
-//                        });
                     }
                 }
             }
@@ -334,13 +315,6 @@ public class PlayerFragment extends Fragment {
 
     private void loadSong(InputStream audioBytes){
         try {
-//            File directory = new File(getContext().getFilesDir(), "MusicZoneTemp");
-//
-//            if (!directory.exists()) {
-//                directory.mkdirs();
-//            }
-
-//            File tempFile = new File(directory + "/music_zone_temp_audio.mp3");
 
             ByteArrayOutputStream bis = new ByteArrayOutputStream();
             byte[] b = new byte[1024];
@@ -354,27 +328,6 @@ public class PlayerFragment extends Fragment {
             try(FileOutputStream fos = new FileOutputStream(fileSong)) {
                 fos.write(bis.toByteArray());
             }
-//            mediaPlayer = new MediaPlayer();
-//            mediaPlayer.reset();
-//            mediaPlayer.setDataSource(tempFile.getPath());
-//            mediaPlayer.prepare();
-//
-//            mediaPlayer.start();
-//
-//            mediaPlayer.seekTo(progressSeekBar);
-//            if(isPlaying) {
-//                mediaPlayer.start();
-//            }
-//            seekBar.setProgress(progressSeekBar);
-//            seekBar.setMax(mediaPlayer.getDuration());
-
-//            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                @Override
-//                public void onCompletion(MediaPlayer mp) {
-//                    mp.release();
-//                    tempFile.delete();
-//                }
-//            });
         } catch (IOException e) {
             e.printStackTrace();
         }
