@@ -101,7 +101,6 @@ public class RegistrationAccountActivity extends AppCompatActivity {
                         }
                     });
 
-            //goToAccount();
         }
     }
 

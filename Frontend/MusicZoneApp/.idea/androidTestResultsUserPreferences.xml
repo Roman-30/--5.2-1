@@ -3,6 +3,20 @@
   <component name="AndroidTestResultsUserPreferences">
     <option name="androidTestResultsTableState">
       <map>
+        <entry key="-2105427970">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="8f19db6d" value="120" />
+                  <entry key="Duration" value="90" />
+                  <entry key="Tests" value="360" />
+                  <entry key="vivo&#10; V2061" value="120" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-2019193127">
           <value>
             <AndroidTestResultsTableState>
@@ -67,6 +81,7 @@
                   <entry key="8f19db6d" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="Tests" value="360" />
+                  <entry key="vivo" value="120" />
                   <entry key="vivo&#10; V2061" value="120" />
                 </map>
               </option>

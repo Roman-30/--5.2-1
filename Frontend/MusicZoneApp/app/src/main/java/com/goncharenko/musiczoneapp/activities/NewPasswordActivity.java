@@ -88,7 +88,5 @@ public class NewPasswordActivity extends AppCompatActivity {
         intent.putExtra("isSignIn", false);
         startActivity(intent);
 
-//        MainActivity mainActivity = (MainActivity) this.getParent();
-//        mainActivity.goAccount();
     }
 }

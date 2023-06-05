@@ -193,7 +193,6 @@ public class AccountFragment extends Fragment {
     public void addMusic() {
         Fragment adminMusicFragment = getActivity().getSupportFragmentManager().findFragmentByTag(AdminMusicFragment.TAG);
         if(adminMusicFragment != null){
-            //saveFragmentState(1, myMusicFragment);
         } else {
             adminMusicFragment = new AdminMusicFragment();
         }

@@ -89,21 +89,6 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
         searchButton = view.findViewById(R.id.search_button);
         searchButton.setOnClickListener(v -> searchMusic());
 
-//        String[] projection = {
-//                MediaStore.Audio.Media.TITLE,
-//                MediaStore.Audio.Media.DATA,
-//                MediaStore.Audio.Media.DURATION
-//        };
-//
-//        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0";
-//
-//        Cursor cursor = getContext().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, null, null);
-//        while (cursor.moveToNext()) {
-//            AudioModel songData = new AudioModel(cursor.getString(1), cursor.getString(0), cursor.getString(2));
-//            if (new File(songData.getPath()).exists())
-//                songsList.add(songData);
-//        }
-
         songsList.clear();
         musicViewModel.loadSongs();
         musicViewModel.getSongsList().observe(getViewLifecycleOwner(), audioModels -> {
@@ -207,9 +192,6 @@ public class SearchMusicFragment extends Fragment implements ItemClickInterface,
         bottomSheetView.findViewById(R.id.add_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                AudioModel audioModel = songsList.get(id);
-//                mainListener.setOnAudioModel(audioModel);
-
                 AudioService
                         .getInstance()
                         .getJSON()

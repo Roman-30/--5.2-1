@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.goncharenko.musiczoneapp.R;
 import com.goncharenko.musiczoneapp.models.UserModel;
+import com.goncharenko.musiczoneapp.service.MailService;
 import com.goncharenko.musiczoneapp.service.UserService;
 import com.goncharenko.musiczoneapp.utill.codegenerator.RandomCodeGenerator;
 import com.goncharenko.musiczoneapp.utill.validator.InputValidator;
@@ -106,7 +107,7 @@ public class SendingCodeActivity extends AppCompatActivity {
     }
 
     private void sendEmail(String email, String code, View view){
-        UserService.getInstance().getJSON().sendCode(email, code).enqueue(new Callback<List<String>>() {
+        MailService.getInstance().getJSON().sendCode(email, code).enqueue(new Callback<List<String>>() {
             @Override
             public void onResponse(Call<List<String>> call, Response<List<String>> response) {
                 Toast.makeText(view.getContext(),
